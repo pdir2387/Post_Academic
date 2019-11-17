@@ -5,12 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.greglturnquist</groupId>
-		<artifactId>react-and-spring-data-rest</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.7.RELEASE</version>
+		<relativePath/>
 	</parent>
 	
-	<artifactId>react-and-spring-data-rest-basic</artifactId>
+	<artifactId>Post_Academic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>React.js and Spring Data REST - Basic</name>
@@ -25,6 +26,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>2.1.6.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>

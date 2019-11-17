@@ -39,7 +39,7 @@ class App extends React.Component {
 	          {/*</header>*/}
 
 	          <div className="login-form-container">
-	            <form method="get" action="">
+	            <form method="post">
 	              <div className="input-container">
 	                <i className="input-icon user-icon"></i>
 	                <input className="input-field" type="text" placeholder="Username" name="username" id="username"/>
@@ -57,7 +57,7 @@ class App extends React.Component {
 	                </label>
 	              </div>
 
-	              <button type="button" className="login-button uppercase bold" onClick={this.handleClick}>Login</button>
+	              <button type="submit" className="login-button uppercase bold">Login</button>
 	            </form>
 	          </div>
 

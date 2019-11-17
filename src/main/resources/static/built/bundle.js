@@ -37502,8 +37502,7 @@ function (_React$Component) {
       }, React.createElement("div", {
         className: "login-form-container"
       }, React.createElement("form", {
-        method: "get",
-        action: ""
+        method: "post"
       }, React.createElement("div", {
         className: "input-container"
       }, React.createElement("i", {
@@ -37535,9 +37534,8 @@ function (_React$Component) {
       }), React.createElement("span", {
         className: "checkmark"
       }))), React.createElement("button", {
-        type: "button",
-        className: "login-button uppercase bold",
-        onClick: this.handleClick
+        type: "submit",
+        className: "login-button uppercase bold"
       }, "Login")))));
     }
   }]);
