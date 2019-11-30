@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - PostAcademicApplication",
+            "request": "launch",
+            "mainClass": "ubb.ni.PostAcademic.PostAcademicApplication",
+            "projectName": "PostAcademic"
+        }
+    ]
+}
