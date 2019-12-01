@@ -17,10 +17,7 @@ package app.ctrl;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Greg Turnquist
@@ -39,6 +36,29 @@ public class MainController {
 	public String home(@PathVariable("username") String username) {
 		return "{\"data\" : \"" + username + "\"}";
 	}
+
+
+	@GetMapping(value = "/api/test" , produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String test(){
+		return "{\"data\" : \"test\"}";
+	}
+
+
+
+
+
+
+
+	// MARK: Prezente api
+
+//	@GetMapping(value = "/api/prezenta" , produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
+//	public String getPrezente(){
+//		return "{\"data\" : \"test\"}";
+//	}
+
+	// ENDMARK:
 
 }
 // end::code[]

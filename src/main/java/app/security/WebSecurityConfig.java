@@ -16,17 +16,17 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	DataSource dataSource;
 
 
 	@Override
-   protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(HttpSecurity http) throws Exception {
       http
       	.authorizeRequests()
 			  .antMatchers(HttpMethod.GET, "/built/**", "/css/**").permitAll()
-         	.anyRequest().authenticated()
+         	.anyRequest().permitAll()
             .and()
         .formLogin()
         	.permitAll()
@@ -40,10 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.deleteCookies("JSESSIONID");
 
    }
-   	
+
 	@Autowired
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-		
+
 	  auth.jdbcAuthentication()
 	  	.passwordEncoder(new BCryptPasswordEncoder())
 	  	.dataSource(dataSource)
@@ -53,5 +53,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			"select username, account_type as authority from users where username=?");
 	}
 
-	
+
 }
