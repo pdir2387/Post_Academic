@@ -1,6 +1,5 @@
 package app.repo;
 
-
 import app.domain.Prezenta;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
