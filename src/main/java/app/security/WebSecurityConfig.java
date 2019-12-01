@@ -24,20 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
       http
-      	.authorizeRequests()
-			  .antMatchers(HttpMethod.GET, "/built/**", "/css/**").permitAll()
-         	.anyRequest().permitAll()
-            .and()
-        .formLogin()
-        	.permitAll()
-			  .loginPage("/login")
-			  .loginProcessingUrl("/login")
-			  .and()
-      	.logout()
-				.permitAll()
-				.logoutUrl("/logout")
-				.logoutSuccessUrl("/login")
-				.deleteCookies("JSESSIONID");
+			  .authorizeRequests()
+			  	.antMatchers("/**").permitAll();
 
    }
 

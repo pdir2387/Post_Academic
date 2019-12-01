@@ -18,6 +18,7 @@ public class Prezenta {
     @Column
     private Long student;
 
+    public Prezenta() {}
     public Prezenta(Long id, Date data, Long ora, Long student) {
         this.id = id;
         this.data = data;
@@ -55,6 +56,11 @@ public class Prezenta {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+    public String toJson() {
+        return "{ \"id\" : \"" + id + "\", \"data\" : " + data + ", \"ora\" : " + ora + ", \"student\" : " + student + "  }";
     }
 }
 
