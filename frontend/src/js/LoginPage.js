@@ -3,8 +3,7 @@ import '../css/main.css';
 
 const React = require('react');
 
-class LoginPage extends React.Component {
-    render() {	
+function LoginPage() {
 	    return (
 	      <div className="App">
 	        <div className="parent-container">
@@ -39,7 +38,6 @@ class LoginPage extends React.Component {
 	        </div>
 	      </div>
 	    );
-	}
 }
 
 export default LoginPage;
