@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "ore")
-public class Ora {
+@Table(name = "Note")
+public class Nota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -17,8 +17,8 @@ public class Ora {
     @Column
     private Long student;
 
-    public Ora(){}
-    public Ora(Long id, Date data, Long ora){
+    public Nota(){}
+    public Nota(Long id, Date data, Long ora){
         this.id = id;
         this.data = data;
         this.ora = ora;
