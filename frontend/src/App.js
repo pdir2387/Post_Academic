@@ -2,8 +2,7 @@ import { withRouter, Switch, Route} from "react-router-dom";
 import HomePage from './js/HomePage';
 import LoginPage from './js/LoginPage';
 import NotFound from './js/404';
-
-const React = require('react');
+import React from 'react'
 
 function App() {	
 	return (

@@ -1,14 +1,21 @@
 import LogoutButton from "./LogoutButton.js"
-
-const React = require('react');
+import React from 'react'
+import StudentNavBar from "./StudentNavBar.js"
+import Orar from "./Orar.js"
+import '../css/home.css'
 
 function HomePage() {
-        return (
-            <div>
-                <h1>You are now logged in</h1>
+    return (
+        <div id="homePage">
+            <div id="homeLeft">
+                <StudentNavBar />
                 <LogoutButton />
             </div>
-        );
+            <div id="homeRight"> 
+                <Orar />
+            </div>
+        </div>
+    );
 }
 
 export default HomePage;

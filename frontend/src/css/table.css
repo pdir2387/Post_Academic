@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+#orar{
+    width: 100%;
+    height: 100%;
+}
+
+#orar table {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: black;
+    font-weight: 600;
+}
+
+#orar table th{
+    background-color: #547598;
+    color: white;
+    font-weight: 900;
+}
+
+#orar table tr{
+    background-color: #eeebd3;
+}
