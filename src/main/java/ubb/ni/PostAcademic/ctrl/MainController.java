@@ -18,6 +18,9 @@ package ubb.ni.PostAcademic.ctrl;
 import java.util.Date;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,5 +44,16 @@ public class MainController {
     public String hello() {
         return "Hello, the time at the server is now " + new Date() + "\n";
     }
+
+    @GetMapping(value = "/api/authority")
+	@ResponseBody
+	public String auth() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if(auth instanceof AnonymousAuthenticationToken){
+			return "anon";
+		}
+		return auth.getAuthorities().toArray()[0].toString();
+	}
+
 }
 // end::code[]
