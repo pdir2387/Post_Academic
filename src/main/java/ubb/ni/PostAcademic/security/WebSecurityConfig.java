@@ -26,9 +26,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	  http
 	  	.csrf().disable()
       	.authorizeRequests()
-			  //.antMatchers(HttpMethod.GET, "/api/login/**").permitAll()
-         	.anyRequest().authenticated()
-            .and()
+			  .antMatchers("/api/authority").permitAll()
+			  .anyRequest().authenticated()
+			  .and()
         .formLogin()
         	.permitAll()
 			  .loginPage("/login")
@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			  .and()
       	.logout()
 				.permitAll()
-				.logoutUrl("/logout")
+				.logoutUrl("/api/logout")
 				.logoutSuccessUrl("/login")
 				.deleteCookies("JSESSIONID");
 
