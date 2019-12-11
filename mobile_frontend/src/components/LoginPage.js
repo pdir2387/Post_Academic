@@ -99,7 +99,7 @@ export default class Login extends React.Component{
     }
 
     login=()=>{
-        fetch('http://192.168.0.199:8080/api/login',{
+        /*fetch('http://192.168.0.199:8080/api/login',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -135,7 +135,9 @@ export default class Login extends React.Component{
                 }
             });
         })
-        .done();
+        .done();*/
+
+        this.props.navigation.navigate('HomePg');
     }
 
 
