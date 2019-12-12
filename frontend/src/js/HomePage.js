@@ -4,7 +4,9 @@ import StudentNavBar from "./StudentNavBar.js"
 import Orar from "./Orar.js"
 import '../css/home.css'
 
-function HomePage() {
+export default function HomePage() {
+    fetchCall();
+
     return (
         <div id="homePage">
             <div id="homeLeft">
@@ -18,4 +20,9 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+async function fetchCall() {
+    fetch('http://localhost:3000/api/authority')
+        .then(response => response.json())
+        .then(alo => alert(alo))
+        .catch(alert("error"));
+}
