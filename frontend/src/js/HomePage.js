@@ -20,9 +20,9 @@ export default function HomePage() {
     );
 }
 
-async function fetchCall() {
+function fetchCall() {
     fetch('http://localhost:3000/api/authority')
-        .then(response => response.json())
+        .then(response => response.text())
         .then(alo => alert(alo))
-        .catch(alert("error"));
+        .catch( e => alert(e));
 }
