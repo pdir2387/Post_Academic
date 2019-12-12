@@ -21,8 +21,8 @@ export default function HomePage() {
 }
 
 function fetchCall() {
-    fetch('http://localhost:3000/api/authority')
-        .then(response => response.text())
-        .then(alo => alert(alo))
-        .catch( e => alert(e));
+    // fetch('http://localhost:3000/api/authority')
+    //     .then(response => response.text())
+    //     .then(alo => alert(alo))
+    //     .catch( e => alert(e));
 }

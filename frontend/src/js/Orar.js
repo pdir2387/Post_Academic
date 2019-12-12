@@ -1,112 +1,95 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import '../css/table.css'
 
+function isIterable(obj) {
+    // checks for null and undefined
+    if (obj == null) {
+      return false;
+    }
+    return typeof obj[Symbol.iterator] === 'function';
+}
+
+function createTableRow(columnList, columnClassName) {
+    return <tr>{createTableData(columnList, columnClassName)}</tr>;
+}
+
+function createTableData(columnList, columnClassName) {
+    let TDList = [];
+    let index = 0;
+
+    for (let column of columnList) {
+        TDList.push(
+            <td key={index} className={columnClassName}>{column}</td>
+        );
+        index++;
+    }
+        
+    return TDList;
+}
+
+function getClassFromTimeAndDay(orar, time, day) {
+    if (isIterable(orar))
+        for (let course of orar) {
+            if (course.zi === day && time >= course.start && time <= (course.start + course.durata))
+                return course;
+        }
+
+    return null;
+}
+
+function getFormattedOrar(orar) {
+    let TRList = [];
+    let time = 8;
+    let days = ['luni', 'marti', 'miercuri', 'joi', 'vineri'];
+
+    while (time <= 20) {
+        let TDList = [];
+        TDList.push(
+            <div>{time}:00</div>
+        )
+
+        for (let day of days) {
+            let course = getClassFromTimeAndDay(orar, time, day);
+
+            if (course !== null)
+                TDList.push(
+                    <div className={course.color}>{course.nume}<br/>{course.tip}</div> 
+                )
+            else
+                TDList.push(
+                    <div></div>
+                )
+        }
+
+        TRList.push(createTableRow(TDList));
+        time++;
+    }
+
+    return TRList;
+}
+
 function Orar(){
+    let [orar, setOrar] = useState(0);
+
+
+    fetch('http://localhost:3000/api/orar')
+    .then(res => res.json())
+    .then(data => setOrar(data));
+
+    
+    // console.log("Am ora luni incepand cu ora 12? " + doIHaveClassNow(orar, 12, "luni"));
+    // console.log("Am ora marti incepand cu ora 12? " + doIHaveClassNow(orar, 14, "marti"));
+    // console.log("Am ora miercuri incepand cu ora 15? " + doIHaveClassNow(orar, 15, "miercuri"));
+
     return(
+
         <div id="orar">
             {/*TO DO: orar logic*/}
             <table>
-                <tr>
-                    <th></th>
-                    <th>Luni</th>
-                    <th>Marti</th>
-                    <th>Miercuri</th>
-                    <th>Joi</th>
-                    <th>Vineri</th>
-                </tr>
-                <tr>
-                    <td>8:00</td>
-                    <td>L8</td>
-                    <td>M8</td>
-                    <td>M8</td>
-                    <td>J8</td>
-                    <td>V8</td>
-                </tr>
-                <tr>
-                    <td>9:00</td>
-                    <td>L9</td>
-                    <td>M9</td>
-                    <td>M9</td>
-                    <td>J9</td>
-                    <td>V9</td>
-                </tr><tr>
-                    <td>10:00</td>
-                    <td>L0</td>
-                    <td>M0</td>
-                    <td>M0</td>
-                    <td>J0</td>
-                    <td>V0</td>
-                </tr><tr>
-                    <td>11:00</td>
-                    <td>L1</td>
-                    <td>M1</td>
-                    <td>M1</td>
-                    <td>J1</td>
-                    <td>V1</td>
-                </tr><tr>
-                    <td>12:00</td>
-                    <td>L2</td>
-                    <td>M2</td>
-                    <td>M2</td>
-                    <td>J2</td>
-                    <td>V2</td>
-                </tr><tr>
-                    <td>13:00</td>
-                    <td>L3</td>
-                    <td>M3</td>
-                    <td>M3</td>
-                    <td>J3</td>
-                    <td>V3</td>
-                </tr><tr>
-                    <td>14:00</td>
-                    <td>L4</td>
-                    <td>M4</td>
-                    <td>M4</td>
-                    <td>J4</td>
-                    <td>V4</td>
-                </tr><tr>
-                    <td>15:00</td>
-                    <td>L5</td>
-                    <td>M5</td>
-                    <td>M5</td>
-                    <td>J5</td>
-                    <td>V5</td>
-                </tr><tr>
-                    <td>16:00</td>
-                    <td>L6</td>
-                    <td>M6</td>
-                    <td>M6</td>
-                    <td>J6</td>
-                    <td>V6</td>
-                </tr><tr>
-                    <td>17:00</td>
-                    <td>L7</td>
-                    <td>M7</td>
-                    <td>M7</td>
-                    <td>J7</td>
-                    <td>V7</td>
-                </tr><tr>
-                    <td>18:00</td>
-                    <td>L8</td>
-                    <td>M8</td>
-                    <td>M8</td>
-                    <td>J8</td>
-                    <td>V8</td>
-                </tr><tr>
-                    <td>19:00</td>
-                    <td>L9</td>
-                    <td>M9</td>
-                    <td>M9</td>
-                    <td>J9</td>
-                    <td>V9</td>
-                </tr><tr>
-                    <td>20:00</td>
-                    <td>L10</td>
-                    <td>M10</td>
-                    <td>M10</td>
-                    <td>J10</td>
-                    <td>V10</td>
-                </tr>
+                <tbody>
+                    {createTableRow(["", "Luni", "Marti", "Miercuri", "Joi", "Vineri"], "th")}
+                    {getFormattedOrar(orar)}
+                </tbody>
             </table>
         </div>
     )

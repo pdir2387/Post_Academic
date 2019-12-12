@@ -17,7 +17,7 @@
     font-weight: 600;
 }
 
-#orar table th{
+#orar table .th{
     background-color: #547598;
     color: white;
     font-weight: 900;
@@ -25,4 +25,22 @@
 
 #orar table tr{
     background-color: #eeebd3;
+}
+
+.red {
+    background-color: red;
+    height: 100%;
+    width: 100%;
+}
+
+.green {
+    background-color: green;
+    height: 100%;
+    width: 100%;
+}
+
+.yellow {
+    background-color: yellow;
+    height: 100%;
+    width: 100%;
 }
