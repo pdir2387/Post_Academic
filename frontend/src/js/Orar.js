@@ -30,7 +30,7 @@ function createTableData(columnList, columnClassName) {
 function getClassFromTimeAndDay(orar, time, day) {
     if (isIterable(orar))
         for (let course of orar) {
-            if (course.zi === day && time >= course.start && time <= (course.start + course.durata))
+            if (course.zi === day && time >= course.start && time < (course.start + course.durata))
                 return course;
         }
 
