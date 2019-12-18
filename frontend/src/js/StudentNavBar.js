@@ -8,7 +8,7 @@ function StudentNavBar(){
         <div id="studentNavBar">
             <img src={mainLogo} alt="logo"></img>
             <div id="navBarSeparator"></div>
-            <NavBarItem buttonText="HOME" url="/home"/>
+            <NavBarItem buttonText="ORAR" url="/home"/>
             <NavBarItem buttonText="PREZENTA" url="/prezenta"/>
             <NavBarItem buttonText="NOTE" url="/note"/>
             <NavBarItem buttonText="CONTRACTE" url="/contracte"/>

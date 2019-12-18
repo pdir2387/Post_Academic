@@ -72,13 +72,13 @@ function fillTable(discipline)
 
 function getCourseAttendances(discipline)
 {
-    if(discipline=="FP")
+    if(discipline==="FP")
     {
         courseAttendances= ["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"];
     }
     else
     {
-        if(discipline=="OOP")
+        if(discipline==="OOP")
         {
             courseAttendances= [" "," "," ","x","x"," ","x"," "," ","x"," ","x","x","x"];
         }
