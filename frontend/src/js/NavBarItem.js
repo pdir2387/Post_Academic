@@ -3,9 +3,9 @@ import '../css/home.css'
 
 function NavBarItem(props){
     return(
-        <div className="NavBarItem">
-            <a href={props.url}>
-                <button class="navBarButton">{props.buttonText}</button>
+        <div>
+            <a href={props.url} >
+                <button className="navBarButton">{props.buttonText}</button>
             </a>
         </div>
     )

@@ -1,0 +1,3 @@
+Pentru Add: apar filed-uri de completat tot, goale.
+Pentru delete apare field de id student.
+Pentru modify, dai id student, si iti da field-uri completate cu tot. Si ai un submit.
