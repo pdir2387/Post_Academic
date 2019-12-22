@@ -1,4 +1,7 @@
 package ubb.ni.PostAcademic.repo;
 
-public interface NotaRepo {
+import org.springframework.data.repository.CrudRepository;
+import ubb.ni.PostAcademic.domain.Nota;
+
+public interface NotaRepo extends CrudRepository<Nota, Long> {
 }

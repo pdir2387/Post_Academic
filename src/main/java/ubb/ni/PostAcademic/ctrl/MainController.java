@@ -17,6 +17,10 @@ package ubb.ni.PostAcademic.ctrl;
 
 import java.util.Date;
 
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +31,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import ubb.ni.PostAcademic.domain.Nota;
+import ubb.ni.PostAcademic.domain.Prezenta;
+import ubb.ni.PostAcademic.service.NotaService;
+import ubb.ni.PostAcademic.service.PrezentaService;
 
 /**
  * @author Greg Turnquist
@@ -34,6 +42,11 @@ import org.springframework.web.bind.annotation.RestController;
 // tag::code[]
 @RestController
 public class MainController {
+	@Autowired
+	NotaService notaService;
+	@Autowired
+	PrezentaService prezentaService;
+
 	@GetMapping(value = "/api/login/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public String home(@PathVariable("username") String username) {
@@ -53,6 +66,45 @@ public class MainController {
 			return "anon";
 		}
 		return auth.getAuthorities().toArray()[0].toString();
+	}
+
+	@GetMapping(value = "/api/student/note", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String note_student(){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		JSONArray json = new JSONArray();
+
+		for(Nota nota: notaService.getNote()){
+			JSONObject nota_object = new JSONObject();
+			nota_object.put("materie", nota.getOra().getDisciplina());
+			nota_object.put("data", nota.getData().toString());
+			nota_object.put("nota", nota.getNota());
+			nota_object.put("tip", nota.getOra().getTipul());
+			nota_object.put("notita", nota.getNotita());
+
+			json.put(nota_object);
+		}
+
+		return json.toString();
+	}
+
+	@GetMapping(value = "/api/student/prezente", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String prezente_student(){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		JSONArray json = new JSONArray();
+
+		for(Prezenta prezenta: prezentaService.getPrezente()){
+			JSONObject nota_object = new JSONObject();
+
+
+
+			json.put(nota_object);
+		}
+
+		return json.toString();
 	}
 
 }
