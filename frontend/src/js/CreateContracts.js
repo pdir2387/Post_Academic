@@ -31,7 +31,7 @@ export default function CreateContracts()
 	       				<thead>
 	       					<tr>
 	       						<th>Nr. Crt.</th>
-	       						<th>Cod disciplilna</th>
+	       						<th>Cod disciplina</th>
 	       						<th>Materie</th>
 	       						<th>Nr. locuri</th>
 	       						<th>Nr. credite</th>
@@ -52,7 +52,7 @@ export default function CreateContracts()
 	       				<thead>
 	       					<tr>
 	       						<th>Nr. Crt.</th>
-	       						<th>Cod disciplilna</th>
+	       						<th>Cod disciplina</th>
 	       						<th>Materie</th>
 	       						<th>Nr. locuri</th>
 	       						<th>Nr. credite</th>
