@@ -1,0 +1,59 @@
+#contractsPage{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    width: 100%;
+}
+
+#contractsLeft {
+    background-color: #ececec;
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    align-items: center;
+}
+
+#contractsRight{
+    flex: 8;
+}
+
+#content{
+    display: flex;
+    flex-direction: row;
+}
+
+#semestersSelect{
+    overflow: auto;
+    margin-top: 10px;
+    border: 1px solid black;
+}
+
+#semesters{
+    flex: 1;
+    margin-right: 20px;
+}
+
+#tableDisciplines{
+    flex: 3;
+    text-align: left;
+}
+
+#generateButton{
+    color: white;
+    font-weight: 900;
+    background-color: #1f4976;
+    border: none;
+    font-size: 15px;
+    margin: 10px;
+    margin-top: 50px;
+    text-align: center;
+
+    text-transform: uppercase;
+    width: 250px;
+    height: 65px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+
+    align-self: center;
+}
