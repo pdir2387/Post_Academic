@@ -2,7 +2,7 @@ import LogoutButton from "./LogoutButton.js"
 import React from 'react'
 import StudentNavBar from "./StudentNavBar.js"
 import ViewContracts from "./ViewContracts"
-import '../css/attendances.css'
+import '../css/contracts.css'
 
 export default function ContractsPage() {
     return (
