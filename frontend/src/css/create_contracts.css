@@ -1,0 +1,61 @@
+#container{
+	display: flex;
+	flex-direction: column;
+}
+
+#semestersTables{
+	display: flex;
+	flex-direction: row;
+	flex: 3;
+	margin-bottom: 20px;
+}
+
+.disciplinesDetails{
+	display: flex;
+	flex-direction: column;
+}
+
+#createContractButton{
+	color: white;
+    font-weight: 900;
+    background-color: #1f4976;
+    border: none;
+    font-size: 15px;
+    margin: 10px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    text-align: center;
+
+    text-transform: uppercase;
+    width: 250px;
+    height: 65px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+
+    align-self: center;
+}
+
+.title{
+	flex: 1;
+}
+
+#legend{
+	flex: 1;
+	align-self: flex-start;
+	text-align: left;
+	font-size: 20px;
+}
+
+#disciplinesSem1{
+	margin-right: 20px;
+}
+
+#disciplinesSem2{
+	margin-left: 20px;
+}
+
+.table{
+	margin-top: 20px;
+	text-align: left;
+}

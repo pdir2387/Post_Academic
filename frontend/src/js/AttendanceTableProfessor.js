@@ -48,7 +48,7 @@ export default function AttendanceTableProfessor()
             </div>
 
             <table id="tableAttendances" className="table">
-            	<thead id="thead">
+            	<thead id="theadAttendances">
 	                <tr id="headers">
 	                    {getHeader(nrWeeks)}
 	                </tr>
@@ -102,6 +102,7 @@ export default function AttendanceTableProfessor()
 				for(let j=0;j<nrWeeks;j++)
 				{
 					let tdAttendance=document.createElement("td");
+					tdAttendance.classList.add("tdAttendance");
 					tdAttendance.innerHTML=students[i].attendances[j];
 					tdAttendance.addEventListener("click", function(){markAttendance(tdAttendance)});
 					trStudent.appendChild(tdAttendance);

@@ -2,6 +2,7 @@ import LogoutButton from "./LogoutButton.js"
 import React from 'react'
 import StudentNavBar from "./StudentNavBar.js"
 import ViewContracts from "./ViewContracts"
+import CreateContracts from "./CreateContracts"
 import '../css/contracts.css'
 
 export default function ContractsPage() {
@@ -13,7 +14,9 @@ export default function ContractsPage() {
             </div>
 
             <div id="contractsRight"> 
-                <ViewContracts />
+                {/*momentan doar una din astea 2 merge la un moment dat*/}
+                {/*<ViewContracts />*/}
+                <CreateContracts />
             </div>
         </div>
     );

@@ -52,7 +52,7 @@
     flex-direction: row;
 }
 
-td{
+.tdAttendance{
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
@@ -61,7 +61,7 @@ td{
     user-select: none;
 }
 
-thead{
+#theadAttendances{
     position: sticky;
     top: 0;
     z-index: 6;
