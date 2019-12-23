@@ -7,13 +7,13 @@ import AttendancePage from './js/AttendancePage';
 import AttendancePageProfessor from './js/AttendancePageProfessor'
 import AdminAdministrateAccountsPage from './js/AdminAdministrateAccountsPage'
 import ContractsPage from './js/ContractsPage'
-import CreateContracts from "./js/CreateContracts"
+import StudentInfoPage from "./js/StudentInfoPage"
 import React from 'react'
 
 function App() {	
 	return (
 	    <Switch>
-	    	<Route path="/creare_contracte" component={CreateContracts} />
+	    	<Route path="/student" component={StudentInfoPage} />
 	    	<Route path="/contracte" component={ContractsPage} />
 	    	<Route path="/admin_accounts" component={AdminAdministrateAccountsPage} />
 	    	<Route path="/prezentaP" component={AttendancePageProfessor} />

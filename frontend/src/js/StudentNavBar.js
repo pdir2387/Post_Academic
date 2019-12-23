@@ -13,6 +13,7 @@ function StudentNavBar(){
             <NavBarItem buttonText="NOTE" url="/note"/>
             <NavBarItem buttonText="CONTRACTE" url="/contracte"/>
             <NavBarItem buttonText="E-MAIL" url="/email"/>
+            <NavBarItem buttonText="INFORMAȚII GENERALE" url="/student"/>
         </div>
     )
 }
