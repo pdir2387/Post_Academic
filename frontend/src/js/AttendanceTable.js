@@ -1,5 +1,4 @@
 import React,{useState} from 'react'
-import StudentNavBar from "./StudentNavBar.js"
 import '../css/commons.css'
 import '../css/attendances.css'
 
@@ -18,7 +17,7 @@ export default function AttendanceTable()
 
     return (
         <div className="container">
-            <h1 className="title">Attendances</h1>
+            <h1 className="title">Prezențe</h1>
 
             <fieldset>
                 <select id="disciplineDropDown" className="dropDown" onChange={disciplineChanged}>
@@ -27,12 +26,17 @@ export default function AttendanceTable()
             </fieldset>
 
             <table id="tableAttendances" className="table">
-                <tr id="headers">
-                    {getHeader(nrWeeks)}
-                </tr>
-                <tr id="courseRow"></tr>
-                <tr id="seminarRow"></tr>
-                <tr id="labRow"></tr>
+                <thead>
+                    <tr id="headers">
+                        {getHeader(nrWeeks)}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr id="courseRow"></tr>
+                    <tr id="seminarRow"></tr>
+                    <tr id="labRow"></tr>
+                </tbody>
             </table>
 
             <div id="infoAttendances">
@@ -53,11 +57,30 @@ function getHeader(nrWeeks)
     for(let i=1;i<=nrWeeks;i++)
     {
         headers.push(
-            <th>Week {i}</th>
+            <th>Săptămâna {i}</th>
         );
     }
 
     return headers;
+}
+
+function getSelectOptions()
+{
+    let options=[];
+     
+     options.push(
+        <option disabled selected value> --- alege materia --- </option>
+     )
+
+     options.push(
+        <option value="FP">FP</option>
+     )
+
+     options.push(
+        <option value="OOP">OOP</option>
+     )
+
+     return options;
 }
 
 function fillTable(discipline)
@@ -151,25 +174,6 @@ function setLabsAttendances(discipline)
     }
 }
 
-function getSelectOptions()
-{
-    let options=[];
-     
-     options.push(
-        <option disabled selected value> --- alege materie --- </option>
-     )
-
-     options.push(
-        <option value="FP">FP</option>
-     )
-
-     options.push(
-        <option value="OOP">OOP</option>
-     )
-
-     return options;
-}
-
 function setAttendancesNumbersCourse()
 {
     let currentAttendances=0;
@@ -177,7 +181,7 @@ function setAttendancesNumbersCourse()
 
     for(let i=0;i<courseAttendances.length;i++)
     {
-        if(courseAttendances[i]=="x")
+        if(courseAttendances[i]==="x")
         {
             currentAttendances+=1;
         }
@@ -193,7 +197,7 @@ function setAttendancesNumbersSeminar()
 
     for(let i=0;i<seminarAttendances.length;i++)
     {
-        if(seminarAttendances[i]=="x")
+        if(seminarAttendances[i]==="x")
         {
             currentAttendances+=1;
         }
@@ -209,7 +213,7 @@ function setAttendancesNumbersLab()
 
     for(let i=0;i<labAttendances.length;i++)
     {
-        if(labAttendances[i]=="x")
+        if(labAttendances[i]==="x")
         {
             currentAttendances+=1;
         }

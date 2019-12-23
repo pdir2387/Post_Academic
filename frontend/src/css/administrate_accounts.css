@@ -1,0 +1,72 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#administratePage{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    width: 100%;
+}
+
+#administrateLeft {
+    background-color: #ececec;
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    align-items: center;
+}
+
+#administrateRight{
+    flex: 8;
+}
+
+#buttonOptions button, #searchAccountContainer button, input[type=submit]{
+    color: white;
+    font-weight: 900;
+    background-color: #1f4976;
+    border: none;
+    font-size: 15px;
+    margin: 10px;
+    text-align: center;
+
+    text-transform: uppercase;
+    width: 250px;
+    height: 65px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+#options_and_fields{
+    display: flex;
+    flex-direction: row;
+}
+
+#buttonOptions{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-self: left;
+    align-items: left;
+}
+
+.fields{
+    flex: 1;
+    display: none;
+}
+
+form, #searchAccountContainer{
+    text-align: left;
+}
+
+input[type=text]{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
