@@ -4,6 +4,10 @@ import '../css/create_contracts.css'
 
 var semester1=[];
 var semester2=[];
+var maxCreditsSem1;
+var maxCreditsSem2;
+var currentCreditsSem1=0;
+var currentCreditsSem2=0;
 
 export default function CreateContracts()
 {
@@ -11,6 +15,8 @@ export default function CreateContracts()
 	{
         fillSemester1Table();
         fillSemester2Table();
+        setNrCreditsSem1();
+        setNrCreditsSem2();
     }, []); 
 
 	return (
@@ -106,6 +112,8 @@ export default function CreateContracts()
             	checkbox.disabled=true;
             }
 
+			checkbox.addEventListener("change", function(){modifyTotalCreditsSem1(checkbox)});
+
 			tdNrCrt.innerText=nrCrt.toString();
 			tdCode.innerText=code;
 			tdName.innerText=name;
@@ -161,6 +169,8 @@ export default function CreateContracts()
             	checkbox.disabled=true;
             }
 
+            checkbox.addEventListener("change", function(){modifyTotalCreditsSem2(checkbox)});
+
 			tdNrCrt.innerText=nrCrt.toString();
 			tdCode.innerText=code;
 			tdName.innerText=name;
@@ -181,13 +191,57 @@ export default function CreateContracts()
 		}
     }
 
+    function modifyTotalCreditsSem1(e)
+    {
+    	let credits=parseInt(e.parentElement.parentElement.children[4].innerText);
+
+    	if(e.checked)
+    	{
+    		currentCreditsSem1+=credits;
+    	}
+    	else
+    	{
+    		currentCreditsSem1-=credits;
+    	}
+
+    	document.getElementById("creditsNumberSem1").innerText="Credite: "+currentCreditsSem1.toString()+"/"+maxCreditsSem1;
+    }
+
+    function modifyTotalCreditsSem2(e)
+    {
+    	let credits=parseInt(e.parentElement.parentElement.children[4].innerText);
+
+    	if(e.checked)
+    	{
+    		currentCreditsSem2+=credits;
+    	}
+    	else
+    	{
+    		currentCreditsSem2-=credits;
+    	}
+
+    	document.getElementById("creditsNumberSem2").innerText="Credite: "+currentCreditsSem2.toString()+"/"+maxCreditsSem2;
+    }
+
+    function setNrCreditsSem1()
+    {
+		document.getElementById("creditsNumberSem1").innerText="Credite: "+currentCreditsSem1.toString()+"/"+maxCreditsSem1;
+    }
+
+    function setNrCreditsSem2()
+    {
+    	document.getElementById("creditsNumberSem2").innerText="Credite: "+currentCreditsSem2.toString()+"/"+maxCreditsSem2;
+    }
+
     function getSemester1()
     {
-		semester1=JSON.parse('{"semester":[{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M2774","name":"Fundamentele programarii2","occupiedPlaces":"80","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').semester;
+		semester1=JSON.parse('{"maxCredits":"30","semester":[{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M2774","name":"Fundamentele programarii2","occupiedPlaces":"80","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').semester;
+		maxCreditsSem1=JSON.parse('{"maxCredits":"30","semester":[{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M2774","name":"Fundamentele programarii2","occupiedPlaces":"80","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').maxCredits;
     }
 
     function getSemester2()
     {
-    	semester2=JSON.parse('{"semester":[{"code":"M2434","name":"Fundamentele programarii11","occupiedPlaces":"80","totalPlaces":"80","type":"1","credits":"6"},{"code":"M277f4","name":"Fundamentele programarii12","occupiedPlaces":"52","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').semester;
+    	semester2=JSON.parse('{"maxCredits":"30","semester":[{"code":"M2434","name":"Fundamentele programarii11","occupiedPlaces":"80","totalPlaces":"80","type":"1","credits":"6"},{"code":"M277f4","name":"Fundamentele programarii12","occupiedPlaces":"52","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').semester;
+    	maxCreditsSem2=JSON.parse('{"maxCredits":"30","semester":[{"code":"M2434","name":"Fundamentele programarii11","occupiedPlaces":"80","totalPlaces":"80","type":"1","credits":"6"},{"code":"M277f4","name":"Fundamentele programarii12","occupiedPlaces":"52","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').maxCredits;
     }
 }
