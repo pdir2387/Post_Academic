@@ -1,7 +1,10 @@
-import React,{useState,useEffect} from 'react'
+import React,{useEffect} from 'react'
 import '../css/commons.css'
 import '../css/email.css'
 import BackIcon from '../img/back.png'
+import RemoveIcon from '../img/remove.png'
+
+var filesToSend=[];
 
 export default function SendEmail() 
 {
@@ -28,9 +31,16 @@ export default function SendEmail()
 
 	    		<div id="emailAttachments">
 	    			<div id="ulAttachmentsTitle">Atașamente</div>
-	    			<ul id="attachmentsUl">
-
-	    			</ul>
+	    			<div id="attachmentsTableContainer">
+		    			<table id="attachmentsTable">
+		    				<thead></thead>
+		    				<tbody></tbody>
+		    			</table>
+	    			</div>
+					
+	    			<form id="fileInputForm">
+	    				<input id="fileInput" type="file" onChange={(e)=>addFile(e.target)} multiple />
+	    			</form>
 	    		</div>
     		</div>
     	</div>
@@ -41,5 +51,48 @@ export default function SendEmail()
     	let to=document.getElementById("toInput").value;
     	let subject=document.getElementById("subjectInput").value;
     	let message=document.getElementById("emailMessageInput").value;
+
+		
+
+    	document.getElementById("attachmentsUl").innerHTML="";
+    	filesToSend=[];
+    }
+
+    function addFile(inputFile)
+    {
+    	let fileTable=document.getElementById("attachmentsTable");
+    	let files=inputFile.files;
+
+    	for(let i=0;i<files.length;i++)
+    	{
+			filesToSend.push(files[i]);
+			
+			let trFile=document.createElement("tr");
+			let tdImg=document.createElement("td");
+			let tdName=document.createElement("td");
+			let tdFile=document.createElement("td");
+			let imgRemoveFile=document.createElement("img");
+
+			imgRemoveFile.src=RemoveIcon;
+			imgRemoveFile.style.width="20px";
+			imgRemoveFile.style.height="auto";
+			imgRemoveFile.alt="D:";
+
+			imgRemoveFile.addEventListener('click',function(){
+			    fileTable.removeChild(trFile);
+			    filesToSend.splice(filesToSend.indexOf(files[i]),1);
+			});
+
+			tdImg.appendChild(imgRemoveFile);
+			tdName.innerText=files[i].name;
+			tdFile.innerText=files[i];
+			tdFile.style.display="none";
+
+			trFile.appendChild(tdImg);
+			trFile.appendChild(tdName);
+			trFile.appendChild(tdFile);
+
+			fileTable.appendChild(trFile);
+    	}
     }
 }

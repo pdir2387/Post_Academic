@@ -192,9 +192,12 @@
 }
 
 #emailAttachments{
+    display: flex;
+    flex-direction: column;
     flex: 2;
     margin: 0 10px;
     border: 1px solid black;
+    height: 100%;
 }
 
 #sendEmailButton{
@@ -221,4 +224,27 @@
 #toComposeEmailImage, #backToEmailsImage{
     width: 50px;
     height: auto;
+}
+
+#attachmentsTable{
+    margin: 5px;
+    font-size: 25px;
+}
+
+#fileInputForm{
+    flex: 1;
+    position: relative;
+}
+
+#fileInput{
+    position: absolute;
+    bottom: 0;
+    margin: 5px;
+}
+
+#attachmentsTableContainer{
+    flex: 6;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
