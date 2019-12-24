@@ -367,7 +367,7 @@ export default function Email()
 				let i=-1;
 				for(i=0;i<emails.length;i++)
 				{
-					if(emails.date===currentlySelectedMail.children[2].innerText && emails.from===currentlySelectedMail.children[1].innerText && emails.subject===currentlySelectedMail.children[0].innerText && emails.message===currentlySelectedMail.children[3].innerText)
+					if(emails[i].date===currentlySelectedMail.children[2].innerText && emails[i].from===currentlySelectedMail.children[1].innerText && emails[i].subject===currentlySelectedMail.children[0].innerText && emails[i].message===currentlySelectedMail.children[3].innerText)
 					{
 						break;
 					}
@@ -385,7 +385,7 @@ export default function Email()
 					let i=-1;
 					for(i=0;i<drafts.length;i++)
 					{
-						if(drafts.date===currentlySelectedMail.children[2].innerText && drafts.to===currentlySelectedMail.children[1].innerText && drafts.subject===currentlySelectedMail.children[0].innerText && drafts.message===currentlySelectedMail.children[3].innerText)
+						if(drafts[i].date===currentlySelectedMail.children[2].innerText && drafts[i].to===currentlySelectedMail.children[1].innerText && drafts[i].subject===currentlySelectedMail.children[0].innerText && drafts[i].message===currentlySelectedMail.children[3].innerText)
 						{
 							break;
 						}
@@ -403,7 +403,7 @@ export default function Email()
 						let i=-1;
 						for(i=0;i<sent.length;i++)
 						{
-							if(sent.date===currentlySelectedMail.children[2].innerText && sent.to===currentlySelectedMail.children[1].innerText && sent.subject===currentlySelectedMail.children[0].innerText && sent.message===currentlySelectedMail.children[3].innerText)
+							if(sent[i].date===currentlySelectedMail.children[2].innerText && sent[i].to===currentlySelectedMail.children[1].innerText && sent[i].subject===currentlySelectedMail.children[0].innerText && sent[i].message===currentlySelectedMail.children[3].innerText)
 							{
 								break;
 							}
@@ -432,7 +432,7 @@ export default function Email()
 
 		if(term==="")
 		{
-			if(currentlySelectedCategory==="emails")
+			if(currentlySelectedCategory==="inbox")
 			{
 				fillTableWithFoundEmails(emails);
 			}
