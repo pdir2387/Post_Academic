@@ -144,6 +144,11 @@
 
 #additionalOptions{
     flex: 1;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-left: 20px;
+    margin-bottom: 20px;
 }
 
 #containerAllSendEmail{
@@ -207,23 +212,21 @@
     padding: 10px;
 }
 
-#additionalOptions{
-    flex: 1;
-    margin-left: 20px;
-    margin-bottom: 20px;
-}
-
 #sendEmailAdditionalOptions{
     flex: 1;
 }
 
-#toComposeEmailImage, #backToEmailsImage, #deleteEmailImage{
+#toComposeEmailImage, #backToEmailsImage, #deleteEmailImage, #searchEmailImage{
     width: 50px;
     height: auto;
 }
 
 #deleteButtonMail{
     margin-left: 20px;
+    background-color: white;
+}
+
+#searchButtonEmail{
     background-color: white;
 }
 
@@ -248,4 +251,20 @@
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+#imageButtons{
+    margin-top: 50px;
+    flex: 1;
+}
+
+#searchArea{
+    margin-top: 50px;
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+}
+
+#searchField{
+    width: 60%;
 }

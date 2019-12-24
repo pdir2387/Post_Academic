@@ -3,6 +3,7 @@ import '../css/commons.css'
 import '../css/email.css'
 import ComposeImage from '../img/compose_email.png'
 import DeleteImage from '../img/trash.png'
+import SearchImage from '../img/search.png'
 
 var emails=[];
 var drafts=[];
@@ -21,8 +22,15 @@ export default function Email()
     return (
     	<div id="containerAllEmail">
     		<div id="additionalOptions">
-    			<a href="/send_email" id="toComposeEmail"><img id="toComposeEmailImage" src={ComposeImage} alt="Trimite email"/></a>
-    			<button id="deleteButtonMail" onClick={deleteCurrentlySelectedMail}><img id="deleteEmailImage" src={DeleteImage} alt="Delete"/></button>
+    			<div id="imageButtons">
+	    			<a href="/send_email" id="toComposeEmail"><img id="toComposeEmailImage" src={ComposeImage} alt="Trimite email"/></a>
+	    			<button id="deleteButtonMail" onClick={deleteCurrentlySelectedMail}><img id="deleteEmailImage" src={DeleteImage} alt="Delete"/></button>
+	    		</div>
+
+    			<div id="searchArea">
+    				<input type="text" id="searchField" />
+    				<button id="searchButtonEmail" onClick={searchEmails}><img id="searchEmailImage" src={SearchImage} alt="Caută"/></button>
+    			</div>
     		</div>
 
 	        <div id="containerEmailInfo">
@@ -416,5 +424,141 @@ export default function Email()
 	function sendDeleteRequest(subject,fromTo,date,message)
 	{
 
+	}
+
+	function searchEmails()
+	{
+		let term=document.getElementById("searchField").value;
+
+		if(term==="")
+		{
+			if(currentlySelectedCategory==="emails")
+			{
+				fillTableWithFoundEmails(emails);
+			}
+			else
+			{
+				if(currentlySelectedCategory==="draft")
+				{
+					fillTableWithFoundEmails(drafts);
+				}
+				else
+				{
+					if(currentlySelectedCategory==="sent")
+					{
+						fillTableWithFoundEmails(sent);
+					}
+				}
+			}
+
+			return;
+		}
+
+		let toSearchEmails=[];
+		let foundEmails=[];
+
+		if(currentlySelectedCategory==="inbox")
+		{
+			toSearchEmails=emails;
+		}
+		else
+		{
+			if(currentlySelectedCategory==="draft")
+			{
+				toSearchEmails=drafts;
+			}
+			else
+			{
+				if(currentlySelectedCategory==="sent")
+				{
+					toSearchEmails=sent;
+				}
+			}
+		}
+
+		for(let i=0;i<toSearchEmails.length;i++)
+		{
+			if(toSearchEmails[i].subject.includes(term) || toSearchEmails[i].date.includes(term) || toSearchEmails[i].message.includes(term))
+			{
+				foundEmails.push(toSearchEmails[i]);
+			}
+
+			if(currentlySelectedCategory==="inbox")
+			{
+				if(toSearchEmails[i].from.includes(term))
+				{
+					foundEmails.push(toSearchEmails[i]);
+				}
+			}
+			else
+			{
+				if(currentlySelectedCategory==="draft" || currentlySelectedCategory==="sent")
+				{
+					if(toSearchEmails[i].to.includes(term))
+					{
+						foundEmails.push(toSearchEmails[i]);
+					}
+				}
+			}
+		}
+
+		fillTableWithFoundEmails(foundEmails);
+	}
+
+	function fillTableWithFoundEmails(foundEmails)
+	{
+		let tbodyEmail=document.getElementById("tbodyEmail");
+		tbodyEmail.innerHTML="";
+
+		for(let i=0;i<foundEmails.length;i++)
+		{
+			let trEmail=document.createElement("tr");
+			let tdSubject=document.createElement("td");
+			let tdFromTo=document.createElement("td");
+			let tdDate=document.createElement("td");
+			let tdMessage=document.createElement("td");
+
+			tdSubject.innerText=foundEmails[i].subject;
+			tdDate.innerText=foundEmails[i].date;
+			tdMessage.innerText=foundEmails[i].message;
+
+			tdMessage.style.display="none";
+
+			if(currentlySelectedCategory==="inbox")
+			{
+				tdFromTo.innerText=foundEmails[i].from;
+			}
+			else
+			{
+				if(currentlySelectedCategory==="draft" || currentlySelectedCategory==="sent")
+				{
+					tdFromTo.innerText=foundEmails[i].to;
+				}
+			}
+
+			trEmail.appendChild(tdSubject);
+			trEmail.appendChild(tdFromTo);
+			trEmail.appendChild(tdDate);
+			trEmail.appendChild(tdMessage);
+
+			trEmail.addEventListener("click",function()
+			{
+				let emailTr=tbodyEmail.children;
+
+				for(let j=0;j<emailTr.length;j++)
+				{
+					emailTr[j].style.backgroundColor="white";
+					emailTr[j].style.color="black";
+				}
+
+				this.style.backgroundColor="#e30707";
+				this.style.color="white";
+
+				fillMessageBox(trEmail,"sent");
+				currentlySelectedMail=trEmail;
+			});
+
+			tbodyEmail.appendChild(trEmail)
+		}
 	}
 }
