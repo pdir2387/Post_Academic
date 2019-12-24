@@ -70,8 +70,8 @@
 }
 
 #ulCategories li{
-    padding: 5px;
     border-bottom: 1px solid #ebebeb;
+    padding: 5px;
 }
 
 #emailList{
@@ -144,10 +144,6 @@
 
 #additionalOptions{
     flex: 1;
-}
-
-#ulCategories li a{
-    display: block;
 }
 
 #containerAllSendEmail{

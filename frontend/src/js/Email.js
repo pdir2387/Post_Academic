@@ -25,9 +25,9 @@ export default function Email()
 	            <div id="leftPanel">
 	            	<div id="ulCategoriesTitle">Categorii</div>
 	            	<ul id="ulCategories">
-	            		<li><a id="inboxA" onClick={openInbox}>Mesaje primite</a></li>
-	            		<li><a id="draftsA" onClick={openDrafts}>Schițe</a></li>
-	            		<li><a id="sentA" onClick={openSent}>Mesaje trimise</a></li>
+	            		<li id="inboxLi" onClick={openInbox}>Mesaje primite</li>
+	            		<li id="draftsLi" onClick={openDrafts}>Schițe</li>
+	            		<li id="sentLi" onClick={openSent}>Mesaje trimise</li>
 	            	</ul>
 	            </div>
 				
@@ -65,6 +65,12 @@ export default function Email()
 
 	function openInbox()
 	{
+		deselectCategories();
+
+		let liElem=document.getElementById("inboxLi");
+		liElem.style.backgroundColor="#e30707";
+		liElem.style.color="white";
+
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
 		document.getElementById("messageP").innerText="";
 		fillEmailTable();
@@ -72,6 +78,12 @@ export default function Email()
 
 	function openDrafts()
 	{
+		deselectCategories();
+
+		let liElem=document.getElementById("draftsLi");
+		liElem.style.backgroundColor="#e30707";
+		liElem.style.color="white";
+
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
 		document.getElementById("messageP").innerText="";
 		fillDraftsTable();
@@ -79,32 +91,33 @@ export default function Email()
 
 	function openSent()
 	{
+		deselectCategories();
+
+		let liElem=document.getElementById("sentLi");
+		liElem.style.backgroundColor="#e30707";
+		liElem.style.color="white";
+
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
 		document.getElementById("messageP").innerText="";
 		fillSentTable();
 	}
 
-	function setup()
+	function deselectCategories()
 	{
 		let categoriesLi=document.getElementById("ulCategories").children;
 
-		categoriesLi[0].style.backgroundColor="#e30707";
-		categoriesLi[0].style.color="white";
-
-		for(let i=0;i<categoriesLi.length;i++)
+		for(let j=0;j<categoriesLi.length;j++)
 		{
-			categoriesLi[i].addEventListener("click",function()
-			{
-				for(let j=0;j<categoriesLi.length;j++)
-				{
-					categoriesLi[j].style.backgroundColor="white";
-					categoriesLi[j].style.color="black";
-				}
-
-				this.style.backgroundColor="#e30707";
-				this.style.color="white";
-			});
+			categoriesLi[j].style.backgroundColor="white";
+			categoriesLi[j].style.color="black";
 		}
+	}
+
+	function setup()
+	{
+		let liElem=document.getElementById("inboxLi");
+		liElem.style.backgroundColor="#e30707";
+		liElem.style.color="white";
 	}
 
 	function fillEmailTable()
@@ -121,14 +134,19 @@ export default function Email()
 			let tdSubject=document.createElement("td");
 			let tdFrom=document.createElement("td");
 			let tdDate=document.createElement("td");
+			let tdMessage=document.createElement("td");
 
 			tdSubject.innerText=emails[i].subject;
 			tdFrom.innerText=emails[i].from;
 			tdDate.innerText=emails[i].date;
+			tdMessage.innerText=emails[i].message;
+
+			tdMessage.style.display="none";
 
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdFrom);
 			trEmail.appendChild(tdDate);
+			trEmail.appendChild(tdMessage);
 
 			trEmail.addEventListener("click",function()
 			{
@@ -143,7 +161,7 @@ export default function Email()
 				this.style.backgroundColor="#e30707";
 				this.style.color="white";
 
-				fillMessageBox(i,"email");
+				fillMessageBox(trEmail,"email");
 			});
 
 			tbodyEmail.appendChild(trEmail)
@@ -164,14 +182,19 @@ export default function Email()
 			let tdSubject=document.createElement("td");
 			let tdTo=document.createElement("td");
 			let tdDate=document.createElement("td");
+			let tdMessage=document.createElement("td");
 
 			tdSubject.innerText=drafts[i].subject;
 			tdTo.innerText=drafts[i].to;
 			tdDate.innerText=drafts[i].date;
+			tdMessage.innerText=drafts[i].message;
+
+			tdMessage.style.display="none";
 
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdTo);
 			trEmail.appendChild(tdDate);
+			trEmail.appendChild(tdMessage);
 
 			trEmail.addEventListener("click",function()
 			{
@@ -186,7 +209,7 @@ export default function Email()
 				this.style.backgroundColor="#e30707";
 				this.style.color="white";
 
-				fillMessageBox(i,"draft");
+				fillMessageBox(trEmail,"draft");
 			});
 
 			tbodyEmail.appendChild(trEmail)
@@ -207,14 +230,19 @@ export default function Email()
 			let tdSubject=document.createElement("td");
 			let tdTo=document.createElement("td");
 			let tdDate=document.createElement("td");
+			let tdMessage=document.createElement("td");
 
 			tdSubject.innerText=sent[i].subject;
 			tdTo.innerText=sent[i].to;
 			tdDate.innerText=sent[i].date;
+			tdMessage.innerText=sent[i].message;
+
+			tdMessage.style.display="none";
 
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdTo);
 			trEmail.appendChild(tdDate);
+			trEmail.appendChild(tdMessage);
 
 			trEmail.addEventListener("click",function()
 			{
@@ -229,14 +257,14 @@ export default function Email()
 				this.style.backgroundColor="#e30707";
 				this.style.color="white";
 
-				fillMessageBox(i,"sent");
+				fillMessageBox(trEmail,"sent");
 			});
 
 			tbodyEmail.appendChild(trEmail)
 		}
 	}
 
-	function fillMessageBox(emailNumber,source)
+	function fillMessageBox(trEmail,source)
 	{
 		let tbodyInfo=document.getElementById("tbodyTableEmailInfo");
 		tbodyInfo.innerHTML="";
@@ -250,7 +278,6 @@ export default function Email()
 		let thDate=document.createElement("th"); 
 
 		thSubject.innerText="Subiect:";
-		
 		thDate.innerText="Data:";
 
 		if(source==="email")
@@ -269,9 +296,9 @@ export default function Email()
 		let tdFrom=document.createElement("td");
 		let tdDate=document.createElement("td");
 
-		tdSubject.innerText=emails[emailNumber].subject;
-		tdFrom.innerText=emails[emailNumber].from;
-		tdDate.innerText=emails[emailNumber].date;
+		tdSubject.innerText=trEmail.children[0].innerText;
+		tdFrom.innerText=trEmail.children[1].innerText;
+		tdDate.innerText=trEmail.children[2].innerText;
 
 		trSubject.appendChild(thSubject);
 		trSubject.appendChild(tdSubject);
@@ -286,28 +313,7 @@ export default function Email()
 		tbodyInfo.appendChild(trFrom);
 		tbodyInfo.appendChild(trDate);
 
-		let message="";
-
-		if(source==="email")
-		{
-			message=emails[emailNumber].message;
-		}
-		else
-		{
-			if(source==="draft")
-			{
-				message=drafts[emailNumber].message;
-			}
-			else
-			{
-				if(source==="sent")
-				{
-					message=sent[emailNumber].message;
-				}
-			}
-		}
-
-		document.getElementById("messageP").innerText=message;
+		document.getElementById("messageP").innerText=trEmail.children[3].innerText;
 	}
 
 	function getEmails()
