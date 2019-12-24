@@ -1,0 +1,151 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#emailPage{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    width: 100%;
+}
+
+#emailLeft {
+    background-color: #ececec;
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    align-items: center;
+}
+
+#emailRight{
+    flex: 8;
+}
+
+#containerAllEmail{
+    width: 100%;
+    height: 100%;
+}
+
+#containerEmailInfo{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+
+}
+
+#leftPanel{
+    flex: 1;
+    height: 90%;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: 1px solid grey;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#emails{
+    display: flex;
+    flex: 8;
+    flex-direction: column;
+}
+
+#ulCategories{
+    text-align: left;
+    list-style-type: none;
+    width: 100%;
+}
+
+#ulCategoriesTitle{
+    background-color: #547598;
+    color: white;
+    text-align: center;
+    padding: 5px;
+}
+
+#ulCategories li{
+    padding: 5px;
+    border-bottom: 1px solid #ebebeb;
+}
+
+#emailList{
+    flex: 2;
+    border: 1px solid grey;
+    margin-bottom: 10px;
+    overflow: auto;
+}
+
+#tableEmails{
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#tableEmails th{
+    background-color: #547598;
+    color: white;
+    text-align: left;
+    padding: 5px;
+    position: sticky;
+    top: 0;
+}
+
+#tableEmails tr{
+    border: 1px solid #ebebeb;
+}
+
+#tableEmails td{
+    padding: 5px;
+    max-width:300px;
+    overflow: hidden;
+    word-wrap: break-word
+}
+
+#emailMessage{
+    border: 1px solid grey;
+    word-wrap: break-word;
+    flex: 6;
+}
+
+#tableEmailInfo{
+    width: 100%;
+    background-color: #ebebeb;
+    text-align: left;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#tableEmailInfo th,#tableEmailInfo td{
+    border-bottom: 2px solid white;
+    padding: 5px;
+}
+
+#tableEmailInfo th{
+    width: 2%;
+    white-space: nowrap;
+}
+
+#messageP{
+    padding: 5px;
+}
+
+#additionalOptions{
+    flex: 1;
+}
+
+#ulCategories li a{
+    display: block;
+}

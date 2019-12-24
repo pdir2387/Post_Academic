@@ -46,18 +46,20 @@ export default function AttendanceTableProfessor()
 	                </select>
 	            </fieldset>
             </div>
+			
+			<div id="containerAttendancesProfessor">
+	            <table id="tableAttendances" className="table">
+	            	<thead id="theadAttendances">
+		                <tr id="headers">
+		                    {getHeader(nrWeeks)}
+		                </tr>
+		            </thead>
 
-            <table id="tableAttendances" className="table">
-            	<thead id="theadAttendances">
-	                <tr id="headers">
-	                    {getHeader(nrWeeks)}
-	                </tr>
-	            </thead>
+		            <tbody id="tbody">
 
-	            <tbody id="tbody">
-
-	            </tbody>
-            </table>
+		            </tbody>
+	            </table>
+            </div>
 
             <div id="infoAttendances">
                 <h2 id="attendancesCourse"></h2>

@@ -35,7 +35,6 @@
 
 .table{
     width: 100%;
-    overflow: auto;
 }
 
 #infoAttendances{
@@ -71,4 +70,8 @@
     position: sticky;
     left: 0;
     z-index: 5;
+}
+
+#containerAttendancesProfessor{
+    overflow: auto;
 }
