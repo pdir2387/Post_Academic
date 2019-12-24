@@ -85,44 +85,25 @@ function getSelectOptions()
 
 function fillTable(discipline)
 {
-    setCourseAttendances(discipline);
-    setSeminarsAttendances(discipline);
-    setLabsAttendances(discipline);
+    getAttendances(discipline);
+    setCourseAttendances();
+    setSeminarsAttendances();
+    setLabsAttendances();
     setAttendancesNumbersCourse();
     setAttendancesNumbersSeminar();
     setAttendancesNumbersLab()
 }
 
-function getCourseAttendances(discipline)
+function getAttendances()
 {
-    if(discipline==="FP")
-    {
-        courseAttendances= ["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"];
-    }
-    else
-    {
-        if(discipline==="OOP")
-        {
-            courseAttendances= [" "," "," ","x","x"," ","x"," "," ","x"," ","x","x","x"];
-        }
-    }
+    let attendances=JSON.parse('{"course":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"seminar":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"laboratory":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"]}');
+    courseAttendances=attendances.course;
+    seminarAttendances=attendances.seminar;
+    labAttendances=attendances.laboratory;
 }
 
-function getSemiarAttendances(discipline)
+function setCourseAttendances()
 {
-    seminarAttendances= ["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"];
-}
-
-
-function getLabsAttendances(discipline)
-{
-    labAttendances= ["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"];
-}
-
-
-function setCourseAttendances(discipline)
-{
-    getCourseAttendances(discipline);
     let courseTr=document.getElementById("courseRow");
     courseTr.innerHTML="";
 
@@ -138,9 +119,8 @@ function setCourseAttendances(discipline)
     }
 }
 
-function setSeminarsAttendances(discipline)
+function setSeminarsAttendances()
 {
-    getSemiarAttendances(discipline);
     let seminarTr=document.getElementById("seminarRow");
     seminarTr.innerHTML="";
 
@@ -156,9 +136,8 @@ function setSeminarsAttendances(discipline)
     }
 }
 
-function setLabsAttendances(discipline)
+function setLabsAttendances()
 {
-    getLabsAttendances(discipline);
     let labTr=document.getElementById("labRow");
     labTr.innerHTML="";
 

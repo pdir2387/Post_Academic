@@ -1,0 +1,38 @@
+#resultsPage{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    width: 100%;
+}
+
+#resultsLeft {
+    background-color: #ececec;
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    align-items: center;
+}
+
+#resultsRight{
+    flex: 8;
+}
+
+#content{
+    display: flex;
+    flex-direction: row;
+}
+
+#sortingAndFilteringOptions{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    text-align: left;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+#optionsAndTable{
+    display: flex;
+    flex-direction: row;
+    flex: 3;
+}
