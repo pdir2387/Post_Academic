@@ -62,7 +62,7 @@
     width: 100%;
 }
 
-#ulCategoriesTitle{
+#ulCategoriesTitle, #ulAttachmentsTitle{
     background-color: #547598;
     color: white;
     text-align: center;
@@ -148,4 +148,77 @@
 
 #ulCategories li a{
     display: block;
+}
+
+#containerAllSendEmail{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    margin: 20px;
+}
+
+#emailDetails{
+    flex: 1;
+    padding: 10px;
+}
+
+#emailContent{
+    display: flex;
+    flex-direction: row;
+    flex: 8;
+}
+
+#emailMessage{
+    flex: 8;
+    text-align: left;
+}
+
+#emailMessageInput{
+    height: 100%;
+    width: 100%;
+}
+
+#toInput, #subjectInput{
+    display: inline-block;
+    width: 90%;
+    height: 10%;
+}
+
+.emailDetailsInput{
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+}
+
+#emailAttachments{
+    flex: 2;
+    margin: 0 10px;
+    border: 1px solid black;
+}
+
+#sendEmailButton{
+    color: white;
+    font-weight: 900;
+    background-color: #1f4976;
+    border: none;
+    font-size: 15px;
+    margin: 10px 0;
+    text-align: start;
+    padding: 10px;
+}
+
+#additionalOptions{
+    flex: 1;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+#sendEmailAdditionalOptions{
+    flex: 1;
+}
+
+#toComposeEmailImage, #backToEmailsImage{
+    width: 50px;
+    height: auto;
 }

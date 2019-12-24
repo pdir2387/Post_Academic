@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import '../css/commons.css'
 import '../css/email.css'
+import ComposeImage from '../img/compose_email.png'
 
 var emails=[];
 var drafts=[];
@@ -17,8 +18,9 @@ export default function Email()
     return (
     	<div id="containerAllEmail">
     		<div id="additionalOptions">
-    			<a id="composeEmail">Compose</a>
+    			<a href="/send_email" id="toComposeEmail"><img id="toComposeEmailImage" src={ComposeImage} alt="Trimite email"/></a>
     		</div>
+
 	        <div id="containerEmailInfo">
 	            <div id="leftPanel">
 	            	<div id="ulCategoriesTitle">Categorii</div>
