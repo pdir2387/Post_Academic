@@ -1,7 +1,8 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import '../css/commons.css'
 import '../css/attendances.css'
 
+var disciplines=[];
 var courseAttendances=[];
 var seminarAttendances=[];
 var labAttendances=[];
@@ -9,6 +10,11 @@ var labAttendances=[];
 export default function AttendanceTable() 
 {
     let [nrWeeks,setNrWeeks]=useState(14);
+
+    useEffect(() => 
+    {
+        setDisciplinesOptions();
+    }, []);
 
     function disciplineChanged(e)
     {
@@ -21,7 +27,6 @@ export default function AttendanceTable()
 
             <fieldset>
                 <select id="disciplineDropDown" className="dropDown" onChange={disciplineChanged}>
-                    {getSelectOptions()}
                 </select>
             </fieldset>
 
@@ -64,23 +69,23 @@ function getHeader(nrWeeks)
     return headers;
 }
 
-function getSelectOptions()
+function setDisciplinesOptions()
 {
-    let options=[];
-     
-     options.push(
-        <option disabled selected value> --- alege materia --- </option>
-     )
+    getDisciplines();
+    let disciplinesSelect=document.getElementById("disciplineDropDown");
 
-     options.push(
-        <option value="FP">FP</option>
-     )
+    let firstOption=document.createElement("option");
+    firstOption.innerText="---alege materia---";
+    firstOption.selected="selected";
+    firstOption.disabled="true";
+    disciplinesSelect.appendChild(firstOption);
 
-     options.push(
-        <option value="OOP">OOP</option>
-     )
-
-     return options;
+    for(let i=0;i<disciplines.length;i++)
+    {
+        let option=document.createElement("option");
+        option.innerText=disciplines[i].name;
+        disciplinesSelect.appendChild(option);
+    }
 }
 
 function fillTable(discipline)
@@ -94,12 +99,23 @@ function fillTable(discipline)
     setAttendancesNumbersLab()
 }
 
-function getAttendances()
+function getAttendances(discipline)
 {
-    let attendances=JSON.parse('{"course":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"seminar":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"laboratory":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"]}');
-    courseAttendances=attendances.course;
-    seminarAttendances=attendances.seminar;
-    labAttendances=attendances.laboratory;
+    for(let i=0;i<disciplines.length;i++)
+    {
+        if(disciplines[i].name===discipline)
+        {
+            courseAttendances=disciplines[i].course;
+            seminarAttendances=disciplines[i].seminar;
+            labAttendances=disciplines[i].laboratory;
+        }
+    }
+}
+
+function getDisciplines()
+{
+    disciplines=JSON.parse('{"disciplines":[{"name":"FP","course":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"seminar":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"laboratory":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"]},{"name":"OOP","course":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"seminar":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"laboratory":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"]}]}').disciplines;
+
 }
 
 function setCourseAttendances()
