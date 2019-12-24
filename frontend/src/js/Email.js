@@ -2,10 +2,13 @@ import React,{useState,useEffect} from 'react'
 import '../css/commons.css'
 import '../css/email.css'
 import ComposeImage from '../img/compose_email.png'
+import DeleteImage from '../img/trash.png'
 
 var emails=[];
 var drafts=[];
 var sent=[];
+var currentlySelectedMail=null;
+var currentlySelectedCategory="inbox";
 
 export default function Email() 
 {
@@ -19,6 +22,7 @@ export default function Email()
     	<div id="containerAllEmail">
     		<div id="additionalOptions">
     			<a href="/send_email" id="toComposeEmail"><img id="toComposeEmailImage" src={ComposeImage} alt="Trimite email"/></a>
+    			<button id="deleteButtonMail" onClick={deleteCurrentlySelectedMail}><img id="deleteEmailImage" src={DeleteImage} alt="Delete"/></button>
     		</div>
 
 	        <div id="containerEmailInfo">
@@ -65,6 +69,7 @@ export default function Email()
 
 	function openInbox()
 	{
+		currentlySelectedMail=null;
 		deselectCategories();
 
 		let liElem=document.getElementById("inboxLi");
@@ -74,10 +79,12 @@ export default function Email()
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
 		document.getElementById("messageP").innerText="";
 		fillEmailTable();
+		currentlySelectedCategory="inbox";
 	}
 
 	function openDrafts()
 	{
+		currentlySelectedMail=null;
 		deselectCategories();
 
 		let liElem=document.getElementById("draftsLi");
@@ -87,10 +94,12 @@ export default function Email()
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
 		document.getElementById("messageP").innerText="";
 		fillDraftsTable();
+		currentlySelectedCategory="draft";
 	}
 
 	function openSent()
 	{
+		currentlySelectedMail=null;
 		deselectCategories();
 
 		let liElem=document.getElementById("sentLi");
@@ -100,6 +109,7 @@ export default function Email()
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
 		document.getElementById("messageP").innerText="";
 		fillSentTable();
+		currentlySelectedCategory="sent";
 	}
 
 	function deselectCategories()
@@ -162,6 +172,7 @@ export default function Email()
 				this.style.color="white";
 
 				fillMessageBox(trEmail,"email");
+				currentlySelectedMail=trEmail;
 			});
 
 			tbodyEmail.appendChild(trEmail)
@@ -210,6 +221,7 @@ export default function Email()
 				this.style.color="white";
 
 				fillMessageBox(trEmail,"draft");
+				currentlySelectedMail=trEmail;
 			});
 
 			tbodyEmail.appendChild(trEmail)
@@ -258,6 +270,7 @@ export default function Email()
 				this.style.color="white";
 
 				fillMessageBox(trEmail,"sent");
+				currentlySelectedMail=trEmail;
 			});
 
 			tbodyEmail.appendChild(trEmail)
@@ -329,5 +342,79 @@ export default function Email()
 	function getSent()
 	{
 		sent=JSON.parse('{"sent":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok sent. fuk da cops"}]}').sent;
+	}
+
+	function deleteCurrentlySelectedMail()
+	{
+		if(currentlySelectedMail!==null)
+		{
+			document.getElementById("tbodyEmail").removeChild(currentlySelectedMail);
+			document.getElementById("tbodyTableEmailInfo").innerHTML="";
+			document.getElementById("messageP").innerText="";
+
+			sendDeleteRequest(currentlySelectedMail.children[0].innerText,currentlySelectedMail.children[1].innerText,currentlySelectedMail.children[2].innerText,currentlySelectedMail.children[3].innerText);
+
+			if(currentlySelectedCategory==="inbox")
+			{
+				let i=-1;
+				for(i=0;i<emails.length;i++)
+				{
+					if(emails.date===currentlySelectedMail.children[2].innerText && emails.from===currentlySelectedMail.children[1].innerText && emails.subject===currentlySelectedMail.children[0].innerText && emails.message===currentlySelectedMail.children[3].innerText)
+					{
+						break;
+					}
+				}
+
+				if(i!==-1)
+				{
+					emails.splice(i,1);
+				}
+			}
+			else
+			{
+				if(currentlySelectedCategory==="draft")
+				{
+					let i=-1;
+					for(i=0;i<drafts.length;i++)
+					{
+						if(drafts.date===currentlySelectedMail.children[2].innerText && drafts.to===currentlySelectedMail.children[1].innerText && drafts.subject===currentlySelectedMail.children[0].innerText && drafts.message===currentlySelectedMail.children[3].innerText)
+						{
+							break;
+						}
+					}
+
+					if(i!==-1)
+					{
+						drafts.splice(i,1);
+					}
+				}
+				else
+				{
+					if(currentlySelectedCategory==="sent")
+					{
+						let i=-1;
+						for(i=0;i<sent.length;i++)
+						{
+							if(sent.date===currentlySelectedMail.children[2].innerText && sent.to===currentlySelectedMail.children[1].innerText && sent.subject===currentlySelectedMail.children[0].innerText && sent.message===currentlySelectedMail.children[3].innerText)
+							{
+								break;
+							}
+						}
+
+						if(i!==-1)
+						{
+							sent.splice(i,1);
+						}
+					}
+				}
+			}
+
+			currentlySelectedMail=null;
+		}
+	}
+
+	function sendDeleteRequest(subject,fromTo,date,message)
+	{
+
 	}
 }

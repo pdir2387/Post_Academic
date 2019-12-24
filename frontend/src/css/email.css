@@ -217,9 +217,14 @@
     flex: 1;
 }
 
-#toComposeEmailImage, #backToEmailsImage{
+#toComposeEmailImage, #backToEmailsImage, #deleteEmailImage{
     width: 50px;
     height: auto;
+}
+
+#deleteButtonMail{
+    margin-left: 20px;
+    background-color: white;
 }
 
 #attachmentsTable{
