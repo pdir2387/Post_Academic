@@ -67,8 +67,10 @@ export default function Email()
 		            		<tbody id="tbodyTableEmailInfo">
 		            		</tbody>
 		            	</table>
-
-		            	<p id="messageP"></p>
+						
+						<div id="messageArea">
+		            		<p id="messageP"></p>
+		            	</div>
 		            </div>
 	            </div>
 	        </div>
@@ -141,12 +143,17 @@ export default function Email()
 	function fillEmailTable()
 	{
 		getEmails();
+		fillEmailTableWithArray(emails);
+	}
+
+	function fillEmailTableWithArray(toFill)
+	{
 		let tbodyEmail=document.getElementById("tbodyEmail");
 		tbodyEmail.innerHTML="";
 
 		document.getElementById("fromToTh").innerText="Expeditor";
 
-		for(let i=0;i<emails.length;i++)
+		for(let i=0;i<toFill.length;i++)
 		{
 			let trEmail=document.createElement("tr");
 			let tdSubject=document.createElement("td");
@@ -154,10 +161,17 @@ export default function Email()
 			let tdDate=document.createElement("td");
 			let tdMessage=document.createElement("td");
 
-			tdSubject.innerText=emails[i].subject;
-			tdFrom.innerText=emails[i].from;
-			tdDate.innerText=emails[i].date;
-			tdMessage.innerText=emails[i].message;
+			tdSubject.innerText=toFill[i].subject;
+			tdFrom.innerText=toFill[i].from;
+			tdDate.innerText=toFill[i].date;
+			tdMessage.innerText=toFill[i].message;
+			
+			if(toFill[i].read=="false")
+			{
+				tdSubject.style.fontWeight="bold";
+				tdFrom.style.fontWeight="bold";
+				tdDate.style.fontWeight="bold";
+			}
 
 			tdMessage.style.display="none";
 
@@ -165,6 +179,8 @@ export default function Email()
 			trEmail.appendChild(tdFrom);
 			trEmail.appendChild(tdDate);
 			trEmail.appendChild(tdMessage);
+
+			tbodyEmail.appendChild(trEmail)
 
 			trEmail.addEventListener("click",function()
 			{
@@ -178,24 +194,43 @@ export default function Email()
 
 				this.style.backgroundColor="#e30707";
 				this.style.color="white";
+				
+				let emailTd=this.children;
+
+				for(let j=0;j<emailTd.length;j++)
+				{
+					emailTd[j].style.fontWeight="normal";
+				}
+
+				toFill[i].read="true";
+				sendReadEmail(toFill[i]);
 
 				fillMessageBox(trEmail,"email");
 				currentlySelectedMail=trEmail;
 			});
-
-			tbodyEmail.appendChild(trEmail)
 		}
 	}
 
 	function fillDraftsTable()
 	{
 		getDrafts();
+		fillDraftsOrSentTableWithArray(drafts);
+	}
+
+	function fillSentTable()
+	{
+		getSent();
+		fillDraftsOrSentTableWithArray(sent);
+	}
+
+	function fillDraftsOrSentTableWithArray(toFill)
+	{
 		let tbodyEmail=document.getElementById("tbodyEmail");
 		tbodyEmail.innerHTML="";
 
 		document.getElementById("fromToTh").innerText="Destinatar";
 
-		for(let i=0;i<drafts.length;i++)
+		for(let i=0;i<toFill.length;i++)
 		{
 			let trEmail=document.createElement("tr");
 			let tdSubject=document.createElement("td");
@@ -203,10 +238,10 @@ export default function Email()
 			let tdDate=document.createElement("td");
 			let tdMessage=document.createElement("td");
 
-			tdSubject.innerText=drafts[i].subject;
-			tdTo.innerText=drafts[i].to;
-			tdDate.innerText=drafts[i].date;
-			tdMessage.innerText=drafts[i].message;
+			tdSubject.innerText=toFill[i].subject;
+			tdTo.innerText=toFill[i].to;
+			tdDate.innerText=toFill[i].date;
+			tdMessage.innerText=toFill[i].message;
 
 			tdMessage.style.display="none";
 
@@ -214,6 +249,8 @@ export default function Email()
 			trEmail.appendChild(tdTo);
 			trEmail.appendChild(tdDate);
 			trEmail.appendChild(tdMessage);
+
+			tbodyEmail.appendChild(trEmail)
 
 			trEmail.addEventListener("click",function()
 			{
@@ -231,57 +268,6 @@ export default function Email()
 				fillMessageBox(trEmail,"draft");
 				currentlySelectedMail=trEmail;
 			});
-
-			tbodyEmail.appendChild(trEmail)
-		}
-	}
-
-	function fillSentTable()
-	{
-		getSent();
-		let tbodyEmail=document.getElementById("tbodyEmail");
-		tbodyEmail.innerHTML="";
-
-		document.getElementById("fromToTh").innerText="Destinatar";
-
-		for(let i=0;i<sent.length;i++)
-		{
-			let trEmail=document.createElement("tr");
-			let tdSubject=document.createElement("td");
-			let tdTo=document.createElement("td");
-			let tdDate=document.createElement("td");
-			let tdMessage=document.createElement("td");
-
-			tdSubject.innerText=sent[i].subject;
-			tdTo.innerText=sent[i].to;
-			tdDate.innerText=sent[i].date;
-			tdMessage.innerText=sent[i].message;
-
-			tdMessage.style.display="none";
-
-			trEmail.appendChild(tdSubject);
-			trEmail.appendChild(tdTo);
-			trEmail.appendChild(tdDate);
-			trEmail.appendChild(tdMessage);
-
-			trEmail.addEventListener("click",function()
-			{
-				let emailTr=tbodyEmail.children;
-
-				for(let j=0;j<emailTr.length;j++)
-				{
-					emailTr[j].style.backgroundColor="white";
-					emailTr[j].style.color="black";
-				}
-
-				this.style.backgroundColor="#e30707";
-				this.style.color="white";
-
-				fillMessageBox(trEmail,"sent");
-				currentlySelectedMail=trEmail;
-			});
-
-			tbodyEmail.appendChild(trEmail)
 		}
 	}
 
@@ -339,7 +325,7 @@ export default function Email()
 
 	function getEmails()
 	{
-		emails=JSON.parse('{"emails":[{"subject":"subject1","from":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok. fuk da cops"},{"subject":"subject2","from":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz"},{"subject":"subject3","from":"Big Smoke3","date":"2017-01-01 12:12","message":"lul u. wont betray. eveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer"},{"subject":"subject4","from":"Big Smoke4","date":"2014-01-01 12:12","message":"fo da hood"},{"subject":"subject5","from":"Big Smoke5","date":"2015-01-01 12:12","message":"need some numba 9s"}]}').emails;
+		emails=JSON.parse('{"emails":[{"read":"true","subject":"subject1","from":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok. fuk da cops"},{"read":"false","subject":"subject2","from":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz"},{"read":"false","subject":"subject3","from":"Big Smoke3","date":"2017-01-01 12:12","message":"lul u. wont betray. eveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer"},{"read":"true","subject":"subject4","from":"Big Smoke4","date":"2014-01-01 12:12","message":"fo da hood"},{"read":"false","subject":"subject5","from":"Big Smoke5","date":"2015-01-01 12:12","message":"need some numba 9s"}]}').emails;
 	}
 
 	function getDrafts()
@@ -356,7 +342,7 @@ export default function Email()
 	{
 		if(currentlySelectedMail!==null)
 		{
-			document.getElementById("tbodyEmail").removeChild(currentlySelectedMail);
+			let tbodyEmail=document.getElementById("tbodyEmail");
 			document.getElementById("tbodyTableEmailInfo").innerHTML="";
 			document.getElementById("messageP").innerText="";
 
@@ -364,58 +350,24 @@ export default function Email()
 
 			if(currentlySelectedCategory==="inbox")
 			{
-				let i=-1;
-				for(i=0;i<emails.length;i++)
-				{
-					if(emails[i].date===currentlySelectedMail.children[2].innerText && emails[i].from===currentlySelectedMail.children[1].innerText && emails[i].subject===currentlySelectedMail.children[0].innerText && emails[i].message===currentlySelectedMail.children[3].innerText)
-					{
-						break;
-					}
-				}
-
-				if(i!==-1)
-				{
-					emails.splice(i,1);
-				}
+				emails.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(currentlySelectedMail),1);
 			}
 			else
 			{
 				if(currentlySelectedCategory==="draft")
 				{
-					let i=-1;
-					for(i=0;i<drafts.length;i++)
-					{
-						if(drafts[i].date===currentlySelectedMail.children[2].innerText && drafts[i].to===currentlySelectedMail.children[1].innerText && drafts[i].subject===currentlySelectedMail.children[0].innerText && drafts[i].message===currentlySelectedMail.children[3].innerText)
-						{
-							break;
-						}
-					}
-
-					if(i!==-1)
-					{
-						drafts.splice(i,1);
-					}
+					drafts.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(currentlySelectedMail),1);
 				}
 				else
 				{
 					if(currentlySelectedCategory==="sent")
 					{
-						let i=-1;
-						for(i=0;i<sent.length;i++)
-						{
-							if(sent[i].date===currentlySelectedMail.children[2].innerText && sent[i].to===currentlySelectedMail.children[1].innerText && sent[i].subject===currentlySelectedMail.children[0].innerText && sent[i].message===currentlySelectedMail.children[3].innerText)
-							{
-								break;
-							}
-						}
-
-						if(i!==-1)
-						{
-							sent.splice(i,1);
-						}
+						sent.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(currentlySelectedMail),1);
 					}
 				}
 			}
+
+			tbodyEmail.removeChild(currentlySelectedMail);
 
 			currentlySelectedMail=null;
 		}
@@ -434,19 +386,19 @@ export default function Email()
 		{
 			if(currentlySelectedCategory==="inbox")
 			{
-				fillTableWithFoundEmails(emails);
+				fillEmailTableWithArray(emails);
 			}
 			else
 			{
 				if(currentlySelectedCategory==="draft")
 				{
-					fillTableWithFoundEmails(drafts);
+					fillDraftsOrSentTableWithArray(drafts);
 				}
 				else
 				{
 					if(currentlySelectedCategory==="sent")
 					{
-						fillTableWithFoundEmails(sent);
+						fillDraftsOrSentTableWithArray(sent);
 					}
 				}
 			}
@@ -501,64 +453,22 @@ export default function Email()
 				}
 			}
 		}
-
-		fillTableWithFoundEmails(foundEmails);
+		
+		if(currentlySelectedCategory==="inbox")
+		{
+			fillEmailTableWithArray(foundEmails);
+		}
+		else
+		{
+			if(currentlySelectedCategory==="draft" || currentlySelectedCategory==="sent")
+			{
+				fillDraftsOrSentTableWithArray(foundEmails);
+			}
+		}
 	}
 
-	function fillTableWithFoundEmails(foundEmails)
+	function sendReadEmail(email)
 	{
-		let tbodyEmail=document.getElementById("tbodyEmail");
-		tbodyEmail.innerHTML="";
 
-		for(let i=0;i<foundEmails.length;i++)
-		{
-			let trEmail=document.createElement("tr");
-			let tdSubject=document.createElement("td");
-			let tdFromTo=document.createElement("td");
-			let tdDate=document.createElement("td");
-			let tdMessage=document.createElement("td");
-
-			tdSubject.innerText=foundEmails[i].subject;
-			tdDate.innerText=foundEmails[i].date;
-			tdMessage.innerText=foundEmails[i].message;
-
-			tdMessage.style.display="none";
-
-			if(currentlySelectedCategory==="inbox")
-			{
-				tdFromTo.innerText=foundEmails[i].from;
-			}
-			else
-			{
-				if(currentlySelectedCategory==="draft" || currentlySelectedCategory==="sent")
-				{
-					tdFromTo.innerText=foundEmails[i].to;
-				}
-			}
-
-			trEmail.appendChild(tdSubject);
-			trEmail.appendChild(tdFromTo);
-			trEmail.appendChild(tdDate);
-			trEmail.appendChild(tdMessage);
-
-			trEmail.addEventListener("click",function()
-			{
-				let emailTr=tbodyEmail.children;
-
-				for(let j=0;j<emailTr.length;j++)
-				{
-					emailTr[j].style.backgroundColor="white";
-					emailTr[j].style.color="black";
-				}
-
-				this.style.backgroundColor="#e30707";
-				this.style.color="white";
-
-				fillMessageBox(trEmail,"sent");
-				currentlySelectedMail=trEmail;
-			});
-
-			tbodyEmail.appendChild(trEmail)
-		}
 	}
 }
