@@ -164,7 +164,7 @@ export default function Email()
 			tdSubject.innerText=toFill[i].subject;
 			tdFrom.innerText=toFill[i].from;
 			tdDate.innerText=toFill[i].date;
-			tdMessage.innerText=toFill[i].message;
+			tdMessage.innerText=toFill[i].message.replace("\n","\\n");
 			
 			if(toFill[i].read=="false")
 			{
@@ -241,7 +241,7 @@ export default function Email()
 			tdSubject.innerText=toFill[i].subject;
 			tdTo.innerText=toFill[i].to;
 			tdDate.innerText=toFill[i].date;
-			tdMessage.innerText=toFill[i].message;
+			tdMessage.innerText=toFill[i].message.replace("\n","\\n");
 
 			tdMessage.style.display="none";
 
@@ -326,38 +326,127 @@ export default function Email()
 		tbodyInfo.appendChild(trSubject);
 		tbodyInfo.appendChild(trFromTo);
 		tbodyInfo.appendChild(trDate);
-		
-		let messageP=document.createElement("p");
-		messageP.id="messageP";
 
-		let messageText=trEmail.children[3].innerText;
-
-		messageP.innerText=messageText;
+		let messageText=trEmail.children[3].innerText.replace("\\n","\n");
 
 		if(source==="draft")
 		{
 			let button=document.createElement("button");
 			button.innerText="Editeaza schița";
 			button.id="editDraftButton";
-			button.addEventListener('click',function(){editDraft(tdFromTo.innerText,tdSubject.innerText,messageP.innerText)});
+			button.addEventListener('click',function(){editDraft(tdFromTo.innerText,tdSubject.innerText,messageText)});
 			messageArea.appendChild(button);
 		}
+		
+		renderMessage(messageText);
 
-		messageArea.appendChild(messageP);
+		messageArea.appendChild(document.createElement("br"));
 
 		if(source==="email")
 		{
 			let button=document.createElement("button");
 			button.innerText="Răspunde";
 			button.id="replyButton";
-			button.addEventListener('click',function(){replyToEmail(tdFromTo.innerText,tdSubject.innerText,messageP.innerText,tdDate.innerText)});
+			button.addEventListener('click',function(){replyToEmail(tdFromTo.innerText,tdSubject.innerText,messageText,tdDate.innerText)});
 			messageArea.appendChild(button);
 		}
 	}
 
+	function renderMessage(messageText)
+	{
+		let messageContainer=document.getElementById("messageArea");
+		messageContainer.innerHTML="";
+		let lines=messageText.split("\n");
+
+		for(let i=0;i<lines.length;i++)
+		{
+			if(lines[i][0]===">")
+			{
+				let linesToBlockQuote=[];
+
+				while(i<lines.length && lines[i][0]===">")
+				{
+					linesToBlockQuote.push(lines[i]);
+					i++;
+				}
+
+				messageContainer.innerHTML+=getBlockQuoteHTML(linesToBlockQuote);
+			}
+			else
+			{
+				messageContainer.innerHTML+=lines[i];
+				messageContainer.innerHTML+="<br/>"
+			}
+		}
+	}
+
+	function getBlockQuoteHTML(lines)
+	{
+		let blockQuoteHtml="";
+		let nr=[];
+		let text=[];
+
+		for(let i=0;i<lines.length;i++)
+		{
+			let j=0;
+
+			while(lines[i][j]===">")
+			{
+				j++;
+			}
+
+			nr.push(j);
+			text.push(lines[i].substr(j));
+		}
+
+		for(let i=0;i<nr[0];i++)
+		{
+			blockQuoteHtml+="<blockquote class='replyQuoteEmail'>";
+		}
+
+		blockQuoteHtml+=text[0];
+
+		for(let i=1;i<nr.length;i++)
+		{
+			if(nr[i]>nr[i-1])
+			{
+				for(let j=0;j<nr[i]-nr[i-1];j++)
+				{
+					blockQuoteHtml+="<blockquote class='replyQuoteEmail'>";
+				}
+
+				blockQuoteHtml+=text[i];
+			}
+			else
+			{
+				if(nr[i]===nr[i-1])
+				{
+					blockQuoteHtml+=" ";
+					blockQuoteHtml+=text[i];
+				}
+				else
+				{
+					for(let j=0;j<nr[i-1]-nr[i];j++)
+					{
+						blockQuoteHtml+="</blockquote>";
+					}
+
+					blockQuoteHtml+=text[i];
+				}
+			}
+		}
+
+		for(let i=0;i<nr[nr.length-1];i++)
+		{
+			blockQuoteHtml+="</blockquote>";
+		}
+
+		return blockQuoteHtml;
+	}
+
 	function getEmails()
 	{
-		emails=JSON.parse('{"emails":[{"read":"true","subject":"subject1","from":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok. fuk da cops"},{"read":"false","subject":"subject2","from":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz"},{"read":"false","subject":"subject3","from":"Big Smoke3","date":"2017-01-01 12:12","message":"lul u. wont betray. eveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer"},{"read":"true","subject":"subject4","from":"Big Smoke4","date":"2014-01-01 12:12","message":"fo da hood"},{"read":"false","subject":"subject5","from":"Big Smoke5","date":"2015-01-01 12:12","message":"need some numba 9s"}]}').emails;
+		emails=JSON.parse('{"emails":[{"read":"true","subject":"subject1","from":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok.\\nfuk da cops"},{"read":"false","subject":"subject2","from":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz"},{"read":"false","subject":"subject3","from":"Big Smoke3","date":"2017-01-01 12:12","message":"lul u. wont betray. eveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer"},{"read":"true","subject":"subject4","from":"Big Smoke4","date":"2014-01-01 12:12","message":"fo da hood"},{"read":"false","subject":"subject5","from":"Big Smoke5","date":"2015-01-01 12:12","message":"need some numba 9s"}]}').emails;
 	}
 
 	function getDrafts()
@@ -367,7 +456,7 @@ export default function Email()
 
 	function getSent()
 	{
-		sent=JSON.parse('{"sent":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":">lul got big smok sent. fuk da cops"}]}').sent;
+		sent=JSON.parse('{"sent":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":">lul got big smok sent. fuk da cops>>ima black\\n>>nigga"}]}').sent;
 	}
 
 	function deleteCurrentlySelectedMail()
@@ -510,12 +599,22 @@ export default function Email()
 
 	function replyToEmail(to,subject,message,date)
 	{
+		let lines=message.split("\n");
+		let messageReply="";
+
+		for(let i=0;i<lines.length;i++)
+		{
+			messageReply+=">";
+			messageReply+=lines[i];
+			messageReply+="\n";
+		}
+
 		if(subject[0]!=="R" && subject[1]!=="e" && subject[2]!=":")
 		{
 			subject="Re: "+subject;
 		}
 
-		let replyMessage="Pe data de "+date+", "+to+" a trimis:\r\n"+"\t"+message;
+		let replyMessage="Pe data de "+date+", "+to+" a trimis:\r\n"+messageReply;
 		localStorage.to=to;
 		localStorage.subject=subject;
 		localStorage.message=replyMessage;

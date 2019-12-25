@@ -138,10 +138,6 @@
     white-space: nowrap;
 }
 
-#messageP{
-    padding: 5px;
-}
-
 #additionalOptions{
     flex: 1;
     display: flex;
@@ -289,4 +285,12 @@
     background-color: #f6f6f6;
     margin: 2px 0;
     padding: 1px 8px 1px 10px;
+}
+
+#messageArea{
+    padding: 5px;
+}
+
+#tbodyEmail tr td{
+    white-space: pre-line;
 }
