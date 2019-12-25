@@ -10,6 +10,7 @@ export default function SendEmail()
 {
 	useEffect(() => 
 	{
+		fillData();
     }, []);
 
     return (
@@ -94,5 +95,34 @@ export default function SendEmail()
 
 			fileTable.appendChild(trFile);
     	}
+    }
+
+    function fillData()
+    {
+    	let to="";
+    	let subject="";
+    	let message="";
+
+    	if(localStorage.getItem("to")!==null)
+    	{
+    		to=localStorage.to;
+    		localStorage.removeItem("to");
+    	}
+
+    	if(localStorage.getItem("subject")!==null)
+    	{
+    		subject=localStorage.subject;
+    		localStorage.removeItem("subject");
+    	}
+
+    	if(localStorage.getItem("message")!==null)
+    	{
+    		message=localStorage.message;
+    		localStorage.removeItem("message");
+    	}
+
+    	document.getElementById("toInput").value=to;
+    	document.getElementById("subjectInput").value=subject;
+    	document.getElementById("emailMessageInput").value=message;
     }
 }

@@ -69,7 +69,7 @@ export default function Email()
 		            	</table>
 						
 						<div id="messageArea">
-		            		<p id="messageP"></p>
+		            		
 		            	</div>
 		            </div>
 	            </div>
@@ -87,7 +87,7 @@ export default function Email()
 		liElem.style.color="white";
 
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
-		document.getElementById("messageP").innerText="";
+		document.getElementById("messageArea").innerHTML="";
 		fillEmailTable();
 		currentlySelectedCategory="inbox";
 	}
@@ -102,7 +102,7 @@ export default function Email()
 		liElem.style.color="white";
 
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
-		document.getElementById("messageP").innerText="";
+		document.getElementById("messageArea").innerHTML="";
 		fillDraftsTable();
 		currentlySelectedCategory="draft";
 	}
@@ -117,7 +117,7 @@ export default function Email()
 		liElem.style.color="white";
 
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
-		document.getElementById("messageP").innerText="";
+		document.getElementById("messageArea").innerHTML="";
 		fillSentTable();
 		currentlySelectedCategory="sent";
 	}
@@ -214,16 +214,16 @@ export default function Email()
 	function fillDraftsTable()
 	{
 		getDrafts();
-		fillDraftsOrSentTableWithArray(drafts);
+		fillDraftsOrSentTableWithArray(drafts,"draft");
 	}
 
 	function fillSentTable()
 	{
 		getSent();
-		fillDraftsOrSentTableWithArray(sent);
+		fillDraftsOrSentTableWithArray(sent,"sent");
 	}
 
-	function fillDraftsOrSentTableWithArray(toFill)
+	function fillDraftsOrSentTableWithArray(toFill,source)
 	{
 		let tbodyEmail=document.getElementById("tbodyEmail");
 		tbodyEmail.innerHTML="";
@@ -265,7 +265,7 @@ export default function Email()
 				this.style.backgroundColor="#e30707";
 				this.style.color="white";
 
-				fillMessageBox(trEmail,"draft");
+				fillMessageBox(trEmail,source);
 				currentlySelectedMail=trEmail;
 			});
 		}
@@ -274,14 +274,16 @@ export default function Email()
 	function fillMessageBox(trEmail,source)
 	{
 		let tbodyInfo=document.getElementById("tbodyTableEmailInfo");
+		let messageArea=document.getElementById("messageArea");
 		tbodyInfo.innerHTML="";
+		messageArea.innerHTML="";
 
 		let trSubject=document.createElement("tr");
-		let trFrom=document.createElement("tr");
+		let trFromTo=document.createElement("tr");
 		let trDate=document.createElement("tr"); 
 
 		let thSubject=document.createElement("th");
-		let thFrom=document.createElement("th");
+		let thFromTo=document.createElement("th");
 		let thDate=document.createElement("th"); 
 
 		thSubject.innerText="Subiect:";
@@ -289,38 +291,57 @@ export default function Email()
 
 		if(source==="email")
 		{
-			thFrom.innerText="Expeditor:";
+			thFromTo.innerText="Expeditor:";
 		}
 		else
 		{
 			if(source==="draft" || source==="sent")
 			{
-				thFrom.innerText="Destinatar:";
+				thFromTo.innerText="Destinatar:";
 			}
 		}
 
 		let tdSubject=document.createElement("td");
-		let tdFrom=document.createElement("td");
+		let tdFromTo=document.createElement("td");
 		let tdDate=document.createElement("td");
 
+		tdSubject.id="messageDetailsSubject";
+		tdFromTo.id="messageDetailsFromTo";
+
 		tdSubject.innerText=trEmail.children[0].innerText;
-		tdFrom.innerText=trEmail.children[1].innerText;
+		tdFromTo.innerText=trEmail.children[1].innerText;
 		tdDate.innerText=trEmail.children[2].innerText;
+
+		tdFromTo.addEventListener('click',function(){goToComposeTo(tdFromTo.innerText)});
 
 		trSubject.appendChild(thSubject);
 		trSubject.appendChild(tdSubject);
 
-		trFrom.appendChild(thFrom);
-		trFrom.appendChild(tdFrom);
+		trFromTo.appendChild(thFromTo);
+		trFromTo.appendChild(tdFromTo);
 
 		trDate.appendChild(thDate);
 		trDate.appendChild(tdDate);
 
 		tbodyInfo.appendChild(trSubject);
-		tbodyInfo.appendChild(trFrom);
+		tbodyInfo.appendChild(trFromTo);
 		tbodyInfo.appendChild(trDate);
+		
+		let messageP=document.createElement("p");
+		messageP.id="messageP";
 
-		document.getElementById("messageP").innerText=trEmail.children[3].innerText;
+		messageP.innerText=trEmail.children[3].innerText;
+
+		if(source==="draft")
+		{
+			let button=document.createElement("button");
+			button.innerText="Editeaza schița";
+			button.id="editDraftButton";
+			button.addEventListener('click',function(){editDraft(tdFromTo.innerText,tdSubject.innerText,messageP.innerText)});
+			messageArea.appendChild(button);
+		}
+
+		messageArea.appendChild(messageP);
 	}
 
 	function getEmails()
@@ -344,7 +365,7 @@ export default function Email()
 		{
 			let tbodyEmail=document.getElementById("tbodyEmail");
 			document.getElementById("tbodyTableEmailInfo").innerHTML="";
-			document.getElementById("messageP").innerText="";
+			document.getElementById("messageArea").innerHTML="";
 
 			sendDeleteRequest(currentlySelectedMail.children[0].innerText,currentlySelectedMail.children[1].innerText,currentlySelectedMail.children[2].innerText,currentlySelectedMail.children[3].innerText);
 
@@ -371,11 +392,6 @@ export default function Email()
 
 			currentlySelectedMail=null;
 		}
-	}
-
-	function sendDeleteRequest(subject,fromTo,date,message)
-	{
-
 	}
 
 	function searchEmails()
@@ -465,6 +481,25 @@ export default function Email()
 				fillDraftsOrSentTableWithArray(foundEmails);
 			}
 		}
+	}
+
+	function editDraft(to,subject,message)
+	{
+		localStorage.to=to;
+		localStorage.subject=subject;
+		localStorage.message=message;
+		window.location="/send_email";
+	}
+
+	function goToComposeTo(to)
+	{
+		localStorage.to=to;
+		window.location="/send_email";
+	}
+
+	function sendDeleteRequest(subject,fromTo,date,message)
+	{
+
 	}
 
 	function sendReadEmail(email)
