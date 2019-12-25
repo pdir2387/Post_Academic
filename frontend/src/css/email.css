@@ -202,7 +202,7 @@
     height: 100%;
 }
 
-#sendEmailButton,#editDraftButton{
+#sendEmailButton,#editDraftButton,#replyButton{
     color: white;
     font-weight: 900;
     background-color: #1f4976;
@@ -280,4 +280,13 @@
 
     -ms-user-select: none;
     user-select: none;
+}
+
+.replyQuoteEmail{
+    color: blue;
+    border-left: 2px solid blue;
+    border-right: 2px solid blue;
+    background-color: #f6f6f6;
+    margin: 2px 0;
+    padding: 1px 8px 1px 10px;
 }

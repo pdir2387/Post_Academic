@@ -330,7 +330,9 @@ export default function Email()
 		let messageP=document.createElement("p");
 		messageP.id="messageP";
 
-		messageP.innerText=trEmail.children[3].innerText;
+		let messageText=trEmail.children[3].innerText;
+
+		messageP.innerText=messageText;
 
 		if(source==="draft")
 		{
@@ -342,6 +344,15 @@ export default function Email()
 		}
 
 		messageArea.appendChild(messageP);
+
+		if(source==="email")
+		{
+			let button=document.createElement("button");
+			button.innerText="Răspunde";
+			button.id="replyButton";
+			button.addEventListener('click',function(){replyToEmail(tdFromTo.innerText,tdSubject.innerText,messageP.innerText,tdDate.innerText)});
+			messageArea.appendChild(button);
+		}
 	}
 
 	function getEmails()
@@ -356,7 +367,7 @@ export default function Email()
 
 	function getSent()
 	{
-		sent=JSON.parse('{"sent":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok sent. fuk da cops"}]}').sent;
+		sent=JSON.parse('{"sent":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":">lul got big smok sent. fuk da cops"}]}').sent;
 	}
 
 	function deleteCurrentlySelectedMail()
@@ -494,6 +505,20 @@ export default function Email()
 	function goToComposeTo(to)
 	{
 		localStorage.to=to;
+		window.location="/send_email";
+	}
+
+	function replyToEmail(to,subject,message,date)
+	{
+		if(subject[0]!=="R" && subject[1]!=="e" && subject[2]!=":")
+		{
+			subject="Re: "+subject;
+		}
+
+		let replyMessage="Pe data de "+date+", "+to+" a trimis:\r\n"+"\t"+message;
+		localStorage.to=to;
+		localStorage.subject=subject;
+		localStorage.message=replyMessage;
 		window.location="/send_email";
 	}
 
