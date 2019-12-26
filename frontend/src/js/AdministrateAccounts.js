@@ -31,6 +31,8 @@ export default function AdministrateAccounts()
 						Parolă:<br/>
 						<input type="text" id="passwordAdd" name="passwordAdd"/><br/>
 
+                        <input type="file" id="fileAdd" name="fileAdd"/><br/>
+
 						<input type="submit" value="Confirma adăugarea"/>
 	            	</form>
 	            </div>
@@ -39,6 +41,8 @@ export default function AdministrateAccounts()
 	           		<form>
 	           			Număr matricol:<br/>
 						<input type="text" id="codeDelete" name="codeDelete"/><br/>
+
+                        <input type="file" id="fileAdd" name="fileDelete"/><br/>
 
 						<input type="submit" value="Confirma ștergerea"/>
 	           		</form>
@@ -67,6 +71,8 @@ export default function AdministrateAccounts()
 						<input type="text" id="usernameModify" name="usernameModify"/><br/>
 						Parolă:<br/>
 						<input type="text" id="passwordModify" name="passwordModify"/><br/>
+
+                        <input type="file" id="fileAdd" name="fileModify"/><br/>
 
 						<input type="submit" value="Confirma modificarea"/>
 	            	</form>
