@@ -175,6 +175,8 @@
     height: 100%;
     width: 100%;
     padding: 5px;
+    box-sizing: border-box;
+    resize: none;
 }
 
 #toInput, #subjectInput{
