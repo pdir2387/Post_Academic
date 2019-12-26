@@ -4,6 +4,7 @@ import '../css/email.css'
 import BackIcon from '../img/back.png'
 import RemoveIcon from '../img/remove.png'
 import SaveDraftIcon from '../img/save_draft.png'
+import CheckedIcon from '../img/checked.png'
 
 var filesToSend=[];
 var draftSaver=null;
@@ -135,6 +136,32 @@ export default function SendEmail()
     	document.getElementById("emailMessageInput").value=message;
     }
 
+    function createSaveDraftMessage()
+    {
+    	let divMessage=document.createElement("div");
+    	let imgChecked=document.createElement("img");
+    	let spanMessage=document.createElement("span")
+
+    	imgChecked.src=CheckedIcon;
+    	imgChecked.id="checkedImage";
+    	imgChecked.style.verticalAlign="middle";
+    	spanMessage.innerText="Schiță salvată";
+    	spanMessage.style.marginLeft="20px";
+
+    	divMessage.appendChild(imgChecked);
+    	divMessage.appendChild(spanMessage);
+    	divMessage.style.display="inline-block";
+    	divMessage.style.marginLeft="20px";
+    	divMessage.style.padding="10px";
+    	divMessage.style.backgroundColor="#deffd4";
+
+    	let container=document.getElementById("sendEmailAdditionalOptions");
+
+    	container.appendChild(divMessage);
+
+    	setTimeout(function(){container.removeChild(divMessage);},4000);
+    }
+
     function saveDraft()
     {
     	let to=document.getElementById("toInput").value;
@@ -143,7 +170,7 @@ export default function SendEmail()
 
     	if(to!=="" || subject!== "" || message!=="")
     	{
-
+			createSaveDraftMessage();
     	}
     }
 }

@@ -213,7 +213,7 @@
     flex: 1;
 }
 
-#toComposeEmailImage, #backToEmailsImage, #deleteEmailImage, #searchEmailImage,#saveDraftImage{
+#toComposeEmailImage, #backToEmailsImage, #deleteEmailImage, #searchEmailImage, #saveDraftImage, #checkedImage{
     width: 50px;
     height: auto;
 }
