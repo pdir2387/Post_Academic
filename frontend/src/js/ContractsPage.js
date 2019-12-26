@@ -1,9 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
 import ViewContracts from "./ViewContracts"
 import CreateContracts from "./CreateContracts"
 import '../css/contracts.css'
+import StudentContractPopup from './StudentContractPopup'
+import Modal from 'react-modal'
 
 var period;
 

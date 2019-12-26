@@ -7,18 +7,22 @@ export default function TeacherGrades() {
     let filter = ["Curs", "Laborator", "Seminar"];
     let groups = [221,222,223,224,225,226,227];
 
-    let [materie, setMaterie] = useState('');
+    let [selectedCourse, setSelectedCourse] = useState('');
     let [selectedTip, setSelectedTip] = useState('');
     let [selectedGroup, setSelectedGroup] = useState('');
 
     function handleSelectCourse(e) {
-        setMaterie(e.target.value);
-        refillTable(grades, filter);
+        setSelectedCourse(e.target.value);
+
+        if(selectedTip !== '')
+            refillTable(grades, filter);
     }
 
     function handleSelectType(e) {
         setSelectedTip(e.target.value);
-        refillTable(grades, filter);
+
+        if(selectedCourse !== '')
+            refillTable(grades, filter);
     }
 
     function handleSelectGroup(e) {
@@ -50,8 +54,16 @@ export default function TeacherGrades() {
                     <th>SAPTAMANA</th>
                     <th>NOTA</th>
                     <th>OBSERVATII</th>
+                    <th>BUTTONS</th>
                 </tr>
-                {getTrs(grades, filter, materie)}
+                {getTrs(grades, selectedCourse, selectedTip)}
+            </table>
+
+            <table id="students-table">
+                <tr>
+                    <th>STUDENT</th>
+                    <th>BUTTONS</th>
+                </tr>
             </table>
         </div>
     )
@@ -105,11 +117,10 @@ function getOptionsGroups(groups){
     return optionList;
 }
 
-function getTrs(grades, filter, selectedCourse){
+function getTrs(grades, materie, selectedTip){
     let TRList = [];
-
     for(let grade of grades){
-       if(filter.indexOf(grade.tip) != -1 && grade.materie === selectedCourse)
+       if(grade.tip === selectedTip && grade.materie === materie)
             TRList.push(
                 <tr>{getThs(grade)}</tr>
             );
@@ -156,10 +167,10 @@ function getThsTitle(){
     return THList;
 }
 
-function refillTable(grades, filter){
+function refillTable(grades, filter, materie, selectedTip){
     let TRs = [];
     let table = document.getElementById("student-grades-table");
 
     TRs.push(<tr>{getThsTitle()}</tr>)
-    TRs.push(<tr>{getTrs(grades, filter)}</tr>);
+    TRs.push(<tr>{getTrs(grades, filter, materie, selectedTip)}</tr>);
 }
