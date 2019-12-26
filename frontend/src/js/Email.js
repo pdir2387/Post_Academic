@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useEffect} from 'react'
 import '../css/commons.css'
 import '../css/email.css'
 import ComposeImage from '../img/compose_email.png'

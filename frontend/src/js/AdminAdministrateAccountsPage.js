@@ -1,7 +1,7 @@
 import LogoutButton from "./LogoutButton.js"
 import React from 'react'
 import AdminNavBar from "./AdminNavBar.js"
-import AdministrateAccounts from "./AdministrateAccounts"
+import AdministrateAccounts from "./AdministrateAccounts.js"
 import '../css/administrate_accounts.css'
 
 export default function AdminAdministrateAccountsPage() {

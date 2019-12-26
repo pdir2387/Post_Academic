@@ -1,9 +1,11 @@
-import LogoutButton from "./LogoutButton.js"
 import React from 'react'
+import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
 import ViewContracts from "./ViewContracts"
 import CreateContracts from "./CreateContracts"
 import '../css/contracts.css'
+
+var period;
 
 export default function ContractsPage() {
     return (
@@ -14,10 +16,35 @@ export default function ContractsPage() {
             </div>
 
             <div id="contractsRight"> 
-                {/*momentan doar una din astea 2 merge la un moment dat*/}
-                {/*<ViewContracts />*/}
-                <CreateContracts />
+                <ContractsPageContent />
             </div>
         </div>
     );
+
+    function getInfo()
+    {
+        period=JSON.parse('{"period":"0"}').period;
+    }
+
+    function ContractsPageContent(props)
+    {
+        getInfo();
+
+        if(period=="0")
+        {
+            return <ViewContracts />;
+        }
+        else
+        {
+            if(period=="1")
+            {
+                return <CreateContracts />;
+            }
+            else
+            {
+                console.log("no");
+            }
+        }
+
+    }
 }

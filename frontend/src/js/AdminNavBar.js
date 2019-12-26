@@ -9,7 +9,7 @@ export default function AdminNavBar(){
             <img src={mainLogo} alt="logo"></img>
             <div id="navBarSeparator"></div>
             <NavBarItem buttonText="ADMINISTRARE CONTURI" url="/admin_accounts"/>
-            <NavBarItem buttonText="OPTIUNI ADMINISTRARE" url="/home"/>
+            <NavBarItem buttonText="OPTIUNI ADMINISTRARE" url="/admin_options"/>
             <NavBarItem buttonText="E-MAIL" url="/email"/>
         </div>
     )

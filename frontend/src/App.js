@@ -11,11 +11,13 @@ import StudentInfoPage from "./js/StudentInfoPage"
 import ResultsPage from "./js/ResultsPage"
 import EmailPage from "./js/EmailPage"
 import SendEmailPage from "./js/SendEmailPage"
+import AdminOptionsPage from "./js/AdminOptionsPage"
 import React from 'react'
 
 function App() {	
 	return (
 	    <Switch>
+	    	<Route path="/admin_options" component={AdminOptionsPage} />
 	    	<Route path="/send_email" component={SendEmailPage} />
 	    	<Route path="/email" component={EmailPage} />
 	    	<Route path="/medii" component={ResultsPage} />
