@@ -118,6 +118,7 @@
     border: 1px solid grey;
     word-wrap: break-word;
     flex: 6;
+    overflow: auto;
 }
 
 #tableEmailInfo{
