@@ -4,7 +4,6 @@ import LoginPage from './js/LoginPage';
 import NotFound from './js/404';
 import GradesPage from './js/GradesPage';
 import AttendancePage from './js/AttendancePage';
-import AttendancePageProfessor from './js/AttendancePageProfessor'
 import AdminAdministrateAccountsPage from './js/AdminAdministrateAccountsPage'
 import ContractsPage from './js/ContractsPage'
 import StudentInfoPage from "./js/StudentInfoPage"
@@ -24,7 +23,6 @@ function App() {
 	    	<Route path="/student" component={StudentInfoPage} />
 	    	<Route path="/contracte" component={ContractsPage} />
 	    	<Route path="/admin_accounts" component={AdminAdministrateAccountsPage} />
-	    	<Route path="/prezentaP" component={AttendancePageProfessor} />
 			<Route path="/prezenta" component={AttendancePage} />
 			<Route path="/note" component={GradesPage} />
 			<Route path="/home" component={HomePage} />
