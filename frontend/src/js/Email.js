@@ -8,6 +8,7 @@ import SearchImage from '../img/search.png'
 var emails=[];
 var drafts=[];
 var sent=[];
+var selectedEmails=[];
 var currentlySelectedMail=null;
 var currentlySelectedCategory="inbox";
 var emailFetcher=null;
@@ -26,7 +27,7 @@ export default function Email()
     		<div id="additionalOptions">
     			<div id="imageButtons">
 	    			<a href="/send_email" id="toComposeEmail" title="Trimite email"><img id="toComposeEmailImage" src={ComposeImage} alt="Trimite email"/></a>
-	    			<button id="deleteButtonMail" onClick={deleteCurrentlySelectedMail} title="Șterge email-uri selectate"><img id="deleteEmailImage" src={DeleteImage} alt="Delete"/></button>
+	    			<button id="deleteButtonMail" onClick={deleteSelectedMails} title="Șterge email-uri selectate"><img id="deleteEmailImage" src={DeleteImage} alt="Delete"/></button>
 	    		</div>
 
     			<div id="searchArea">
@@ -50,6 +51,7 @@ export default function Email()
 		            	<table id="tableEmails">
 		            		<thead>
 		            			<tr>
+		            				<th className="checkboxTh"></th>
 		            				<th>Subiect</th>
 		            				<th id="fromToTh">Expeditor</th>
 		            				<th>Data</th>
@@ -71,7 +73,6 @@ export default function Email()
 		            	</table>
 						
 						<div id="messageArea">
-		            		
 		            	</div>
 		            </div>
 	            </div>
@@ -81,6 +82,7 @@ export default function Email()
 
 	function openInbox()
 	{
+		selectedEmails=[];
 		currentlySelectedMail=null;
 		deselectCategories();
 
@@ -96,6 +98,7 @@ export default function Email()
 
 	function openDrafts()
 	{
+		selectedEmails=[];
 		currentlySelectedMail=null;
 		deselectCategories();
 
@@ -111,6 +114,7 @@ export default function Email()
 
 	function openSent()
 	{
+		selectedEmails=[];
 		currentlySelectedMail=null;
 		deselectCategories();
 
@@ -142,7 +146,6 @@ export default function Email()
 
 	function fillEmailTable()
 	{
-		console.log("inbox");
 		getEmails();
 		fillEmailTableWithArray(emails);
 	}
@@ -157,17 +160,23 @@ export default function Email()
 		for(let i=0;i<toFill.length;i++)
 		{
 			let trEmail=document.createElement("tr");
+			let tdCheck=document.createElement("td");
 			let tdSubject=document.createElement("td");
 			let tdFrom=document.createElement("td");
 			let tdDate=document.createElement("td");
 			let tdMessage=document.createElement("td");
+			let tdRead=document.createElement("td");
 
+			let checkboxRow = document.createElement("input");
+			checkboxRow.type="checkbox";
+
+			tdCheck.appendChild(checkboxRow);
 			tdSubject.innerText=toFill[i].subject;
 			tdFrom.innerText=toFill[i].from;
 			tdDate.innerText=toFill[i].date;
 			tdMessage.innerText=toFill[i].message.replace("\n","\\n");
 			
-			if(toFill[i].read=="false")
+			if(toFill[i].read==="false")
 			{
 				tdSubject.style.fontWeight="bold";
 				tdFrom.style.fontWeight="bold";
@@ -175,7 +184,8 @@ export default function Email()
 			}
 
 			tdMessage.style.display="none";
-
+			
+			trEmail.appendChild(tdCheck);
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdFrom);
 			trEmail.appendChild(tdDate);
@@ -183,14 +193,37 @@ export default function Email()
 
 			tbodyEmail.appendChild(trEmail)
 
+			checkboxRow.addEventListener('change',function()
+			{
+				let parentTr=this.parentNode.parentNode;
+
+				if(this.checked===false)
+				{
+					parentTr.style.backgroundColor="white";
+					parentTr.style.color="black";
+					selectedEmails.splice(selectedEmails.indexOf(parentTr),1);
+				}
+				else
+				{
+					parentTr.style.backgroundColor="#e30707";
+					parentTr.style.color="white";
+					selectedEmails.push(parentTr);
+				}
+			});
+
+			let aux=toFill[i];
+
 			trEmail.addEventListener("click",function()
 			{
 				let emailTr=tbodyEmail.children;
 
 				for(let j=0;j<emailTr.length;j++)
 				{
-					emailTr[j].style.backgroundColor="white";
-					emailTr[j].style.color="black";
+					if(emailTr[j].children[0].children[0].checked===false)
+					{
+						emailTr[j].style.backgroundColor="white";
+						emailTr[j].style.color="black";
+					}
 				}
 
 				this.style.backgroundColor="#e30707";
@@ -198,7 +231,7 @@ export default function Email()
 				
 				let emailTd=this.children;
 				
-				if(toFill[i].read==="false")
+				if(aux.read==="false")
 				{
 					for(let j=0;j<emailTd.length;j++)
 					{
@@ -216,26 +249,24 @@ export default function Email()
 						document.getElementById("unreadNumber").innerText="("+unreadEmailsCount.toString()+")";
 					}
 
-					toFill[i].read="true";
+					aux.read="true";
 					sendReadEmail(toFill[i]);
 				}
 
-				fillMessageBox(trEmail,"email");
-				currentlySelectedMail=trEmail;
+				fillMessageBox(this,"email");
+				currentlySelectedMail=this;
 			});
 		}
 	}
 
 	function fillDraftsTable()
 	{
-		console.log("drafts");
 		getDrafts();
 		fillDraftsOrSentTableWithArray(drafts,"draft");
 	}
 
 	function fillSentTable()
 	{
-		console.log("sent");
 		getSent();
 		fillDraftsOrSentTableWithArray(sent,"sent");
 	}
@@ -250,11 +281,16 @@ export default function Email()
 		for(let i=0;i<toFill.length;i++)
 		{
 			let trEmail=document.createElement("tr");
+			let tdCheck=document.createElement("td");
 			let tdSubject=document.createElement("td");
 			let tdTo=document.createElement("td");
 			let tdDate=document.createElement("td");
 			let tdMessage=document.createElement("td");
 
+			let checkboxRow = document.createElement("input");
+			checkboxRow.type="checkbox";
+
+			tdCheck.appendChild(checkboxRow);
 			tdSubject.innerText=toFill[i].subject;
 			tdTo.innerText=toFill[i].to;
 			tdDate.innerText=toFill[i].date;
@@ -262,6 +298,7 @@ export default function Email()
 
 			tdMessage.style.display="none";
 
+			trEmail.appendChild(tdCheck);
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdTo);
 			trEmail.appendChild(tdDate);
@@ -269,21 +306,42 @@ export default function Email()
 
 			tbodyEmail.appendChild(trEmail)
 
+			checkboxRow.addEventListener('change',function()
+			{
+				let parentTr=this.parentNode.parentNode;
+
+				if(this.checked===false)
+				{
+					parentTr.style.backgroundColor="white";
+					parentTr.style.color="black";
+					selectedEmails.splice(selectedEmails.indexOf(parentTr),1);
+				}
+				else
+				{
+					parentTr.style.backgroundColor="#e30707";
+					parentTr.style.color="white";
+					selectedEmails.push(parentTr);
+				}
+			});
+
 			trEmail.addEventListener("click",function()
 			{
 				let emailTr=tbodyEmail.children;
 
 				for(let j=0;j<emailTr.length;j++)
 				{
-					emailTr[j].style.backgroundColor="white";
-					emailTr[j].style.color="black";
+					if(emailTr[j].children[0].children[0].checked===false)
+					{
+						emailTr[j].style.backgroundColor="white";
+						emailTr[j].style.color="black";
+					}
 				}
 
 				this.style.backgroundColor="#e30707";
 				this.style.color="white";
 
-				fillMessageBox(trEmail,source);
-				currentlySelectedMail=trEmail;
+				fillMessageBox(this,source);
+				currentlySelectedMail=this;
 			});
 		}
 	}
@@ -325,11 +383,11 @@ export default function Email()
 		tdSubject.id="messageDetailsSubject";
 		tdFromTo.id="messageDetailsFromTo";
 
-		tdSubject.innerText=trEmail.children[0].innerText;
-		tdFromTo.innerText=trEmail.children[1].innerText;
-		tdDate.innerText=trEmail.children[2].innerText;
+		tdSubject.innerText=trEmail.children[1].innerText;
+		tdFromTo.innerText=trEmail.children[2].innerText;
+		tdDate.innerText=trEmail.children[3].innerText;
 
-		tdFromTo.addEventListener('click',function(){goToComposeTo(tdFromTo.innerText)});
+		tdFromTo.addEventListener('click',function(){goToComposeTo(this.innerText)});
 
 		trSubject.appendChild(thSubject);
 		trSubject.appendChild(tdSubject);
@@ -344,7 +402,7 @@ export default function Email()
 		tbodyInfo.appendChild(trFromTo);
 		tbodyInfo.appendChild(trDate);
 
-		let messageText=trEmail.children[3].innerText.replace("\\n","\n");
+		let messageText=trEmail.children[4].innerText.replace("\\n","\n");
 
 		if(source==="draft")
 		{
@@ -353,6 +411,7 @@ export default function Email()
 			button.id="editDraftButton";
 			button.addEventListener('click',function(){editDraft(tdFromTo.innerText,tdSubject.innerText,messageText)});
 			messageArea.appendChild(button);
+			messageArea.appendChild(document.createElement("br"));
 		}
 		
 		renderMessage(messageText);
@@ -372,7 +431,9 @@ export default function Email()
 	function renderMessage(messageText)
 	{
 		let messageContainer=document.getElementById("messageArea");
-		messageContainer.innerHTML="";
+		let message=document.createElement("div");
+		message.id="renderedMessage";
+
 		let lines=messageText.split("\n");
 
 		for(let i=0;i<lines.length;i++)
@@ -387,14 +448,16 @@ export default function Email()
 					i++;
 				}
 
-				messageContainer.innerHTML+=getBlockQuoteHTML(linesToBlockQuote);
+				message.innerHTML+=getBlockQuoteHTML(linesToBlockQuote);
 			}
 			else
 			{
-				messageContainer.innerHTML+=lines[i];
-				messageContainer.innerHTML+="<br/>"
+				message.innerHTML+=lines[i];
+				message.innerHTML+="<br/>"
 			}
 		}
+
+		messageContainer.appendChild(message);
 	}
 
 	function getBlockQuoteHTML(lines)
@@ -501,38 +564,46 @@ export default function Email()
 		sent=JSON.parse('{"sent":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":">lul got big smok sent. fuk da cops>>ima black\\n>>nigga"}]}').sent;
 	}
 
-	function deleteCurrentlySelectedMail()
+	function deleteSelectedMails()
 	{
-		if(currentlySelectedMail!==null)
+		if(selectedEmails.length>0)
 		{
 			let tbodyEmail=document.getElementById("tbodyEmail");
 			document.getElementById("tbodyTableEmailInfo").innerHTML="";
 			document.getElementById("messageArea").innerHTML="";
 
-			sendDeleteRequest(currentlySelectedMail.children[0].innerText,currentlySelectedMail.children[1].innerText,currentlySelectedMail.children[2].innerText,currentlySelectedMail.children[3].innerText);
+			for(let i=0;i<selectedEmails.length;i++)
+			{
+				sendDeleteRequest(selectedEmails[i].children[1].innerText,selectedEmails[i].children[2].innerText,selectedEmails[i].children[3].innerText,selectedEmails[i].children[4].innerText);
 
-			if(currentlySelectedCategory==="inbox")
-			{
-				emails.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(currentlySelectedMail),1);
-			}
-			else
-			{
-				if(currentlySelectedCategory==="draft")
+				if(currentlySelectedCategory==="inbox")
 				{
-					drafts.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(currentlySelectedMail),1);
+					emails.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(selectedEmails[i]),1);
 				}
 				else
 				{
-					if(currentlySelectedCategory==="sent")
+					if(currentlySelectedCategory==="draft")
 					{
-						sent.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(currentlySelectedMail),1);
+						drafts.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(selectedEmails[i]),1);
 					}
+					else
+					{
+						if(currentlySelectedCategory==="sent")
+						{
+							sent.splice(Array.prototype.slice.call(tbodyEmail.children).indexOf(selectedEmails[i]),1);
+						}
+					}
+				}
+
+				tbodyEmail.removeChild(selectedEmails[i]);
+
+				if(selectedEmails[i]===currentlySelectedMail)
+				{
+					currentlySelectedMail=null;
 				}
 			}
 
-			tbodyEmail.removeChild(currentlySelectedMail);
-
-			currentlySelectedMail=null;
+			selectedEmails=[];
 		}
 	}
 
@@ -656,7 +727,7 @@ export default function Email()
 			subject="Re: "+subject;
 		}
 
-		let replyMessage="Pe data de "+date+", "+to+" a trimis:\r\n"+messageReply;
+		let replyMessage=">Pe data de "+date+", "+to+" a trimis:\r\n"+messageReply;
 		localStorage.to=to;
 		localStorage.subject=subject;
 		localStorage.message=replyMessage;

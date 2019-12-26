@@ -297,3 +297,8 @@
 #tbodyEmail tr td{
     white-space: pre-line;
 }
+
+.checkboxTh{
+    width: 1%;
+    white-space: nowrap;
+}
