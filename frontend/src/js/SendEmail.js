@@ -3,20 +3,24 @@ import '../css/commons.css'
 import '../css/email.css'
 import BackIcon from '../img/back.png'
 import RemoveIcon from '../img/remove.png'
+import SaveDraftIcon from '../img/save_draft.png'
 
 var filesToSend=[];
+var draftSaver=null;
 
 export default function SendEmail() 
 {
 	useEffect(() => 
 	{
+		startDraftSaver();
 		fillData();
     }, []);
 
     return (
     	<div id="containerAllSendEmail">
     		<div id="sendEmailAdditionalOptions">
-    			<a href="/email" id="backToEmails"><img src={BackIcon} id="backToEmailsImage" alt="Înapoi" /></a>
+    			<a href="/email" id="backToEmails" title="Înapoi"><img src={BackIcon} id="backToEmailsImage" alt="Înapoi" /></a>
+    			<button id="saveDraftButton" onClick={saveDraft} title="Salvează schiță"><img id="saveDraftImage" src={SaveDraftIcon} alt="Salvează schiță"/></button>
     		</div>
 
     		<div id="emailDetails">
@@ -46,6 +50,11 @@ export default function SendEmail()
     		</div>
     	</div>
     );
+
+    function startDraftSaver()
+    {
+		draftSaver=setInterval(function(){ saveDraft(); }, 30000);
+    }
 
     function sendEmail()
     {
@@ -124,5 +133,17 @@ export default function SendEmail()
     	document.getElementById("toInput").value=to;
     	document.getElementById("subjectInput").value=subject;
     	document.getElementById("emailMessageInput").value=message;
+    }
+
+    function saveDraft()
+    {
+    	let to=document.getElementById("toInput").value;
+    	let subject=document.getElementById("subjectInput").value;
+    	let message=document.getElementById("emailMessageInput").value
+
+    	if(to!=="" || subject!== "" || message!=="")
+    	{
+
+    	}
     }
 }

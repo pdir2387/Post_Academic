@@ -213,12 +213,12 @@
     flex: 1;
 }
 
-#toComposeEmailImage, #backToEmailsImage, #deleteEmailImage, #searchEmailImage{
+#toComposeEmailImage, #backToEmailsImage, #deleteEmailImage, #searchEmailImage,#saveDraftImage{
     width: 50px;
     height: auto;
 }
 
-#deleteButtonMail{
+#deleteButtonMail,#saveDraftButton{
     margin-left: 20px;
     background-color: white;
 }
@@ -289,6 +289,7 @@
 
 #messageArea{
     padding: 5px;
+    word-wrap: break-word;
 }
 
 #tbodyEmail tr td{

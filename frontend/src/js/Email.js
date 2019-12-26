@@ -10,21 +10,23 @@ var drafts=[];
 var sent=[];
 var currentlySelectedMail=null;
 var currentlySelectedCategory="inbox";
+var emailFetcher=null;
+var unreadEmailsCount=0;
 
 export default function Email() 
 {
 	useEffect(() => 
 	{
-        setup();
-        fillEmailTable();
+        openInbox();
+        startEmailFetcher();
     }, []);
 
     return (
     	<div id="containerAllEmail">
     		<div id="additionalOptions">
     			<div id="imageButtons">
-	    			<a href="/send_email" id="toComposeEmail"><img id="toComposeEmailImage" src={ComposeImage} alt="Trimite email"/></a>
-	    			<button id="deleteButtonMail" onClick={deleteCurrentlySelectedMail}><img id="deleteEmailImage" src={DeleteImage} alt="Delete"/></button>
+	    			<a href="/send_email" id="toComposeEmail" title="Trimite email"><img id="toComposeEmailImage" src={ComposeImage} alt="Trimite email"/></a>
+	    			<button id="deleteButtonMail" onClick={deleteCurrentlySelectedMail} title="Șterge email-uri selectate"><img id="deleteEmailImage" src={DeleteImage} alt="Delete"/></button>
 	    		</div>
 
     			<div id="searchArea">
@@ -37,7 +39,7 @@ export default function Email()
 	            <div id="leftPanel">
 	            	<div id="ulCategoriesTitle">Categorii</div>
 	            	<ul id="ulCategories">
-	            		<li id="inboxLi" onClick={openInbox}>Mesaje primite</li>
+	            		<li id="inboxLi" onClick={openInbox}>Mesaje primite<span id="unreadNumber"></span></li>
 	            		<li id="draftsLi" onClick={openDrafts}>Schițe</li>
 	            		<li id="sentLi" onClick={openSent}>Mesaje trimise</li>
 	            	</ul>
@@ -122,6 +124,11 @@ export default function Email()
 		currentlySelectedCategory="sent";
 	}
 
+	function startEmailFetcher()
+	{
+		emailFetcher=setInterval(function(){ getEmails(); }, 30000);
+	}
+
 	function deselectCategories()
 	{
 		let categoriesLi=document.getElementById("ulCategories").children;
@@ -133,15 +140,9 @@ export default function Email()
 		}
 	}
 
-	function setup()
-	{
-		let liElem=document.getElementById("inboxLi");
-		liElem.style.backgroundColor="#e30707";
-		liElem.style.color="white";
-	}
-
 	function fillEmailTable()
 	{
+		console.log("inbox");
 		getEmails();
 		fillEmailTableWithArray(emails);
 	}
@@ -196,14 +197,28 @@ export default function Email()
 				this.style.color="white";
 				
 				let emailTd=this.children;
-
-				for(let j=0;j<emailTd.length;j++)
+				
+				if(toFill[i].read==="false")
 				{
-					emailTd[j].style.fontWeight="normal";
-				}
+					for(let j=0;j<emailTd.length;j++)
+					{
+						emailTd[j].style.fontWeight="normal";
+					}
 
-				toFill[i].read="true";
-				sendReadEmail(toFill[i]);
+					unreadEmailsCount-=1;
+
+					if(unreadEmailsCount===0)
+					{
+						document.getElementById("unreadNumber").innerText="";
+					}
+					else
+					{
+						document.getElementById("unreadNumber").innerText="("+unreadEmailsCount.toString()+")";
+					}
+
+					toFill[i].read="true";
+					sendReadEmail(toFill[i]);
+				}
 
 				fillMessageBox(trEmail,"email");
 				currentlySelectedMail=trEmail;
@@ -213,12 +228,14 @@ export default function Email()
 
 	function fillDraftsTable()
 	{
+		console.log("drafts");
 		getDrafts();
 		fillDraftsOrSentTableWithArray(drafts,"draft");
 	}
 
 	function fillSentTable()
 	{
+		console.log("sent");
 		getSent();
 		fillDraftsOrSentTableWithArray(sent,"sent");
 	}
@@ -447,6 +464,31 @@ export default function Email()
 	function getEmails()
 	{
 		emails=JSON.parse('{"emails":[{"read":"true","subject":"subject1","from":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok.\\nfuk da cops"},{"read":"false","subject":"subject2","from":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz"},{"read":"false","subject":"subject3","from":"Big Smoke3","date":"2017-01-01 12:12","message":"lul u. wont betray. eveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer"},{"read":"true","subject":"subject4","from":"Big Smoke4","date":"2014-01-01 12:12","message":"fo da hood"},{"read":"false","subject":"subject5","from":"Big Smoke5","date":"2015-01-01 12:12","message":"need some numba 9s"}]}').emails;
+		updateUnreadCount();
+	}
+
+	function updateUnreadCount()
+	{
+		let unread=0;
+
+		for(let i=0;i<emails.length;i++)
+		{
+			if(emails[i].read==="false")
+			{
+				unread+=1;
+			}
+		}
+
+		unreadEmailsCount=unread;
+
+		if(unreadEmailsCount===0)
+		{
+			document.getElementById("unreadNumber").innerText="";
+		}
+		else
+		{
+			document.getElementById("unreadNumber").innerText="("+unreadEmailsCount.toString()+")";
+		}
 	}
 
 	function getDrafts()
