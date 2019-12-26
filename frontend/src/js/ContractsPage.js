@@ -23,7 +23,7 @@ export default function ContractsPage() {
 
     function getInfo()
     {
-        period=JSON.parse('{"period":"0"}').period;
+        period=JSON.parse('{"period":"1"}').period;
     }
 
     function ContractsPageContent(props)

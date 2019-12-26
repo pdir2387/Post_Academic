@@ -4,8 +4,10 @@ import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import StudentGrades from "./StudentGrades.js"
+import TeacherGrades from "./TeacherGrades.js"
 
 import '../css/grades.css'
+import EmailPage from './EmailPage.js';
 
 var accountType;
 
@@ -51,13 +53,13 @@ export default function GradesPage() {
         {
             if(accountType==="professor")
             {
-                return <StudentGrades />;
+                return <TeacherGrades />;
             }
         }
     }
 
     function getAccountType()
     {
-        accountType="student";
+        accountType="professor";
     }
 }
