@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import '../css/commons.css'
 import '../css/email.css'
 import BackIcon from '../img/back.png'
@@ -6,11 +6,11 @@ import RemoveIcon from '../img/remove.png'
 import SaveDraftIcon from '../img/save_draft.png'
 import CheckedIcon from '../img/checked.png'
 
-var filesToSend=[];
-var draftSaver=null;
-
 export default function SendEmail() 
 {
+    let [filesToSend,setFilesToSend]=useState([]);
+    let [draftSaver,setDraftSaver]=useState(null);
+
 	useEffect(() => 
 	{
 		startDraftSaver();

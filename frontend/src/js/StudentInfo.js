@@ -1,14 +1,14 @@
-import React,{useEffect} from 'react'
+import React,{useState, useEffect} from 'react'
 import '../css/commons.css'
 import '../css/student_info.css'
 
-var studentInfo;
-
 export default function StudentInfo() 
 {
+    let [studentInfo,setStudentInfo]=useState(()=>getStudentInfo());
+
 	useEffect(() => 
 	{
-        setStudentInfo();
+        setStudentInfoSpan();
     }, []); 
 
 	return (
@@ -26,10 +26,8 @@ export default function StudentInfo()
         </div>
     );
 
-    function setStudentInfo()
+    function setStudentInfoSpan()
     {
-    	getStudentInfo();
-
     	document.getElementById("nameSpan").innerText=studentInfo.name;
     	document.getElementById("cnpSpan").innerText=studentInfo.cnp;
     	document.getElementById("codeSpan").innerText=studentInfo.code;
@@ -40,6 +38,6 @@ export default function StudentInfo()
 
     function getStudentInfo()
     {
-    	studentInfo=JSON.parse('{"name":"Carl Johnson","cnp":"1234567891123","code":"cjir2242","group":"211","year":"1","semester":"2"}');
+    	return JSON.parse('{"name":"Carl Johnson","cnp":"1234567891123","code":"cjir2242","group":"211","year":"1","semester":"2"}');
     }
 }

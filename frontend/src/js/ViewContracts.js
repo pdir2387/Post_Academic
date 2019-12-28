@@ -2,10 +2,10 @@ import React,{useState,useEffect} from 'react'
 import '../css/commons.css'
 import '../css/contracts.css'
 
-var semesters=[];
-
 export default function ViewContracts()
 {
+	let [semesters,setSemesters]=useState(()=>getSemesters());
+
 	useEffect(() => 
 	{
         loadSemesters();
@@ -43,9 +43,7 @@ export default function ViewContracts()
     );
 
     function loadSemesters()
-    {
-    	getSemesters();
-    	
+    {	
 		for(let i=0;i<semesters.length;i++)
 		{
 			let text="Sem: "+semesters[i].number+" An: "+semesters[i].year;
@@ -100,6 +98,6 @@ export default function ViewContracts()
 
     function getSemesters()
     {
-    	semesters=JSON.parse('{"semesters":[{"number":"1","year":"2017","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii"},{"passed":"true","code":"M124","name":"Logica computationala"},{"passed":"true","code":"M125","name":"Arhitectura sistemelor de calcul"},{"passed":"false","code":"M127","name":"Algebra"},{"passed":"true","code":"M123","name":"Analiza matematica"}]},{"number":"2","year":"2017","disciplines":[{"passed":"true","code":"M123","name":"Programare orientata obiect"},{"passed":"true","code":"M123","name":"Geometrie"},{"passed":"true","code":"M123","name":"Sisteme de operare"},{"passed":"true","code":"M123","name":"Sisteme dinamice"},{"passed":"true","code":"M123","name":"Algoritmica grafelor"}]},{"number":"3","year":"2018","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii3"},{"passed":"true","code":"M123","name":"Logica computationala3"},{"passed":"true","code":"M123","name":"Arhitectura sistemelor de calcul3"},{"passed":"true","code":"M123","name":"Algebra3"},{"passed":"true","code":"M123","name":"Analiza matematica3"}]},{"number":"4","year":"2018","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii4"},{"passed":"true","code":"M123","name":"Logica computationala4"},{"passed":"true","code":"M123","name":"Arhitectura sistemelor de calcul4"},{"passed":"true","code":"M123","name":"Algebra4"},{"passed":"true","code":"M123","name":"Analiza matematica4"}]},{"number":"5","year":"2019","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii5"},{"passed":"true","code":"M123","name":"Logica computationala5"},{"passed":"true","code":"M123","name":"Arhitectura sistemelor de calcul5"},{"passed":"true","code":"M123","name":"Algebra5"},{"passed":"true","code":"M123","name":"Analiza matematica5"}]},{"number":"6","year":"2019","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii6"},{"passed":"true","code":"M123","name":"Logica computationala6"},{"passed":"true","code":"M123","name":"Arhitectura sistemelor de calcul6"},{"passed":"true","code":"M123","name":"Algebra6"},{"passed":"true","code":"M123","name":"Analiza matematica6"}]}]}').semesters;
+    	return JSON.parse('{"semesters":[{"number":"1","year":"2017","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii"},{"passed":"true","code":"M124","name":"Logica computationala"},{"passed":"true","code":"M125","name":"Arhitectura sistemelor de calcul"},{"passed":"false","code":"M127","name":"Algebra"},{"passed":"true","code":"M123","name":"Analiza matematica"}]},{"number":"2","year":"2017","disciplines":[{"passed":"true","code":"M123","name":"Programare orientata obiect"},{"passed":"true","code":"M123","name":"Geometrie"},{"passed":"true","code":"M123","name":"Sisteme de operare"},{"passed":"true","code":"M123","name":"Sisteme dinamice"},{"passed":"true","code":"M123","name":"Algoritmica grafelor"}]},{"number":"3","year":"2018","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii3"},{"passed":"true","code":"M123","name":"Logica computationala3"},{"passed":"true","code":"M123","name":"Arhitectura sistemelor de calcul3"},{"passed":"true","code":"M123","name":"Algebra3"},{"passed":"true","code":"M123","name":"Analiza matematica3"}]},{"number":"4","year":"2018","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii4"},{"passed":"true","code":"M123","name":"Logica computationala4"},{"passed":"true","code":"M123","name":"Arhitectura sistemelor de calcul4"},{"passed":"true","code":"M123","name":"Algebra4"},{"passed":"true","code":"M123","name":"Analiza matematica4"}]},{"number":"5","year":"2019","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii5"},{"passed":"true","code":"M123","name":"Logica computationala5"},{"passed":"true","code":"M123","name":"Arhitectura sistemelor de calcul5"},{"passed":"true","code":"M123","name":"Algebra5"},{"passed":"true","code":"M123","name":"Analiza matematica5"}]},{"number":"6","year":"2019","disciplines":[{"passed":"true","code":"M123","name":"Fundamentele programarii6"},{"passed":"true","code":"M123","name":"Logica computationala6"},{"passed":"true","code":"M123","name":"Arhitectura sistemelor de calcul6"},{"passed":"true","code":"M123","name":"Algebra6"},{"passed":"true","code":"M123","name":"Analiza matematica6"}]}]}').semesters;
     }
 }

@@ -2,11 +2,10 @@ import React,{useState} from 'react'
 import '../css/commons.css'
 import '../css/attendances.css'
 
-var students=[];
-
 export default function AttendanceTableProfessor() 
 {
 	let [nrWeeks,setNrWeeks]=useState(14);
+	let [students,setStudents]=useState([]);
 
 	function disciplineDropDownOptionsChanged()
 	{
@@ -192,7 +191,7 @@ export default function AttendanceTableProfessor()
 		let options=[];
      
 	     options.push(
-	        <option disabled selected value="nothing"> --- alege grupa --- </option>
+	        <option selected value="nothing"> --- alege grupa --- </option>
 	     )
 
 	     options.push(

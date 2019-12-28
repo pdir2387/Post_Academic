@@ -1,21 +1,21 @@
-import React,{useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import '../css/commons.css'
 import '../css/email.css'
 import ComposeImage from '../img/compose_email.png'
 import DeleteImage from '../img/trash.png'
 import SearchImage from '../img/search.png'
 
-var emails=[];
-var drafts=[];
-var sent=[];
-var selectedEmails=[];
-var currentlySelectedMail=null;
-var currentlySelectedCategory="inbox";
-var emailFetcher=null;
-var unreadEmailsCount=0;
-
 export default function Email() 
 {
+	let [emails,setEmails]=useState([]);
+	let [drafts,setDrafts]=useState([]);
+	let [sent,setSent]=useState([]);
+	let [selectedEmails,setSelectedEmails]=useState([]);
+	let [currentlySelectedMail,setCurrentlySelectedMail]=useState(null);
+	let [currentlySelectedCategory,setCurrentlySelectedCategory]=useState("inbox");
+	let [emailFetcher,setEmailFetcher]=useState(null);
+	let [unreadEmailsCount,setUnreadEmailsCount]=useState(0);
+
 	useEffect(() => 
 	{
         openInbox();

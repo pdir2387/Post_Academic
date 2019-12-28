@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
@@ -9,9 +9,10 @@ import TeacherGrades from "./TeacherGrades.js"
 import '../css/grades.css'
 import EmailPage from './EmailPage.js';
 
-var accountType;
+export default function GradesPage() 
+{
+    let [accountType,setAccountType]=useState(()=>getAccountType());
 
-export default function GradesPage() {
     return (
         <div id="grades-page">
             <div id="grades-left">
@@ -60,6 +61,6 @@ export default function GradesPage() {
 
     function getAccountType()
     {
-        accountType="professor";
+        return "professor";
     }
 }

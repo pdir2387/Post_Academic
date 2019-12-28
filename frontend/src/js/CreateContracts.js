@@ -2,15 +2,15 @@ import React,{useState,useEffect} from 'react'
 import '../css/commons.css'
 import '../css/create_contracts.css'
 
-var semester1=[];
-var semester2=[];
-var maxCreditsSem1;
-var maxCreditsSem2;
-var currentCreditsSem1=0;
-var currentCreditsSem2=0;
-
 export default function CreateContracts()
 {
+	let [semester1,setSemester1]=useState([]);
+	let [semester2,setSemester2]=useState([]);
+	let [maxCreditsSem1,setMaxCreditsSem1]=useState(0);
+	let [maxCreditsSem2,setMaxCreditsSem2]=useState(0);
+	let [currentCreditsSem1,setCurrentCreditsSem1]=useState(0);
+	let [currentCreditsSem2,setCurrentCreditsSem2]=useState(0);
+
 	useEffect(() => 
 	{
         fillSemester1Table();

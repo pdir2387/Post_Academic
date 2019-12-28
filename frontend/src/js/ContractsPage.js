@@ -7,9 +7,10 @@ import '../css/contracts.css'
 import StudentContractPopup from './StudentContractPopup'
 import Modal from 'react-modal'
 
-var period;
+export default function ContractsPage() 
+{
+    let [period,setPeriod]=useState(()=>getPeriod());
 
-export default function ContractsPage() {
     return (
         <div id="contractsPage">
             <div id="contractsLeft">
@@ -23,15 +24,13 @@ export default function ContractsPage() {
         </div>
     );
 
-    function getInfo()
+    function getPeriod()
     {
-        period=JSON.parse('{"period":"1"}').period;
+        return JSON.parse('{"period":"1"}').period;
     }
 
     function ContractsPageContent(props)
     {
-        getInfo();
-
         if(period=="0")
         {
             return <ViewContracts />;
@@ -47,6 +46,5 @@ export default function ContractsPage() {
                 console.log("no");
             }
         }
-
     }
 }

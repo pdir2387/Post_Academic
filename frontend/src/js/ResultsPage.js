@@ -1,13 +1,14 @@
 import LogoutButton from "./LogoutButton.js"
-import React from 'react'
+import React, {useState} from 'react'
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import StudentNavBar from "./StudentNavBar.js"
 import Results from "./Results"
 import '../css/results.css'
 
-var accountType;
+export default function ResultsPage() 
+{
+    let [accountType,setAccountType]=useState(()=>getAccountType());
 
-export default function ResultsPage() {
     return (
         <div id="resultsPage">
             <div id="resultsLeft">
@@ -23,8 +24,6 @@ export default function ResultsPage() {
 
     function NavBar()
     {
-        getAccountType();
-
         if(accountType==="student")
         {
             return <StudentNavBar />;
@@ -55,6 +54,6 @@ export default function ResultsPage() {
 
     function getAccountType()
     {
-        accountType="student";
+        return "student";
     }
 }

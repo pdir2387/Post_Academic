@@ -1,16 +1,15 @@
-import React,{useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import '../css/commons.css'
 import '../css/results.css'
 
-var sortingOptions=[];
-var filteringOptions=[];
-var results=[];
-
 export default function Results() 
 {
+	let [sortingOptions,setSortingOptions]=useState([]);
+	let [filteringOptions,setFilteringOptions]=useState([]);
+	let [results,setResults]=useState(()=>getResults());
+
 	useEffect(() => 
 	{
-        getResults();
         fillTable(results);
     }, []);
 
@@ -275,6 +274,6 @@ export default function Results()
 
     function getResults()
     {
-    	results=JSON.parse('{"results":[{"year":"2017/2018","semester":"1","code":"M123","name":"Fundamentele programarii","grade":"6","credits":"6","date":"17.01.2018"},{"year":"2017/2018","semester":"1","code":"M124","name":"Tundamentele programarii","grade":"10","credits":"5","date":"19.05.2018"},{"year":"2018/2019","semester":"3","code":"M126","name":"Fundamentele programarii3","grade":"6","credits":"6","date":"06.04.2018"},{"year":"2018/2019","semester":"4","code":"M127","name":"Fundamentele programarii2","grade":"8","credits":"6","date":"17.01.2018"},{"year":"2019/2020","semester":"6","code":"M153","name":"Fundamentela programarii","grade":"5","credits":"6","date":"06.04.2018"},{"year":"2019/2020","semester":"6","code":"M113","name":"Fundaaentele programarii","grade":"5","credits":"6","date":"01.01.2019"},{"year":"2020/2021","semester":"7","code":"M223","name":"FFundamentele programarii","grade":"9","credits":"6","date":"17.01.2017"},{"year":"2021/2022","semester":"8","code":"M183","name":"Fundamentele programarii4","grade":"10","credits":"6","date":"17.01.2018"}]}').results;
+    	return JSON.parse('{"results":[{"year":"2017/2018","semester":"1","code":"M123","name":"Fundamentele programarii","grade":"6","credits":"6","date":"17.01.2018"},{"year":"2017/2018","semester":"1","code":"M124","name":"Tundamentele programarii","grade":"10","credits":"5","date":"19.05.2018"},{"year":"2018/2019","semester":"3","code":"M126","name":"Fundamentele programarii3","grade":"6","credits":"6","date":"06.04.2018"},{"year":"2018/2019","semester":"4","code":"M127","name":"Fundamentele programarii2","grade":"8","credits":"6","date":"17.01.2018"},{"year":"2019/2020","semester":"6","code":"M153","name":"Fundamentela programarii","grade":"5","credits":"6","date":"06.04.2018"},{"year":"2019/2020","semester":"6","code":"M113","name":"Fundaaentele programarii","grade":"5","credits":"6","date":"01.01.2019"},{"year":"2020/2021","semester":"7","code":"M223","name":"FFundamentele programarii","grade":"9","credits":"6","date":"17.01.2017"},{"year":"2021/2022","semester":"8","code":"M183","name":"Fundamentele programarii4","grade":"10","credits":"6","date":"17.01.2018"}]}').results;
     }
 }

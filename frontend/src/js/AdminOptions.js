@@ -1,13 +1,13 @@
-import React,{useEffect} from 'react'
+import React,{useState, useEffect} from 'react'
 import '../css/administrate_options.css'
-
-var options;
 
 export default function AdminOptions() 
 {
+	let [options,setOptions]=useState(()=>getOtions());
+
 	useEffect(() => 
 	{
-        setOptions();
+        setOptionsPage();
     }, []);
 
 	return (
@@ -27,10 +27,8 @@ export default function AdminOptions()
         </div>
     );
 
-    function setOptions()
+    function setOptionsPage()
     {
-    	getOtions();
-
     	if(options.period==="view")
     	{
     		document.getElementById("viewPeriodRadio").checked=true;
@@ -46,7 +44,7 @@ export default function AdminOptions()
 
     function getOtions()
     {
-    	options=JSON.parse('{"period":"view"}');
+    	return JSON.parse('{"period":"view"}');
     }
 
 	function viewPeriod()
