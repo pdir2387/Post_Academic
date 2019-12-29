@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react'
 
+import commons from '../css/commons.module.css'
 import administrate_options from '../css/administrate_options.module.css'
 
 export default function AdminOptions() 
@@ -12,7 +13,7 @@ export default function AdminOptions()
     }, []);
 
 	return (
-        <div className="container">
+        <div className={commons.container}>
             <h1 className="title">Administrare opțiuni</h1>
 
 			<div id="adminOptionsContainer">
