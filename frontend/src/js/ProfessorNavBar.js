@@ -10,7 +10,7 @@ export default function ProfessorNavBar(){
             <img src={mainLogo} alt="logo"></img>
             <div id={home.navBarSeparator}></div>
             <NavBarItem buttonText="ORAR" url="/home"/>
-            <NavBarItem buttonText="PREZENTA" url="/prezentaP"/>
+            <NavBarItem buttonText="PREZENTA" url="/prezenta"/>
             <NavBarItem buttonText="NOTE" url="/note"/>
             <NavBarItem buttonText="E-MAIL" url="/email"/>
         </div>
