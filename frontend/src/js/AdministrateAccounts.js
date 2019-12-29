@@ -1,11 +1,12 @@
 import React,{useState} from 'react'
 
+import commons from '../css/commons.module.css'
 import administrate_accounts from '../css/administrate_accounts.module.css'
 
 export default function AdministrateAccounts() 
 {
 	return (
-        <div className="container">
+        <div className={commons.container}>
             <h1 className="title">Administrare conturi</h1>
 
 			<div id={administrate_accounts.optionsAndFields}>
