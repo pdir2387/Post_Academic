@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from 'react'
-import '../css/commons.css'
-import '../css/student_info.css'
+
+import studentInfoCss from '../css/student_info.module.css'
+import commons from '../css/commons.module.css'
 
 export default function StudentInfo() 
 {
@@ -12,16 +13,16 @@ export default function StudentInfo()
     }, []); 
 
 	return (
-        <div className="container">
+        <div className={commons.container}>
             <h1 className="title">Informații student</h1>
 
-            <div id="infoStudent">
-            	<span className="bold">Nume:</span> <span id="nameSpan"></span><br/>
-            	<span className="bold">CNP:</span> <span id="cnpSpan"></span><br/>
-            	<span className="bold">Nr. matricol:</span> <span id="codeSpan"></span><br/>
-            	<span className="bold">Grupa:</span> <span id="groupNumberSpan"></span><br/>
-            	<span className="bold">An de studiu:</span> <span id="yearSpan"></span><br/>
-            	<span className="bold">Semestrul curent:</span> <span id="semesterNumberSpan"></span><br/>
+            <div id={studentInfoCss.infoStudent}>
+            	<span className={studentInfoCss.bold}>Nume:</span> <span id="nameSpan"></span><br/>
+            	<span className={studentInfoCss.bold}>CNP:</span> <span id="cnpSpan"></span><br/>
+            	<span className={studentInfoCss.bold}>Nr. matricol:</span> <span id="codeSpan"></span><br/>
+            	<span className={studentInfoCss.bold}>Grupa:</span> <span id="groupNumberSpan"></span><br/>
+            	<span className={studentInfoCss.bold}>An de studiu:</span> <span id="yearSpan"></span><br/>
+            	<span className={studentInfoCss.bold}>Semestrul curent:</span> <span id="semesterNumberSpan"></span><br/>
             </div>
         </div>
     );

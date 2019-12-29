@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
-import '../css/commons.css'
-import '../css/create_contracts.css'
+import commons from '../css/commons.module.css'
+import contracts from '../css/create_contracts.module.css'
 
 export default function CreateContracts()
 {
@@ -20,14 +20,14 @@ export default function CreateContracts()
     }, []); 
 
 	return (
-        <div className="container">
-            <h1 className="title">Creare contract de studiu</h1>
+        <div className={commons.container}>
+            <h1 className={contracts.title}>Creare contract de studiu</h1>
 
-			<div id="semestersTables">
-	       		<div id="disciplinesSem1" className="disciplinesDetails">
+			<div id={contracts.semestersTables}>
+	       		<div id={contracts.disciplinesSem1} className={contracts.disciplinesDetails}>
 	       			<h2>Discipline semestrul 1</h2>
 
-	       			<table id="tableSem1" className="table">
+	       			<table id="tableSem1" className={`${commons.table} ${contracts.table}`}>
 	       				<thead>
 	       					<tr>
 	       						<th>Nr. Crt.</th>
@@ -45,10 +45,10 @@ export default function CreateContracts()
 	       			<h2 id="creditsNumberSem1"></h2>
 	       		</div>
 
-	       		<div id="disciplinesSem2" className="disciplinesDetails">
+	       		<div id={contracts.disciplinesSem2} className={contracts.disciplinesDetails}>
 	       			<h2>Discipline semestrul 2</h2>
 
-	       			<table id="tableSem2" className="table">
+	       			<table id="tableSem2" className={`${commons.table} ${contracts.table}`}>
 	       				<thead>
 	       					<tr>
 	       						<th>Nr. Crt.</th>
@@ -67,13 +67,7 @@ export default function CreateContracts()
 	       		</div>
 	        </div>
 
-	        <button id="createContractButton" type="button">Creare contract</button>
-
-	        <div id="legend">
-	        	1. Obligatorie<br/>
-	        	2. Opțională<br/>
-	        	3. Facultativă<br/>
-	        </div>
+	        <button id={contracts.createContractButton} className={commons.button} type="button">Creare contract</button>
         </div>
     );
 

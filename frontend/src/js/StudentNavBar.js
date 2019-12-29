@@ -1,13 +1,14 @@
 import React from 'react'
 import NavBarItem from './NavBarItem'
 import mainLogo from '../img/logo_facultate.png';
-import '../css/home.css'
+
+import home from '../css/home.module.css'
 
 function StudentNavBar(){
     return(
-        <div id="studentNavBar">
+        <div id={home.studentNavBar}>
             <img src={mainLogo} alt="logo"></img>
-            <div id="navBarSeparator"></div>
+            <div id={home.navBarSeparator}></div>
             <NavBarItem buttonText="ORAR" url="/home"/>
             <NavBarItem buttonText="PREZENTA" url="/prezenta"/>
             <NavBarItem buttonText="NOTE" url="/note"/>

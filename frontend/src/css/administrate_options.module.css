@@ -1,0 +1,8 @@
+#adminOptionsUl{
+    list-style: none;
+    text-align: left;
+}
+
+#adminOptionsUl li{
+    border: 1px solid black;
+}

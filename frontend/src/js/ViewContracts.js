@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
-import '../css/commons.css'
-import '../css/contracts.css'
+
+import commons from '../css/commons.module.css'
+import contracts from '../css/contracts.module.css'
 
 export default function ViewContracts()
 {
@@ -12,18 +13,17 @@ export default function ViewContracts()
     }, []); 
 
 	return (
-        <div className="container">
+        <div className={commons.container}>
             <h1 className="title">Contracte de studii</h1>
 
-			<div id="content">
-	       		<div id="semesters">
-	       			Semestrul:<br/>
-	       			<select name="user" id="semestersSelect" size="10">
+			<div id={contracts.content}>
+	       		<div id={contracts.semesters}>
+	       			<select name="user" id={contracts.semestersSelect} size="10">
 
 				  	</select>
 	       		</div>
 
-	            <table id="tableDisciplines" className="table">
+	            <table id={contracts.tableDisciplines} className={commons.table}>
 	                <thead>
 	                    <tr id="headers">
 	                   		<th>Nr. Crt.</th>
@@ -38,7 +38,7 @@ export default function ViewContracts()
 	            </table>
 	        </div>
 
-	        <button id="generateButton" type="button">Generare contract</button>
+	        <button id={contracts.generateButton} className={commons.button} type="button">Generare contract</button>
         </div>
     );
 
@@ -50,7 +50,7 @@ export default function ViewContracts()
 			let option=document.createElement("option");
 			option.innerText=text;
 			option.addEventListener("click", function(){loadDisciplinesIntoTable(option)});
-			document.getElementById("semestersSelect").appendChild(option);
+			document.getElementById(contracts.semestersSelect).appendChild(option);
 		}
     }
 

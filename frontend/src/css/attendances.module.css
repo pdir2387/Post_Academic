@@ -3,47 +3,19 @@
     padding: 0;
 }
 
-#attendancePage{
-    display: flex;
-    flex-direction: row;
-    min-height: 100vh;
-    width: 100%;
-}
-
-#attendanceLeft {
-    background-color: #ececec;
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-    align-items: center;
-}
-
-#attendanceRight{
-    flex: 8;
-}
-
-.container{
-	display: flex;
-	flex-direction: column;
-	text-align: center;
-	margin: 5%;
-}
-
 .title{
 	flex: 1;
 }
 
-.table{
-    width: 100%;
-}
-
 #infoAttendances{
 	flex: 2;
-	text-align: left;
+    text-align: left;
+    margin-top: 10px;
 }
 
 .dropDown{
-	margin-bottom: 2%;
+    margin-bottom: 2%;
+    width: 60%;
 }
 
 #dropDownContainer{

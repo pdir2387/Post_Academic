@@ -4,20 +4,21 @@ import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import AttendanceTable from "./AttendanceTable"
 import AttendanceTableProfessor from "./AttendanceTableProfessor"
-import '../css/attendances.css'
+
+import commons from '../css/commons.module.css'
 
 export default function AttendancePage() 
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
     return (
-        <div id="attendancePage">
-            <div id="attendanceLeft">
+        <div id={commons.page}>
+            <div id={commons.left}>
                 <NavBar />
                 <LogoutButton />
             </div>
 
-            <div id="attendanceRight"> 
+            <div id={commons.right}> 
                 <Attendance />
             </div>
         </div>
@@ -55,6 +56,6 @@ export default function AttendancePage()
 
     function getAccountType()
     {
-        return "student";
+        return "professor";
     }
 }

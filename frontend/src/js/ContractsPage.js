@@ -3,22 +3,23 @@ import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
 import ViewContracts from "./ViewContracts"
 import CreateContracts from "./CreateContracts"
-import '../css/contracts.css'
 import StudentContractPopup from './StudentContractPopup'
 import Modal from 'react-modal'
+
+import commons from '../css/commons.module.css'
 
 export default function ContractsPage() 
 {
     let [period,setPeriod]=useState(()=>getPeriod());
 
     return (
-        <div id="contractsPage">
-            <div id="contractsLeft">
+        <div id={commons.page}>
+            <div id={commons.left}>
                 <StudentNavBar />
                 <LogoutButton />
             </div>
 
-            <div id="contractsRight"> 
+            <div id={commons.right}> 
                 <ContractsPageContent />
             </div>
         </div>
@@ -40,10 +41,6 @@ export default function ContractsPage()
             if(period=="1")
             {
                 return <CreateContracts />;
-            }
-            else
-            {
-                console.log("no");
             }
         }
     }

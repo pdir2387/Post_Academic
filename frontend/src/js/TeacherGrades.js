@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
-import '../css/teacher_grades.css'
+
+import commons from '../css/commons.module.css'
+import gradesCss from '../css/teacher_grades.module.css'
 
 export default function TeacherGrades() {
     let materii = ["Mate", "Info", "Romana"];
@@ -31,24 +33,24 @@ export default function TeacherGrades() {
     }
 
     return(
-        <div id="teacher-grades-container">
+        <div className={commons.container}>
             <h1>Note</h1>
 
-            <div id="select-container">
-                <select id="course-select" onChange={handleSelectCourse}>
+            <div id={gradesCss.selectContainer}>
+                <select id="course-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectCourse}>
                     {getOptions(materii)}
                 </select>
 
-                <select id="type-select" onChange={handleSelectType}>
+                <select id="type-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectType}>
                     {getOptionsTypes(filter)}
                 </select>
 
-                <select id="group-select" onChange={handleSelectGroup}>
+                <select id="group-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectGroup}>
                     {getOptionsGroups(groups)}
                 </select>
             </div>
 
-            <table id="student-grades-table">
+            <table className={commons.table}>
                 <tr>
                     <th>STUDENT</th>
                     <th>SAPTAMANA</th>

@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
-import '../css/grades.css'
+
+import commons from '../css/commons.module.css'
+import gradesCss from '../css/grades.module.css'
 
 // /api/student/note
 
@@ -17,14 +19,14 @@ export default function StudentGrades() {
     }
 
     return (
-        <div id="student-grades">
+        <div className={commons.container}>
             <h1>Note</h1>
 
-            <select id="course-select" onChange={handleSelectChange}>
+            <select id={gradesCss.courseSelect} className={commons.dropDown} onChange={handleSelectChange}>
                 {getOptions(options)}
             </select>
 
-            <table id="student-grades-table">
+            <table className={commons.table}>
                 <tr>
                     <th>DATA</th>
                     <th>NOTA</th>

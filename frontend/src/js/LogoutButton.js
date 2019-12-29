@@ -1,9 +1,10 @@
 import React from 'react'
-import '../css/home.css'
+
+import home from '../css/home.module.css'
 
 function LogoutButton(){
     return(
-        <div className="NavBarItem">
+        <div className={home.NavBarItem}>
             <a href="/api/logout">
                 <button>Logout</button>
             </a>

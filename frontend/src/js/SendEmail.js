@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import '../css/commons.css'
-import '../css/email.css'
 import BackIcon from '../img/back.png'
 import RemoveIcon from '../img/remove.png'
 import SaveDraftIcon from '../img/save_draft.png'
 import CheckedIcon from '../img/checked.png'
+
+import commons from '../css/commons.module.css'
+import emailCss from '../css/email.module.css'
 
 export default function SendEmail() 
 {
@@ -18,33 +19,33 @@ export default function SendEmail()
     }, []);
 
     return (
-    	<div id="containerAllSendEmail">
-    		<div id="sendEmailAdditionalOptions">
-    			<a href="/email" id="backToEmails" title="Înapoi"><img src={BackIcon} id="backToEmailsImage" alt="Înapoi" /></a>
-    			<button id="saveDraftButton" onClick={saveDraft} title="Salvează schiță"><img id="saveDraftImage" src={SaveDraftIcon} alt="Salvează schiță"/></button>
+    	<div id={emailCss.containerAllSendEmail}>
+    		<div id={emailCss.sendEmailAdditionalOptions}>
+    			<a href="/email" id="backToEmails" title="Înapoi"><img src={BackIcon} id={emailCss.backToEmailsImage} alt="Înapoi" /></a>
+    			<button id={emailCss.saveDraftButton} onClick={saveDraft} title="Salvează schiță"><img id={emailCss.saveDraftImage} src={SaveDraftIcon} alt="Salvează schiță"/></button>
     		</div>
 
-    		<div id="emailDetails">
-				<label className="emailDetailsInput">Destinatar: </label><input type="text" id="toInput"/><br/>
-				<label className="emailDetailsInput">Subiect: </label><input type="text" id="subjectInput"/>
+    		<div id={emailCss.emailDetails}>
+				<label className={emailCss.emailDetailsInput}>Destinatar: </label><input type="text" id="toInput"/><br/>
+				<label className={emailCss.emailDetailsInput}>Subiect: </label><input type="text" id="subjectInput"/>
     		</div>
 
-			<div id="emailContent">
-	    		<div id="emailMessage">
-	    			<textarea rows="20" cols="70" id="emailMessageInput" />
-	    			<button id="sendEmailButton" onClick={sendEmail}>Trimite</button>
+			<div id={emailCss.emailContent}>
+	    		<div id={emailCss.emailMessage}>
+	    			<textarea rows="20" cols="70" id={emailCss.emailMessageInput} />
+					<button id={emailCss.sendEmailButton} onClick={sendEmail}>Trimite</button>
 	    		</div>
 
-	    		<div id="emailAttachments">
-	    			<div id="ulAttachmentsTitle">Atașamente</div>
-	    			<div id="attachmentsTableContainer">
-		    			<table id="attachmentsTable">
+	    		<div id={emailCss.emailAttachments}>
+	    			<div id={emailCss.ulAttachmentsTitle}>Atașamente</div>
+	    			<div id={emailCss.attachmentsTableContainer}>
+		    			<table id={emailCss.attachmentsTable}>
 		    				<thead></thead>
 		    				<tbody></tbody>
 		    			</table>
 	    			</div>
 					
-	    			<form id="fileInputForm">
+	    			<form id={emailCss.fileInputForm}>
 	    				<input id="fileInput" type="file" onChange={(e)=>addFile(e.target)} multiple />
 	    			</form>
 	    		</div>
@@ -61,17 +62,18 @@ export default function SendEmail()
     {
     	let to=document.getElementById("toInput").value;
     	let subject=document.getElementById("subjectInput").value;
-    	let message=document.getElementById("emailMessageInput").value;
+    	let message=document.getElementById(emailCss.emailMessageInput).value;
 
 		
 
-    	document.getElementById("attachmentsUl").innerHTML="";
+		document.getElementById(emailCss.attachmentsTable).children[0].innerHTML="";
+		document.getElementById(emailCss.attachmentsTable).children[1].innerHTML="";
     	filesToSend=[];
     }
 
     function addFile(inputFile)
     {
-    	let fileTable=document.getElementById("attachmentsTable");
+    	let fileTable=document.getElementById(emailCss.attachmentsTable);
     	let files=inputFile.files;
 
     	for(let i=0;i<files.length;i++)
@@ -133,7 +135,7 @@ export default function SendEmail()
 
     	document.getElementById("toInput").value=to;
     	document.getElementById("subjectInput").value=subject;
-    	document.getElementById("emailMessageInput").value=message;
+    	document.getElementById(emailCss.emailMessageInput).value=message;
     }
 
     function createSaveDraftMessage()
@@ -143,7 +145,7 @@ export default function SendEmail()
     	let spanMessage=document.createElement("span")
 
     	imgChecked.src=CheckedIcon;
-    	imgChecked.id="checkedImage";
+    	imgChecked.id=emailCss.checkedImage;
     	imgChecked.style.verticalAlign="middle";
     	spanMessage.innerText="Schiță salvată";
     	spanMessage.style.marginLeft="20px";
@@ -155,7 +157,7 @@ export default function SendEmail()
     	divMessage.style.padding="10px";
     	divMessage.style.backgroundColor="#deffd4";
 
-    	let container=document.getElementById("sendEmailAdditionalOptions");
+    	let container=document.getElementById(emailCss.sendEmailAdditionalOptions);
 
     	container.appendChild(divMessage);
 
@@ -166,7 +168,7 @@ export default function SendEmail()
     {
     	let to=document.getElementById("toInput").value;
     	let subject=document.getElementById("subjectInput").value;
-    	let message=document.getElementById("emailMessageInput").value
+    	let message=document.getElementById(emailCss.emailMessageInput).value
 
     	if(to!=="" || subject!== "" || message!=="")
     	{

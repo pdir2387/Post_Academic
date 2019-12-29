@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import '../css/table.css'
+import tableCss from '../css/table.module.css'
 
 function isIterable(obj) {
     // checks for null and undefined
@@ -31,7 +31,7 @@ function getClassFromTimeAndDay(orar, time, day) {
     if (isIterable(orar))
         for (let course of orar) {
             if (course.zi === day && time >= course.start && time < (course.start + course.durata))
-                return course;
+                return tableCss.course;
         }
 
     return null;
@@ -83,11 +83,11 @@ function Orar(){
 
     return(
 
-        <div id="orar">
+        <div id={tableCss.orar}>
             {/*TO DO: orar logic*/}
             <table>
                 <tbody>
-                    {createTableRow(["", "Luni", "Marti", "Miercuri", "Joi", "Vineri"], "th")}
+                    {createTableRow(["", "Luni", "Marti", "Miercuri", "Joi", "Vineri"], tableCss.th)}
                     {getFormattedOrar(orar)}
                 </tbody>
             </table>

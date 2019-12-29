@@ -2,17 +2,18 @@ import LogoutButton from "./LogoutButton.js"
 import React from 'react'
 import AdminNavBar from "./AdminNavBar.js"
 import AdminOptions from "./AdminOptions.js"
-import '../css/administrate_options.css'
+
+import commons from '../css/commons.module.css'
 
 export default function AdminOptionsPage() {
     return (
-        <div id="administrateOptionsPage">
-            <div id="administrateOptionsLeft">
+        <div id={commons.page}>
+            <div id={commons.left}>
                 <AdminNavBar />
                 <LogoutButton />
             </div>
 
-            <div id="administrateOptionsRight"> 
+            <div id={commons.right}> 
                 <AdminOptions />
             </div>
         </div>

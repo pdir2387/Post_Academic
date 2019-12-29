@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import '../css/commons.css'
-import '../css/attendances.css'
+
+import commons from '../css/commons.module.css'
+import attendances from '../css/attendances.module.css'
 
 export default function AttendanceTable() 
 {
@@ -21,15 +22,15 @@ export default function AttendanceTable()
     }
 
     return (
-        <div className="container">
-            <h1 className="title">Prezențe</h1>
+        <div className={commons.container}>
+            <h1 className={attendances.title}>Prezențe</h1>
 
             <fieldset>
-                <select id="disciplineDropDown" className="dropDown" onChange={disciplineChanged}>
+                <select id="disciplineDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={disciplineChanged}>
                 </select>
             </fieldset>
 
-            <table id="tableAttendances" className="table">
+            <table id="tableAttendances" className={commons.table}>
                 <thead>
                     <tr id="headers">
                         {getHeader(nrWeeks)}
@@ -43,7 +44,7 @@ export default function AttendanceTable()
                 </tbody>
             </table>
 
-            <div id="infoAttendances">
+            <div id={attendances.infoAttendances}>
                 <h2 id="attendancesCourse"></h2>
                 <h2 id="attendancesSeminar"></h2>
                 <h2 id="attendancesLab"></h2>

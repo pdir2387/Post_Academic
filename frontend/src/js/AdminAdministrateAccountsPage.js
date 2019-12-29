@@ -2,17 +2,18 @@ import LogoutButton from "./LogoutButton.js"
 import React from 'react'
 import AdminNavBar from "./AdminNavBar.js"
 import AdministrateAccounts from "./AdministrateAccounts.js"
-import '../css/administrate_accounts.css'
+
+import commons from '../css/commons.module.css'
 
 export default function AdminAdministrateAccountsPage() {
     return (
-        <div id="administratePage">
-            <div id="administrateLeft">
+        <div id={commons.page}>
+            <div id={commons.left}>
                 <AdminNavBar />
                 <LogoutButton />
             </div>
 
-            <div id="administrateRight"> 
+            <div id={commons.right}> 
                 <AdministrateAccounts />
             </div>
         </div>

@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import '../css/commons.css'
-import '../css/email.css'
 import ComposeImage from '../img/compose_email.png'
 import DeleteImage from '../img/trash.png'
 import SearchImage from '../img/search.png'
+
+import commons from '../css/commons.module.css'
+import emailCss from '../css/email.module.css'
 
 export default function Email() 
 {
@@ -23,48 +24,48 @@ export default function Email()
     }, []);
 
     return (
-    	<div id="containerAllEmail">
-    		<div id="additionalOptions">
-    			<div id="imageButtons">
-	    			<a href="/send_email" id="toComposeEmail" title="Trimite email"><img id="toComposeEmailImage" src={ComposeImage} alt="Trimite email"/></a>
-	    			<button id="deleteButtonMail" onClick={deleteSelectedMails} title="Șterge email-uri selectate"><img id="deleteEmailImage" src={DeleteImage} alt="Delete"/></button>
+    	<div id={emailCss.containerAllEmail}>
+    		<div id={emailCss.additionalOptions}>
+    			<div id={emailCss.imageButtons}>
+	    			<a href="/send_email" id={emailCss.toComposeEmail} title="Trimite email"><img id={emailCss.toComposeEmailImage} src={ComposeImage} alt="Trimite email"/></a>
+	    			<button id={emailCss.deleteButtonMail} onClick={deleteSelectedMails} title="Șterge email-uri selectate"><img id={emailCss.deleteEmailImage} src={DeleteImage} alt="Delete"/></button>
 	    		</div>
 
-    			<div id="searchArea">
-    				<input type="text" id="searchField" />
-    				<button id="searchButtonEmail" onClick={searchEmails}><img id="searchEmailImage" src={SearchImage} alt="Caută"/></button>
+    			<div id={emailCss.searchArea}>
+    				<input type="text" id={emailCss.searchField} />
+    				<button id={emailCss.searchButtonEmail} onClick={searchEmails}><img id={emailCss.searchEmailImage} src={SearchImage} alt="Caută"/></button>
     			</div>
     		</div>
 
-	        <div id="containerEmailInfo">
-	            <div id="leftPanel">
-	            	<div id="ulCategoriesTitle">Categorii</div>
-	            	<ul id="ulCategories">
+	        <div id={emailCss.containerEmailInfo}>
+	            <div id={emailCss.leftPanel}>
+	            	<div id={emailCss.ulCategoriesTitle}>Categorii</div>
+	            	<ul id={emailCss.ulCategories}>
 	            		<li id="inboxLi" onClick={openInbox}>Mesaje primite<span id="unreadNumber"></span></li>
 	            		<li id="draftsLi" onClick={openDrafts}>Schițe</li>
 	            		<li id="sentLi" onClick={openSent}>Mesaje trimise</li>
 	            	</ul>
 	            </div>
 				
-				<div id="emails">
-		            <div id="emailList">
-		            	<table id="tableEmails">
+				<div id={emailCss.emails}>
+		            <div id={emailCss.emailList}>
+		            	<table id={emailCss.tableEmails}>
 		            		<thead>
 		            			<tr>
-		            				<th className="checkboxTh"></th>
+		            				<th className={emailCss.checkboxTh}></th>
 		            				<th>Subiect</th>
 		            				<th id="fromToTh">Expeditor</th>
 		            				<th>Data</th>
 		            			</tr>
 		            		</thead>
 
-		            		<tbody id="tbodyEmail">
+		            		<tbody id={emailCss.tbodyEmail}>
 		            		</tbody>
 		            	</table>
 		            </div>
 
-		            <div id="emailMessage">
-		            	<table id="tableEmailInfo">
+		            <div id={emailCss.emailMessage}>
+		            	<table id={emailCss.tableEmailInfo}>
 		            		<thead id="theadTableEmailInfo">
 		            		</thead>
 
@@ -72,7 +73,7 @@ export default function Email()
 		            		</tbody>
 		            	</table>
 						
-						<div id="messageArea">
+						<div id={emailCss.messageArea}>
 		            	</div>
 		            </div>
 	            </div>
@@ -91,7 +92,7 @@ export default function Email()
 		liElem.style.color="white";
 
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
-		document.getElementById("messageArea").innerHTML="";
+		document.getElementById(emailCss.messageArea).innerHTML="";
 		fillEmailTable();
 		currentlySelectedCategory="inbox";
 	}
@@ -107,7 +108,7 @@ export default function Email()
 		liElem.style.color="white";
 
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
-		document.getElementById("messageArea").innerHTML="";
+		document.getElementById(emailCss.messageArea).innerHTML="";
 		fillDraftsTable();
 		currentlySelectedCategory="draft";
 	}
@@ -123,7 +124,7 @@ export default function Email()
 		liElem.style.color="white";
 
 		document.getElementById("tbodyTableEmailInfo").innerHTML="";
-		document.getElementById("messageArea").innerHTML="";
+		document.getElementById(emailCss.messageArea).innerHTML="";
 		fillSentTable();
 		currentlySelectedCategory="sent";
 	}
@@ -135,7 +136,7 @@ export default function Email()
 
 	function deselectCategories()
 	{
-		let categoriesLi=document.getElementById("ulCategories").children;
+		let categoriesLi=document.getElementById(emailCss.ulCategories).children;
 
 		for(let j=0;j<categoriesLi.length;j++)
 		{
@@ -152,7 +153,7 @@ export default function Email()
 
 	function fillEmailTableWithArray(toFill)
 	{
-		let tbodyEmail=document.getElementById("tbodyEmail");
+		let tbodyEmail=document.getElementById(emailCss.tbodyEmail);
 		tbodyEmail.innerHTML="";
 
 		document.getElementById("fromToTh").innerText="Expeditor";
@@ -273,7 +274,7 @@ export default function Email()
 
 	function fillDraftsOrSentTableWithArray(toFill,source)
 	{
-		let tbodyEmail=document.getElementById("tbodyEmail");
+		let tbodyEmail=document.getElementById(emailCss.tbodyEmail);
 		tbodyEmail.innerHTML="";
 
 		document.getElementById("fromToTh").innerText="Destinatar";
@@ -349,7 +350,7 @@ export default function Email()
 	function fillMessageBox(trEmail,source)
 	{
 		let tbodyInfo=document.getElementById("tbodyTableEmailInfo");
-		let messageArea=document.getElementById("messageArea");
+		let messageArea=document.getElementById(emailCss.messageArea);
 		tbodyInfo.innerHTML="";
 		messageArea.innerHTML="";
 
@@ -381,7 +382,7 @@ export default function Email()
 		let tdDate=document.createElement("td");
 
 		tdSubject.id="messageDetailsSubject";
-		tdFromTo.id="messageDetailsFromTo";
+		tdFromTo.id=emailCss.messageDetailsFromTo;
 
 		tdSubject.innerText=trEmail.children[1].innerText;
 		tdFromTo.innerText=trEmail.children[2].innerText;
@@ -408,7 +409,7 @@ export default function Email()
 		{
 			let button=document.createElement("button");
 			button.innerText="Editeaza schița";
-			button.id="editDraftButton";
+			button.id=emailCss.editDraftButton;
 			button.addEventListener('click',function(){editDraft(tdFromTo.innerText,tdSubject.innerText,messageText)});
 			messageArea.appendChild(button);
 			messageArea.appendChild(document.createElement("br"));
@@ -422,7 +423,7 @@ export default function Email()
 		{
 			let button=document.createElement("button");
 			button.innerText="Răspunde";
-			button.id="replyButton";
+			button.id=emailCss.replyButton;
 			button.addEventListener('click',function(){replyToEmail(tdFromTo.innerText,tdSubject.innerText,messageText,tdDate.innerText)});
 			messageArea.appendChild(button);
 		}
@@ -430,7 +431,7 @@ export default function Email()
 
 	function renderMessage(messageText)
 	{
-		let messageContainer=document.getElementById("messageArea");
+		let messageContainer=document.getElementById(emailCss.messageArea);
 		let message=document.createElement("div");
 		message.id="renderedMessage";
 
@@ -481,7 +482,7 @@ export default function Email()
 
 		for(let i=0;i<nr[0];i++)
 		{
-			blockQuoteHtml+="<blockquote class='replyQuoteEmail'>";
+			blockQuoteHtml+="<blockquote class="+emailCss.replyQuoteEmail+">";
 		}
 
 		blockQuoteHtml+=text[0];
@@ -492,7 +493,7 @@ export default function Email()
 			{
 				for(let j=0;j<nr[i]-nr[i-1];j++)
 				{
-					blockQuoteHtml+="<blockquote class='replyQuoteEmail'>";
+					blockQuoteHtml+="<blockquote class="+emailCss.replyQuoteEmail+">";
 				}
 
 				blockQuoteHtml+=text[i];
@@ -568,9 +569,9 @@ export default function Email()
 	{
 		if(selectedEmails.length>0)
 		{
-			let tbodyEmail=document.getElementById("tbodyEmail");
+			let tbodyEmail=document.getElementById(emailCss.tbodyEmail);
 			document.getElementById("tbodyTableEmailInfo").innerHTML="";
-			document.getElementById("messageArea").innerHTML="";
+			document.getElementById(emailCss.messageArea).innerHTML="";
 
 			for(let i=0;i<selectedEmails.length;i++)
 			{
@@ -609,7 +610,7 @@ export default function Email()
 
 	function searchEmails()
 	{
-		let term=document.getElementById("searchField").value;
+		let term=document.getElementById(emailCss.searchField).value;
 
 		if(term==="")
 		{

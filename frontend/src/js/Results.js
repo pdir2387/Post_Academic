@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import '../css/commons.css'
-import '../css/results.css'
+
+import commons from '../css/commons.module.css'
+import resultsCss from '../css/results.module.css'
 
 export default function Results() 
 {
@@ -14,11 +15,11 @@ export default function Results()
     }, []);
 
 	return (
-        <div className="container">
+        <div className={commons.container}>
             <h1 className="title">Medii</h1>
 
-			<div id="optionsAndTable">
-				<div id="sortingAndFilteringOptions">
+			<div id={resultsCss.optionsAndTable}>
+				<div id={resultsCss.sortingAndFilteringOptions}>
 					<h2 id="sortingH2">Sortează după:</h2>
 					<div id="sortingOptions">
 						<input type="checkbox" id="yearS" name="yearS" value="0" onChange={(e) => manageSortingOptions("year",e.target)}/> An<br/>
@@ -43,7 +44,7 @@ export default function Results()
 					</div>
 				</div>
 
-	            <table id="tableResults" className="table">
+	            <table id="tableResults" className={commons.table}>
 	            	<thead id="theadResults">
 	            		<tr>
 	            			<th>An studiu</th>

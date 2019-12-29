@@ -4,20 +4,21 @@ import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import AdminNavBar from "./AdminNavBar.js"
 import SendEmail from "./SendEmail.js"
-import '../css/email.css'
+
+import commons from '../css/commons.module.css'
 
 export default function SendEmailPage() 
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
     return (
-        <div id="emailPage">
-            <div id="emailLeft">
+        <div id={commons.page}>
+            <div id={commons.left}>
                 <NavBar />
                 <LogoutButton />
             </div>
 
-            <div id="emailRight"> 
+            <div id={commons.right}> 
                 <SendEmail />
             </div>
         </div>

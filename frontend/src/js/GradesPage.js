@@ -6,23 +6,21 @@ import ProfessorNavBar from "./ProfessorNavBar.js"
 import StudentGrades from "./StudentGrades.js"
 import TeacherGrades from "./TeacherGrades.js"
 
-import '../css/grades.css'
-import EmailPage from './EmailPage.js';
+import commons from '../css/commons.module.css'
+import grades from '../css/grades.module.css'
 
 export default function GradesPage() 
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
     return (
-        <div id="grades-page">
-            <div id="grades-left">
+        <div id={commons.page}>
+            <div id={commons.left}>
                 <NavBar />
                 <LogoutButton />
             </div>
-            <div id="grades-right">
-                <div id="student-grades-container">
-                    <Grades />
-                </div>
+            <div id={commons.right}>
+                <Grades />
             </div>
         </div>
     );

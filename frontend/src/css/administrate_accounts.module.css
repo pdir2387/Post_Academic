@@ -3,25 +3,6 @@
     padding: 0;
 }
 
-#administratePage{
-    display: flex;
-    flex-direction: row;
-    min-height: 100vh;
-    width: 100%;
-}
-
-#administrateLeft {
-    background-color: #ececec;
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-    align-items: center;
-}
-
-#administrateRight{
-    flex: 8;
-}
-
 #buttonOptions button, #searchAccountContainer button, input[type=submit]{
     color: white;
     font-weight: 900;
@@ -39,7 +20,7 @@
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
 }
 
-#options_and_fields{
+#optionsAndFields{
     display: flex;
     flex-direction: row;
 }

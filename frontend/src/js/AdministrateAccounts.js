@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
-import '../css/administrate_accounts.css'
+
+import administrate_accounts from '../css/administrate_accounts.module.css'
 
 export default function AdministrateAccounts() 
 {
@@ -7,14 +8,14 @@ export default function AdministrateAccounts()
         <div className="container">
             <h1 className="title">Administrare conturi</h1>
 
-			<div id="options_and_fields">
-	            <div id="buttonOptions">
-					<button type="button" id="addAccount" onClick={openAddForm}>Adaugă conturi</button> 
-					<button type="button" id="deleteAccount" onClick={openDeleteForm}>Șterge conturi</button> 
-					<button type="button" id="modifyAccount" onClick={openModifyForm}>Modifică conturi</button> 
+			<div id={administrate_accounts.optionsAndFields}>
+	            <div id={administrate_accounts.buttonOptions}>
+					<button type="button" id={administrate_accounts.addAccount} onClick={openAddForm}>Adaugă conturi</button> 
+					<button type="button" id={administrate_accounts.deleteAccount} onClick={openDeleteForm}>Șterge conturi</button> 
+					<button type="button" id={administrate_accounts.modifyAccount} onClick={openModifyForm}>Modifică conturi</button> 
 	            </div>
 				
-	            <div id="addFields" className="fields">
+	            <div id="addFields" className={administrate_accounts.fields}>
 	            	<form>
 	            		Nume:<br/>
 						<input type="text" id="lastNameAdd" name="lastNameAdd"/><br/>
@@ -37,7 +38,7 @@ export default function AdministrateAccounts()
 	            	</form>
 	            </div>
 
-	            <div id="deleteFields" className="fields">
+	            <div id="deleteFields" className={administrate_accounts.fields}>
 	           		<form>
 	           			Număr matricol:<br/>
 						<input type="text" id="codeDelete" name="codeDelete"/><br/>
@@ -48,8 +49,8 @@ export default function AdministrateAccounts()
 	           		</form>
 	            </div>
 
-	            <div id="modifyFields" className="fields">
-					<div id="searchAccountContainer">
+	            <div id="modifyFields" className={administrate_accounts.fields}>
+					<div id={administrate_accounts.searchAccountContainer}>
 						Număr matricol:<br/>
 						<input type="text" id="codeSearchModify" name="codeSearchModify"/><br/>
 

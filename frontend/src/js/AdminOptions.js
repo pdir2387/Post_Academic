@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react'
-import '../css/administrate_options.css'
+
+import administrate_options from '../css/administrate_options.module.css'
 
 export default function AdminOptions() 
 {
@@ -15,7 +16,7 @@ export default function AdminOptions()
             <h1 className="title">Administrare opțiuni</h1>
 
 			<div id="adminOptionsContainer">
-				<ul id="adminOptionsUl">
+				<ul id={administrate_options.adminOptionsUl}>
 					<li id="periodLi">
 						<form name="formPeriod">
 							<input type="radio" name="period" value="view" id="viewPeriodRadio" onClick={viewPeriod}/> Perioadă vizualizare contracte<br/>

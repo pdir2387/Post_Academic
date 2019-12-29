@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
-import '../css/commons.css'
-import '../css/attendances.css'
+
+import commons from '../css/commons.module.css'
+import attendances from '../css/attendances.module.css'
 
 export default function AttendanceTableProfessor() 
 {
@@ -23,32 +24,32 @@ export default function AttendanceTableProfessor()
 	}
 
     return (
-        <div className="container">
-            <h1 className="title">Prezențe</h1>
+        <div className={commons.container}>
+            <h1 className={attendances.title}>Prezențe</h1>
 
-			<div id="dropDownContainer">
-	            <fieldset>
-	                <select id="disciplineDropDown" className="dropDown" onChange={disciplineDropDownOptionsChanged}>
+			<div id={attendances.dropDownContainer}>
+	            <fieldset className={commons.fieldset}>
+	                <select id="disciplineDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={disciplineDropDownOptionsChanged}>
 	                    {getSelectOptionsDiscipline()}
 	                </select>
 	            </fieldset>
 
-	            <fieldset>
-	                <select id="categoryDropDown" className="dropDown" onChange={categoryDropDownOptionsChanged}>
+	            <fieldset className={commons.fieldset}>
+	                <select id="categoryDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={categoryDropDownOptionsChanged}>
 	                    {getSelectOptionsCategory()}
 	                </select>
 	            </fieldset>
 
-	            <fieldset>
-	                <select id="groupNumberDropDown" className="dropDown" onChange={groupNumberDropDownOptionsChanged}>
+	            <fieldset className={commons.fieldset}>
+	                <select id="groupNumberDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={groupNumberDropDownOptionsChanged}>
 	                    {getSelectOptionsGroupNumber()}
 	                </select>
 	            </fieldset>
             </div>
 			
-			<div id="containerAttendancesProfessor">
-	            <table id="tableAttendances" className="table">
-	            	<thead id="theadAttendances">
+			<div id={attendances.containerAttendancesProfessor}>
+	            <table id="tableAttendances" className={commons.table}>
+	            	<thead id={attendances.theadAttendances}>
 		                <tr id="headers">
 		                    {getHeader(nrWeeks)}
 		                </tr>
@@ -58,12 +59,6 @@ export default function AttendanceTableProfessor()
 
 		            </tbody>
 	            </table>
-            </div>
-
-            <div id="infoAttendances">
-                <h2 id="attendancesCourse"></h2>
-                <h2 id="attendancesSeminar"></h2>
-                <h2 id="attendancesLab"></h2>
             </div>
         </div>
     );
@@ -97,13 +92,13 @@ export default function AttendanceTableProfessor()
 				let trStudent=document.createElement("tr");
 				let thNameStudent=document.createElement("th");
 				thNameStudent.innerHTML=students[i].name;
-				thNameStudent.classList.add("stickyColumn");
+				thNameStudent.classList.add(attendances.stickyColumn);
 				trStudent.appendChild(thNameStudent);
 
 				for(let j=0;j<nrWeeks;j++)
 				{
 					let tdAttendance=document.createElement("td");
-					tdAttendance.classList.add("tdAttendance");
+					tdAttendance.classList.add(attendances.tdAttendance);
 					tdAttendance.innerHTML=students[i].attendances[j];
 					tdAttendance.addEventListener("click", function(){markAttendance(tdAttendance)});
 					trStudent.appendChild(tdAttendance);
@@ -229,7 +224,7 @@ export default function AttendanceTableProfessor()
 	{
 		let headers=[];
 
-	    headers.push(<th className="stickyColumn">&nbsp;</th>);
+	    headers.push(<th className={attendances.stickyColumn}>&nbsp;</th>);
 
 	    for(let i=1;i<=nrWeeks;i++)
 	    {

@@ -3,20 +3,21 @@ import React, {useState} from 'react'
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import StudentNavBar from "./StudentNavBar.js"
 import Results from "./Results"
-import '../css/results.css'
+
+import commons from '../css/commons.module.css'
 
 export default function ResultsPage() 
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
     return (
-        <div id="resultsPage">
-            <div id="resultsLeft">
+        <div id={commons.page}>
+            <div id={commons.left}>
                 <NavBar />
                 <LogoutButton />
             </div>
 
-            <div id="resultsRight"> 
+            <div id={commons.right}> 
                 <ResultsStudentOrProfessor />
             </div>
         </div>
