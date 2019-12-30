@@ -6,27 +6,27 @@ import attendances from '../css/attendances.module.css'
 export default function AttendanceTable() 
 {
     let [nrWeeks,setNrWeeks]=useState(14);
-    let [disciplines,setDisciplines]=useState(()=>getDisciplines());
+    let [disciplines,setDisciplines]=useState([]);
     let [courseAttendances,setCourseAttendances]=useState([]);
     let [seminarAttendances,setSeminarAttendances]=useState([]);
     let [labAttendances,setLabAttendances]=useState([]);
 
     useEffect(() => 
     {
-        setDisciplinesOptions();
+        getDisciplines();
     }, []);
 
     function disciplineChanged(e)
     {
-        fillTable(e.target.value);
+        getAttendances(e.target.value);
     }
 
     return (
         <div className={commons.container}>
             <h1 className={attendances.title}>Prezențe</h1>
 
-            <fieldset>
-                <select id="disciplineDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={disciplineChanged}>
+            <fieldset className={attendances.fieldset}>
+                <select id="disciplineDropDown" className={`${commons.dropDown} ${attendances.dropDownStudent}`} onChange={disciplineChanged}>
                 </select>
             </fieldset>
 
@@ -81,14 +81,14 @@ export default function AttendanceTable()
         for(let i=0;i<disciplines.length;i++)
         {
             let option=document.createElement("option");
+            option.value=disciplines[i].code;
             option.innerText=disciplines[i].name;
             disciplinesSelect.appendChild(option);
         }
     }
 
-    function fillTable(discipline)
+    function fillTable()
     {
-        getAttendances(discipline);
         setCourseAttendancesTable();
         setSeminarsAttendancesTable();
         setLabsAttendancesTable();
@@ -99,20 +99,53 @@ export default function AttendanceTable()
 
     function getAttendances(discipline)
     {
-        for(let i=0;i<disciplines.length;i++)
-        {
-            if(disciplines[i].name===discipline)
-            {
-                courseAttendances=disciplines[i].course;
-                seminarAttendances=disciplines[i].seminar;
-                labAttendances=disciplines[i].laboratory;
-            }
-        }
+        fetch('http://localhost:3000/api/student/prezente/'+discipline)
+        .then(res => res.json())
+        .then(res => {
+            courseAttendances=res.curs.map(el=>{
+                if(el===true)
+                {
+                    return "x";
+                }
+                else
+                {
+                    return "";
+                }
+            });
+
+            seminarAttendances=res.seminar.map(el=>{
+                if(el===true)
+                {
+                    return "x";
+                }
+                else
+                {
+                    return "";
+                }
+            });
+            
+            labAttendances=res.laborator.map(el=>{
+                if(el===true)
+                {
+                    return "x";
+                }
+                else
+                {
+                    return "";
+                }
+            });
+            fillTable();
+        });
     }
 
     function getDisciplines()
     {
-        return JSON.parse('{"disciplines":[{"name":"FP","course":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"seminar":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"laboratory":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"]},{"name":"OOP","course":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"seminar":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"],"laboratory":["x","x","x","x","x"," ","x"," "," ","x"," ","x","x","x"]}]}').disciplines;
+        fetch('http://localhost:3000/api/student/materii/')
+        .then(res => res.json())
+        .then(res => {
+            disciplines=res;
+            setDisciplinesOptions();
+        });
     }
 
     function setCourseAttendancesTable()

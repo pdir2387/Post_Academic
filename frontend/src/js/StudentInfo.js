@@ -5,11 +5,11 @@ import commons from '../css/commons.module.css'
 
 export default function StudentInfo() 
 {
-    let [studentInfo,setStudentInfo]=useState(()=>getStudentInfo());
+    let [studentInfo,setStudentInfo]=useState(null);
 
 	useEffect(() => 
 	{
-        setStudentInfoSpan();
+		getStudentInfo();
     }, []); 
 
 	return (
@@ -31,14 +31,21 @@ export default function StudentInfo()
     {
     	document.getElementById("nameSpan").innerText=studentInfo.name;
     	document.getElementById("cnpSpan").innerText=studentInfo.cnp;
-    	document.getElementById("codeSpan").innerText=studentInfo.code;
-    	document.getElementById("groupNumberSpan").innerText=studentInfo.group;
-    	document.getElementById("yearSpan").innerText=studentInfo.year;
-    	document.getElementById("semesterNumberSpan").innerText=studentInfo.semester;
+    	document.getElementById("codeSpan").innerText=studentInfo.cod;
+    	document.getElementById("groupNumberSpan").innerText=studentInfo.grupa;
+    	document.getElementById("yearSpan").innerText=studentInfo.an;
+    	document.getElementById("semesterNumberSpan").innerText=studentInfo.semestru;
     }
 
     function getStudentInfo()
     {
+		fetch('http://localhost:3000/api/student/informatii_personale')
+        .then(res => res.json())
+        .then(res => {
+            studentInfo=res;
+            setStudentInfoSpan();
+		});
+
     	return JSON.parse('{"name":"Carl Johnson","cnp":"1234567891123","code":"cjir2242","group":"211","year":"1","semester":"2"}');
     }
 }

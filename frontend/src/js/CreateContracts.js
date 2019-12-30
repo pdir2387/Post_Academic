@@ -13,10 +13,7 @@ export default function CreateContracts()
 
 	useEffect(() => 
 	{
-        fillSemester1Table();
-        fillSemester2Table();
-        setNrCreditsSem1();
-        setNrCreditsSem2();
+		getSemesters();
     }, []); 
 
 	return (
@@ -73,7 +70,6 @@ export default function CreateContracts()
 
     function fillSemester1Table()
     {
-		getSemester1();
 		let tableBody=document.getElementById("tableBodySem1");
 		tableBody.innerHTML="";
 
@@ -99,14 +95,22 @@ export default function CreateContracts()
 			let checkbox=document.createElement('input'); 
             checkbox.type="checkbox"; 
             checkbox.name="chosen";
-            checkbox.class="chosenCheckbox";
+			checkbox.class="chosenCheckbox";
 
-            if(occupiedPlaces===totalPlaces)
+            if(occupiedPlaces===totalPlaces || type==="obligatorie")
             {
             	checkbox.disabled=true;
-            }
-
-			checkbox.addEventListener("change", function(){modifyTotalCreditsSem1(checkbox)});
+			}
+			
+			if(type==="obligatorie")
+			{
+				checkbox.checked=true;
+				currentCreditsSem1+=credits;
+			}
+			else
+			{
+				checkbox.addEventListener("change", function(){modifyTotalCreditsSem1(checkbox)});
+			}
 
 			tdNrCrt.innerText=nrCrt.toString();
 			tdCode.innerText=code;
@@ -130,7 +134,6 @@ export default function CreateContracts()
 
     function fillSemester2Table()
     {
-		getSemester2();
 		let tableBody=document.getElementById("tableBodySem2");
 		tableBody.innerHTML="";
 
@@ -158,12 +161,20 @@ export default function CreateContracts()
             checkbox.name="chosen";
             checkbox.class="chosenCheckbox";
 
-            if(occupiedPlaces===totalPlaces)
+            if(occupiedPlaces===totalPlaces || type==="obligatorie")
             {
             	checkbox.disabled=true;
-            }
-
-            checkbox.addEventListener("change", function(){modifyTotalCreditsSem2(checkbox)});
+			}
+			
+			if(type==="obligatorie")
+			{
+				checkbox.checked=true;
+				currentCreditsSem2+=credits;
+			}
+			else
+			{
+				checkbox.addEventListener("change", function(){modifyTotalCreditsSem2(checkbox)});
+			}
 
 			tdNrCrt.innerText=nrCrt.toString();
 			tdCode.innerText=code;
@@ -198,7 +209,23 @@ export default function CreateContracts()
     		currentCreditsSem1-=credits;
     	}
 
-    	document.getElementById("creditsNumberSem1").innerText="Credite: "+currentCreditsSem1.toString()+"/"+maxCreditsSem1;
+		document.getElementById("creditsNumberSem1").innerText="Credite: "+currentCreditsSem1.toString()+"/"+maxCreditsSem1;
+		
+		let placesTd=e.parentNode.parentNode.children[3];
+		let text=placesTd.innerText;
+		let occupiedPlacesValue=parseInt(text.split("/")[0]);
+		let allPlaces=text.split("/")[1];
+
+		if(e.checked)
+		{
+			occupiedPlacesValue+=1;
+		}
+		else
+		{
+			occupiedPlacesValue-=1;
+		}
+
+		placesTd.innerText=occupiedPlacesValue+"/"+allPlaces;
     }
 
     function modifyTotalCreditsSem2(e)
@@ -214,7 +241,23 @@ export default function CreateContracts()
     		currentCreditsSem2-=credits;
     	}
 
-    	document.getElementById("creditsNumberSem2").innerText="Credite: "+currentCreditsSem2.toString()+"/"+maxCreditsSem2;
+		document.getElementById("creditsNumberSem2").innerText="Credite: "+currentCreditsSem2.toString()+"/"+maxCreditsSem2;
+		
+		let placesTd=e.parentNode.parentNode.children[3];
+		let text=placesTd.innerText;
+		let occupiedPlacesValue=parseInt(text.split("/")[0]);
+		let allPlaces=text.split("/")[1];
+
+		if(e.checked)
+		{
+			occupiedPlacesValue+=1;
+		}
+		else
+		{
+			occupiedPlacesValue-=1;
+		}
+
+		placesTd.innerText=occupiedPlacesValue+"/"+allPlaces;
     }
 
     function setNrCreditsSem1()
@@ -227,14 +270,43 @@ export default function CreateContracts()
     	document.getElementById("creditsNumberSem2").innerText="Credite: "+currentCreditsSem2.toString()+"/"+maxCreditsSem2;
     }
 
-    function getSemester1()
+	function getSemesters()
+	{
+		fetch('http://localhost:3000/api/student/ani')
+        .then(res => res.json())
+        .then(res => {
+			let firstSemester=res.semestru;
+			getSemester1(firstSemester);
+			getSemester2(firstSemester+1);
+		});
+	}
+
+    function getSemester1(semester)
     {
+		fetch('http://localhost:3000/api/student/materii/'+semester)
+        .then(res => res.json())
+        .then(res => {
+			semester1=res;
+			maxCreditsSem1=30;
+			fillSemester1Table();
+			setNrCreditsSem1();
+		});
+
 		semester1=JSON.parse('{"maxCredits":"30","semester":[{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M2774","name":"Fundamentele programarii2","occupiedPlaces":"80","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').semester;
 		maxCreditsSem1=JSON.parse('{"maxCredits":"30","semester":[{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M2774","name":"Fundamentele programarii2","occupiedPlaces":"80","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').maxCredits;
     }
 
-    function getSemester2()
+    function getSemester2(semester)
     {
+		fetch('http://localhost:3000/api/student/materii/'+semester)
+        .then(res => res.json())
+        .then(res => {
+			semester2=res;
+			maxCreditsSem2=30;
+			fillSemester2Table();
+			setNrCreditsSem2();
+		});
+
     	semester2=JSON.parse('{"maxCredits":"30","semester":[{"code":"M2434","name":"Fundamentele programarii11","occupiedPlaces":"80","totalPlaces":"80","type":"1","credits":"6"},{"code":"M277f4","name":"Fundamentele programarii12","occupiedPlaces":"52","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').semester;
     	maxCreditsSem2=JSON.parse('{"maxCredits":"30","semester":[{"code":"M2434","name":"Fundamentele programarii11","occupiedPlaces":"80","totalPlaces":"80","type":"1","credits":"6"},{"code":"M277f4","name":"Fundamentele programarii12","occupiedPlaces":"52","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').maxCredits;
     }

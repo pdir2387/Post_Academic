@@ -7,11 +7,11 @@ export default function Results()
 {
 	let [sortingOptions,setSortingOptions]=useState([]);
 	let [filteringOptions,setFilteringOptions]=useState([]);
-	let [results,setResults]=useState(()=>getResults());
+	let [results,setResults]=useState([]);
 
 	useEffect(() => 
 	{
-        fillTable(results);
+		getResults();
     }, []);
 
 	return (
@@ -228,8 +228,8 @@ export default function Results()
 			{
 				if(criteria==="date")
 				{
-					let date1=new Date(value1.split(".")[2]+"-"+value1.split(".")[1]+"-"+value1.split(".")[0]);
-					let date2=new Date(value2.split(".")[2]+"-"+value2.split(".")[1]+"-"+value2.split(".")[0]);
+					let date1=new Date(value1.split("-")[2]+"-"+value1.split("-")[1]+"-"+value1.split("-")[0]);
+					let date2=new Date(value2.split("-")[2]+"-"+value2.split("-")[1]+"-"+value2.split("-")[0]);
 
 					if(date1.getTime()>date2.getTime())
 					{
@@ -275,6 +275,13 @@ export default function Results()
 
     function getResults()
     {
+		fetch('http://localhost:3000/api/student/medii')
+        .then(res => res.json())
+        .then(res => {
+            results=res;
+            fillTable(results);
+		});
+		
     	return JSON.parse('{"results":[{"year":"2017/2018","semester":"1","code":"M123","name":"Fundamentele programarii","grade":"6","credits":"6","date":"17.01.2018"},{"year":"2017/2018","semester":"1","code":"M124","name":"Tundamentele programarii","grade":"10","credits":"5","date":"19.05.2018"},{"year":"2018/2019","semester":"3","code":"M126","name":"Fundamentele programarii3","grade":"6","credits":"6","date":"06.04.2018"},{"year":"2018/2019","semester":"4","code":"M127","name":"Fundamentele programarii2","grade":"8","credits":"6","date":"17.01.2018"},{"year":"2019/2020","semester":"6","code":"M153","name":"Fundamentela programarii","grade":"5","credits":"6","date":"06.04.2018"},{"year":"2019/2020","semester":"6","code":"M113","name":"Fundaaentele programarii","grade":"5","credits":"6","date":"01.01.2019"},{"year":"2020/2021","semester":"7","code":"M223","name":"FFundamentele programarii","grade":"9","credits":"6","date":"17.01.2017"},{"year":"2021/2022","semester":"8","code":"M183","name":"Fundamentele programarii4","grade":"10","credits":"6","date":"17.01.2018"}]}').results;
     }
 }

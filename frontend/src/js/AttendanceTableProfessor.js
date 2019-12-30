@@ -28,19 +28,19 @@ export default function AttendanceTableProfessor()
             <h1 className={attendances.title}>Prezențe</h1>
 
 			<div id={attendances.dropDownContainer}>
-	            <fieldset className={commons.fieldset}>
+	            <fieldset className={`${commons.fieldset} ${attendances.fieldset}`}>
 	                <select id="disciplineDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={disciplineDropDownOptionsChanged}>
 	                    {getSelectOptionsDiscipline()}
 	                </select>
 	            </fieldset>
 
-	            <fieldset className={commons.fieldset}>
+	            <fieldset className={`${commons.fieldset} ${attendances.fieldset}`}>
 	                <select id="categoryDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={categoryDropDownOptionsChanged}>
 	                    {getSelectOptionsCategory()}
 	                </select>
 	            </fieldset>
 
-	            <fieldset className={commons.fieldset}>
+	            <fieldset className={`${commons.fieldset} ${attendances.fieldset}`}>
 	                <select id="groupNumberDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={groupNumberDropDownOptionsChanged}>
 	                    {getSelectOptionsGroupNumber()}
 	                </select>

@@ -17,7 +17,7 @@ export default function AdministrateAccounts()
 	            </div>
 				
 	            <div id="addFields" className={administrate_accounts.fields}>
-	            	<form>
+	            	<form className={administrate_accounts.form}>
 	            		Nume:<br/>
 						<input type="text" id="lastNameAdd" name="lastNameAdd"/><br/>
 						Prenume:<br/>
@@ -40,7 +40,7 @@ export default function AdministrateAccounts()
 	            </div>
 
 	            <div id="deleteFields" className={administrate_accounts.fields}>
-	           		<form>
+	           		<form className={administrate_accounts.form}>
 	           			Număr matricol:<br/>
 						<input type="text" id="codeDelete" name="codeDelete"/><br/>
 
@@ -58,7 +58,7 @@ export default function AdministrateAccounts()
 						<button type="button" id="searchAccount" onClick={searchAccountToModify}>Cauta cont</button> 
 					</div>
 
-	            	<form>
+	            	<form className={administrate_accounts.form}>
 	            		Nume:<br/>
 						<input type="text" id="lastNameModify" name="lastNameModify"/><br/>
 						Prenume:<br/>
