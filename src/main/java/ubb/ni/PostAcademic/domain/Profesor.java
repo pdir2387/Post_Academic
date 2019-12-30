@@ -11,8 +11,6 @@ public class Profesor {
     @Column
     private Long id;
     @Column
-    private String username;
-    @Column
     private String nume;
     @Column
     private String email;
@@ -23,20 +21,23 @@ public class Profesor {
     @Column
     private String telefon;
     @Column
-    private ArrayList<String> domeniiDeInteres;
+    private String domeniiDeInteres;
+    @OneToOne
+    @JoinColumn
+    private User user;
 
     public Profesor(){
 
     }
 
-    public Profesor(String username, String nume, String email, String website, String adresa, String telefon, ArrayList<String> domeniiDeInteres) {
-        this.username = username;
+    public Profesor(String nume, String email, String website, String adresa, String telefon, String domeniiDeInteres, User user) {
         this.nume = nume;
         this.email = email;
         this.website = website;
         this.adresa = adresa;
         this.telefon = telefon;
         this.domeniiDeInteres = domeniiDeInteres;
+        this.user = user;
     }
 
     public Long getId() {
@@ -45,14 +46,6 @@ public class Profesor {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getNume() {
@@ -95,11 +88,19 @@ public class Profesor {
         this.telefon = telefon;
     }
 
-    public ArrayList<String> getDomeniiDeInteres() {
+    public String getDomeniiDeInteres() {
         return domeniiDeInteres;
     }
 
-    public void setDomeniiDeInteres(ArrayList<String> domeniiDeInteres) {
+    public void setDomeniiDeInteres(String domeniiDeInteres) {
         this.domeniiDeInteres = domeniiDeInteres;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

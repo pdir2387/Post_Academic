@@ -58,6 +58,4 @@ public class User {
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
     }
-
-
 }

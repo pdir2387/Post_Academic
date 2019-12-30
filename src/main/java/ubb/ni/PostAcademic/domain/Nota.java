@@ -19,16 +19,20 @@ public class Nota {
     private Integer nota;
     @Column
     private String notita;
+    @ManyToOne
+    @JoinColumn
+    private Student student;
 
     public Nota(){
 
     }
 
-    public Nota(LocalDateTime data, Ora ora, Integer nota, String notita) {
+    public Nota(LocalDateTime data, Ora ora, Integer nota, String notita, Student student) {
         this.data = data;
         this.ora = ora;
         this.nota = nota;
         this.notita = notita;
+        this.student = student;
     }
 
     public Long getId() {
@@ -69,5 +73,13 @@ public class Nota {
 
     public void setNotita(String notita) {
         this.notita = notita;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }

@@ -13,8 +13,6 @@ public class ContractStudii {
     private Long id;
     @Column
     private Integer anStart;
-    @Column
-    private Integer anEnd;
     @OneToMany
     @JoinColumn
     private List<Disciplina> discipline;
@@ -23,10 +21,9 @@ public class ContractStudii {
 
     }
 
-    public ContractStudii(Integer anStart, Integer anEnd, List<Disciplina> discipline) {
+    public ContractStudii(Integer anStart) {
         this.anStart = anStart;
-        this.anEnd = anEnd;
-        this.discipline = discipline;
+        this.discipline = new ArrayList<>();
     }
 
     public Long getId() {
@@ -43,14 +40,6 @@ public class ContractStudii {
 
     public void setAnStart(Integer anStart) {
         this.anStart = anStart;
-    }
-
-    public Integer getAnEnd() {
-        return anEnd;
-    }
-
-    public void setAnEnd(Integer anEnd) {
-        this.anEnd = anEnd;
     }
 
     public List<Disciplina> getDiscipline() {

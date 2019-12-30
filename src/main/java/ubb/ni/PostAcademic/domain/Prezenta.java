@@ -14,7 +14,7 @@ public class Prezenta {
     @Column
     private Long id;
     @Column
-    private LocalDateTime data;
+    private Integer saptamana;
     @Column
     private Boolean prezent;
     @ManyToOne
@@ -28,8 +28,8 @@ public class Prezenta {
 
     }
 
-    public Prezenta(LocalDateTime data, Boolean prezent, Ora ora, Student student) {
-        this.data = data;
+    public Prezenta(Integer saptamana, Boolean prezent, Ora ora, Student student) {
+        this.saptamana = saptamana;
         this.prezent = prezent;
         this.ora = ora;
         this.student = student;
@@ -43,12 +43,12 @@ public class Prezenta {
         this.id = id;
     }
 
-    public LocalDateTime getData() {
-        return data;
+    public Integer getSaptamana() {
+        return saptamana;
     }
 
-    public void setData(LocalDateTime data) {
-        this.data = data;
+    public void setSaptamana(Integer saptamana) {
+        this.saptamana = saptamana;
     }
 
     public Boolean getPrezent() {
