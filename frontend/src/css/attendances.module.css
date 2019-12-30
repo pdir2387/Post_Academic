@@ -1,0 +1,58 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.title{
+	flex: 1;
+}
+
+#infoAttendances{
+	flex: 2;
+    text-align: left;
+    margin-top: 10px;
+}
+
+.dropDown{
+    margin-bottom: 2%;
+    width: 60%;
+}
+
+.dropDownStudent{
+    margin-bottom: 2%;
+    width: 20%;
+}
+
+.fieldset{
+    text-align: left;
+}
+
+#dropDownContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.tdAttendance{
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#theadAttendances{
+    position: sticky;
+    top: 0;
+    z-index: 6;
+}
+
+.stickyColumn{
+    position: sticky;
+    left: 0;
+    z-index: 5;
+}
+
+#containerAttendancesProfessor{
+    overflow: auto;
+}

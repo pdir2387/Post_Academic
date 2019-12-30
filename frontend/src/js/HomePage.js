@@ -2,18 +2,19 @@ import LogoutButton from "./LogoutButton.js"
 import React from 'react'
 import StudentNavBar from "./StudentNavBar.js"
 import Orar from "./Orar.js"
-import '../css/home.css'
+
+import home from '../css/home.module.css'
 
 export default function HomePage() {
     fetchCall();
 
     return (
-        <div id="homePage">
-            <div id="homeLeft">
+        <div id={home.homePage}>
+            <div id={home.homeLeft}>
                 <StudentNavBar />
                 <LogoutButton />
             </div>
-            <div id="homeRight"> 
+            <div id={home.homeRight}> 
                 <Orar />
             </div>
         </div>

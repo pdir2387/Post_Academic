@@ -1,0 +1,41 @@
+#semestersTables{
+	display: flex;
+	flex-direction: row;
+	flex: 3;
+	margin-bottom: 20px;
+}
+
+.disciplinesDetails{
+	display: flex;
+	flex-direction: column;
+}
+
+#createContractButton{
+    align-self: center;
+}
+
+.title{
+	flex: 1;
+}
+
+.table{
+	height: 80%;
+}
+
+#disciplinesSem1{
+	margin-right: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
+#disciplinesSem2{
+	margin-left: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
+.table{
+	margin-top: 20px;
+	text-align: left;
+	height: auto;
+}

@@ -1,0 +1,14 @@
+#sortingAndFilteringOptions{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    text-align: left;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+#optionsAndTable{
+    display: flex;
+    flex-direction: row;
+    flex: 3;
+}

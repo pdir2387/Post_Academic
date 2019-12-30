@@ -1,0 +1,305 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#emailPage{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    width: 100%;
+}
+
+#emailLeft {
+    background-color: #ececec;
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    align-items: center;
+}
+
+#emailRight{
+    flex: 8;
+}
+
+#containerAllEmail{
+    width: 100%;
+    height: 100%;
+}
+
+#containerEmailInfo{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+
+}
+
+#leftPanel{
+    flex: 1;
+    height: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: 1px solid grey;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#emails{
+    display: flex;
+    flex: 8;
+    flex-direction: column;
+}
+
+#ulCategories{
+    text-align: left;
+    list-style-type: none;
+    width: 100%;
+}
+
+#ulCategoriesTitle, #ulAttachmentsTitle{
+    background-color: #547598;
+    color: white;
+    text-align: center;
+    padding: 5px;
+}
+
+#ulCategories li{
+    border-bottom: 1px solid #ebebeb;
+    padding: 5px;
+}
+
+#emailList{
+    flex: 2;
+    border: 1px solid grey;
+    margin-bottom: 10px;
+    overflow: auto;
+}
+
+#tableEmails{
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#tableEmails th{
+    background-color: #547598;
+    color: white;
+    text-align: left;
+    padding: 5px;
+    position: sticky;
+    top: 0;
+}
+
+#tableEmails tr{
+    border: 1px solid #ebebeb;
+}
+
+#tableEmails td{
+    padding: 5px;
+    max-width:300px;
+    overflow: hidden;
+    word-wrap: break-word
+}
+
+#emailMessage{
+    border: 1px solid grey;
+    word-wrap: break-word;
+    flex: 6;
+    overflow: auto;
+}
+
+#tableEmailInfo{
+    width: 100%;
+    background-color: #ebebeb;
+    text-align: left;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#tableEmailInfo th,#tableEmailInfo td{
+    border-bottom: 2px solid white;
+    padding: 5px;
+}
+
+#tableEmailInfo th{
+    width: 2%;
+    white-space: nowrap;
+}
+
+#additionalOptions{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+#containerAllSendEmail{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    margin: 20px;
+}
+
+#emailDetails{
+    flex: 1;
+    padding: 10px;
+}
+
+#emailContent{
+    display: flex;
+    flex-direction: row;
+    flex: 8;
+}
+
+#emailMessage{
+    flex: 8;
+    text-align: left;
+}
+
+#emailMessageInput{
+    height: 100%;
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    resize: none;
+}
+
+#toInput, #subjectInput{
+    display: inline-block;
+    width: 90%;
+    height: 10%;
+}
+
+.emailDetailsInput{
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+}
+
+#emailAttachments{
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    margin: 0 10px;
+    border: 1px solid black;
+    height: 100%;
+}
+
+#sendEmailButton,#editDraftButton,#replyButton{
+    color: white;
+    font-weight: 900;
+    background-color: #1f4976;
+    border: none;
+    font-size: 15px;
+    margin: 10px 0;
+    text-align: start;
+    padding: 10px;
+}
+
+#sendEmailAdditionalOptions{
+    flex: 1;
+}
+
+#toComposeEmailImage, #backToEmailsImage, #deleteEmailImage, #searchEmailImage, #saveDraftImage, #checkedImage{
+    width: 50px;
+    height: auto;
+}
+
+#deleteButtonMail,#saveDraftButton{
+    margin-left: 20px;
+    background-color: white;
+}
+
+#searchButtonEmail{
+    background-color: white;
+}
+
+#attachmentsTable{
+    margin: 5px;
+    font-size: 25px;
+}
+
+#fileInputForm{
+    flex: 1;
+    position: relative;
+}
+
+#fileInput{
+    position: absolute;
+    bottom: 0;
+    margin: 5px;
+}
+
+#attachmentsTableContainer{
+    flex: 6;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#imageButtons{
+    margin-top: 50px;
+    flex: 1;
+}
+
+#searchArea{
+    margin-top: 50px;
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+}
+
+#searchField{
+    width: 60%;
+}
+
+#messageDetailsFromTo:hover{
+    color: blue;
+    text-decoration: underline;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.replyQuoteEmail{
+    color: blue;
+    border-left: 2px solid blue;
+    border-right: 2px solid blue;
+    background-color: #f6f6f6;
+    margin: 2px 0;
+    padding: 1px 8px 1px 10px;
+}
+
+#messageArea{
+    padding: 5px;
+    word-wrap: break-word;
+}
+
+#tbodyEmail tr td{
+    white-space: pre-line;
+}
+
+.checkboxTh{
+    width: 1%;
+    white-space: nowrap;
+}

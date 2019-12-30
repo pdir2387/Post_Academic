@@ -1,13 +1,12 @@
 import LogoutButton from "./LogoutButton.js"
 import React, {useState} from 'react'
-import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
-import AttendanceTable from "./AttendanceTable"
-import AttendanceTableProfessor from "./AttendanceTableProfessor"
+import StudentNavBar from "./StudentNavBar.js"
+import Results from "./Results"
 
 import commons from '../css/commons.module.css'
 
-export default function AttendancePage() 
+export default function ResultsPage() 
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
@@ -19,7 +18,7 @@ export default function AttendancePage()
             </div>
 
             <div id={commons.right}> 
-                <Attendance />
+                <ResultsStudentOrProfessor />
             </div>
         </div>
     );
@@ -39,17 +38,17 @@ export default function AttendancePage()
         }
     }
 
-    function Attendance()
+    function ResultsStudentOrProfessor()
     {
         if(accountType==="student")
         {
-            return <AttendanceTable />;
+            return <Results />;
         }
         else
         {
             if(accountType==="professor")
             {
-                return <AttendanceTableProfessor />;
+                return <Results />;
             }
         }
     }

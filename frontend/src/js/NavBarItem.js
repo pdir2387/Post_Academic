@@ -1,11 +1,12 @@
 import React from 'react'
-import '../css/home.css'
+
+import home from '../css/home.module.css'
 
 function NavBarItem(props){
     return(
         <div>
             <a href={props.url} >
-                <button className="navBarButton">{props.buttonText}</button>
+                <button className={home.navBarButton}>{props.buttonText}</button>
             </a>
         </div>
     )

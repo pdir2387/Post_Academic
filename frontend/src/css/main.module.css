@@ -20,7 +20,7 @@ code {
   font-weight: bold;
 }
 
-.semi-bold{
+.semiBold{
   font-weight: 600;
 }
 
@@ -30,7 +30,7 @@ code {
   height: 100vh;
 }
 
-.parent-container {
+.parentContainer {
   width: 50vw;
   margin: 0 auto;
   padding-top: 25px;
@@ -40,7 +40,7 @@ code {
   width: 30vw;
 }
 
-.login-form-container {
+.loginFormContainer {
   width: 25vw;
   height: 30vh;
   background-color: #ffffff;
@@ -52,14 +52,14 @@ code {
   border-radius: 25px;
 }
 
-.input-container {
+.inputContainer {
   display: -ms-flexbox; /* IE10 */
   display: flex;
   width: 92%;
   margin-bottom: 15px;
 }
 
-.input-icon {
+.inputIcon {
   color: white;
   min-width: 50px;
   text-align: center;
@@ -69,15 +69,15 @@ code {
   bottom: -3px;
 }
 
-.user-icon {
+.userIcon {
   background-image: url("../img/username.png");
 }
 
-.pass-icon {
+.passIcon {
   background-image : url("../img/password.png");
 }
 
-.input-field {
+.inputField {
   width: 100%;
   padding: 5px;
   outline: none;
@@ -86,11 +86,11 @@ code {
   font-size: 20px
 }
 
-.input-field:focus {
+.inputField:focus {
   border: 2px solid #0E2A51;
 }
 
-.checkbox-container {
+.checkboxContainer {
   display: block;
   position: relative;
   padding-left: 35px;
@@ -105,7 +105,7 @@ code {
 }
 
 /* Hide the browser's default checkbox */
-.checkbox-container input {
+.checkboxContainer input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -124,12 +124,12 @@ code {
 }
 
 /* On mouse-over, add a grey background color */
-.checkbox-container:hover input ~ .checkmark {
+.checkboxContainer:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
-.checkbox-container input:checked ~ .checkmark {
+.checkboxContainer input:checked ~ .checkmark {
   background-color: #0E2A51;
 }
 
@@ -141,12 +141,12 @@ code {
 }
 
 /* Show the checkmark when checked */
-.checkbox-container input:checked ~ .checkmark:after {
+.checkboxContainer input:checked ~ .checkmark:after {
   display: block;
 }
 
 /* Style the checkmark/indicator */
-.checkbox-container .checkmark:after {
+.checkboxContainer .checkmark:after {
   left: 9px;
   top: 5px;
   width: 5px;
@@ -158,7 +158,7 @@ code {
   transform: rotate(45deg);
 }
 
-.login-button {
+.loginButton {
   background-color: #0E2A51;
   color: white;
   font-size: 20px;
@@ -170,11 +170,11 @@ code {
   opacity: 0.9;
 }
 
-#ubb-logo{
+#ubbLogo{
   height: 100px;
   width: auto;
 }
 
-.input-container label{
+.inputContainer label{
   font-size: 18px;
 }

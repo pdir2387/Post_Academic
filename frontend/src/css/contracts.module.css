@@ -1,0 +1,24 @@
+#content{
+    display: flex;
+    flex-direction: row;
+}
+
+#semestersSelect{
+    overflow: auto;
+    margin-top: 10px;
+    border: 1px solid black;
+}
+
+#semesters{
+    flex: 1;
+    margin-right: 20px;
+}
+
+#tableDisciplines{
+    flex: 3;
+    text-align: left;
+}
+
+#generateButton{
+    align-self: center;
+}
