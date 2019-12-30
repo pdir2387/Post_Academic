@@ -2,10 +2,7 @@ package ubb.ni.PostAcademic.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ubb.ni.PostAcademic.domain.AccountType;
-import ubb.ni.PostAcademic.domain.Disciplina;
-import ubb.ni.PostAcademic.domain.TipDisciplina;
-import ubb.ni.PostAcademic.domain.User;
+import ubb.ni.PostAcademic.domain.*;
 import ubb.ni.PostAcademic.repo.DisciplinaRepo;
 import ubb.ni.PostAcademic.repo.UserRepo;
 
@@ -17,6 +14,25 @@ import java.util.ArrayList;
 public class DisciplinaService {
     @Autowired
     DisciplinaRepo disciplinaRepo;
+    @Autowired
+    UserService userService;
+
+
+    public void addMateriiToContract(User user, ArrayList<String> materii){
+        Student student = userService.getStudentByUsername(user.getUsername());
+
+        if(user.getAccountType().equals(AccountType.student)){
+            for(ContractStudii c : student.getContracteStudii()){
+                if(c.getAnStart() == student.getAnulInscrierii() +  (student.getSemestru()-1)/2){
+                    c.getDiscipline().clear();
+
+                    for(String materie : materii){
+                        c.getDiscipline().add(findDisciplina(materie));
+                    }
+                }
+            }
+        }
+    }
 
 
     public Disciplina findDisciplina(String cod_disciplina){
@@ -31,16 +47,39 @@ public class DisciplinaService {
     public ArrayList<Disciplina> getDisciplineBySemestru(User user, String semestru){
         ArrayList<Disciplina> discipline = new ArrayList<>();
 
+        Student student = userService.getStudentByUsername(user.getUsername());
+
         if(user.getAccountType().equals(AccountType.student)){
-            for(Disciplina d : disciplinaRepo.findAll()){
-                if(d.getSemestru() == Integer.parseInt(semestru)){
-                    discipline.add(d);
+            for(ContractStudii c : student.getContracteStudii()){
+                if(c.getAnStart() == student.getAnulInscrierii() + (student.getSemestru()-1)/2){
+                    for(Disciplina d : c.getDiscipline()){
+                        if(d.getSemestru() == Integer.parseInt(semestru)){
+                            discipline.add(d);
+                        }
+                    }
                 }
             }
+
         }
 
         return discipline;
     }
+
+//    public ArrayList<Disciplina> getAllDisciplineBySemestru(User user, String semestru){
+//        ArrayList<Disciplina> discipline = new ArrayList<>();
+//
+//        Student student = userService.getStudentByUsername(user.getUsername());
+//
+//        if(user.getAccountType().equals(AccountType.student)){
+//            for(Disciplina d : disciplinaRepo.findAll()){
+//                if(d.getTipDisciplina().equals(TipDisciplina.obligatorie) && d.getSpecializare().equals(student.getGrupa().getSpecializare()) && d.getSemestru() == Integer.parseInt(semestru)){
+//                    discipline.add(d);
+//                }
+//            }
+//        }
+//
+//        return discipline;
+//    }
 
     public ArrayList<Disciplina> getDisciplineBySpecializareAndSemestru(User user, String specializare, String semestru){
         ArrayList<Disciplina> discipline = new ArrayList<>();

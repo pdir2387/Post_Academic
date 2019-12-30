@@ -13,7 +13,7 @@ public class ContractStudii {
     private Long id;
     @Column
     private Integer anStart;
-    @OneToMany
+    @ManyToMany
     @JoinColumn
     private List<Disciplina> discipline;
 
