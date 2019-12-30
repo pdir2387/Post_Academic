@@ -30,9 +30,9 @@ function LoginPage() {
 							<span className={main.checkmark}/>
 						</label>
 						</div>
+						
+						<button type="submit" className={`${main.loginButton} ${main.uppercase} ${main.bold}`}>Login</button>
 					</form>
-					
-					<button type="submit" className={`${main.loginButton} ${main.uppercase} ${main.bold}`}>Login</button>
 				</div>
 
 			</div>

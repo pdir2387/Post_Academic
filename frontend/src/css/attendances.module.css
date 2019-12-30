@@ -18,6 +18,15 @@
     width: 60%;
 }
 
+.dropDownStudent{
+    margin-bottom: 2%;
+    width: 20%;
+}
+
+fieldset{
+    text-align: left;
+}
+
 #dropDownContainer{
     display: flex;
     flex-direction: row;
