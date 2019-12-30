@@ -64,7 +64,7 @@ export default function CreateContracts()
 	       		</div>
 	        </div>
 
-	        <button id={contracts.createContractButton} className={commons.button} type="button">Creare contract</button>
+	        <button id={contracts.createContractButton} className={commons.button} onClick={sendContract} type="button">Creare contract</button>
         </div>
     );
 
@@ -291,9 +291,6 @@ export default function CreateContracts()
 			fillSemester1Table();
 			setNrCreditsSem1();
 		});
-
-		semester1=JSON.parse('{"maxCredits":"30","semester":[{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M2774","name":"Fundamentele programarii2","occupiedPlaces":"80","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').semester;
-		maxCreditsSem1=JSON.parse('{"maxCredits":"30","semester":[{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M2774","name":"Fundamentele programarii2","occupiedPlaces":"80","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').maxCredits;
     }
 
     function getSemester2(semester)
@@ -306,8 +303,62 @@ export default function CreateContracts()
 			fillSemester2Table();
 			setNrCreditsSem2();
 		});
+	}
+	
+	function sendContract()
+	{
+		let tableTrSem1=document.getElementById("tableBodySem1").children;
+		let tableTrSem2=document.getElementById("tableBodySem2").children;
+		let disciplineCodes=[];
 
-    	semester2=JSON.parse('{"maxCredits":"30","semester":[{"code":"M2434","name":"Fundamentele programarii11","occupiedPlaces":"80","totalPlaces":"80","type":"1","credits":"6"},{"code":"M277f4","name":"Fundamentele programarii12","occupiedPlaces":"52","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').semester;
-    	maxCreditsSem2=JSON.parse('{"maxCredits":"30","semester":[{"code":"M2434","name":"Fundamentele programarii11","occupiedPlaces":"80","totalPlaces":"80","type":"1","credits":"6"},{"code":"M277f4","name":"Fundamentele programarii12","occupiedPlaces":"52","totalPlaces":"80","type":"2","credits":"5"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"},{"code":"M234","name":"Fundamentele programarii","occupiedPlaces":"12","totalPlaces":"80","type":"1","credits":"6"}]}').maxCredits;
-    }
+		for(let i=0;i<tableTrSem1.length;i++)
+		{
+			if(tableTrSem1[i].children[6].children[0].checked)
+			{
+				let code=tableTrSem1[i].children[1].innerText;
+				let codeExists=false;
+
+				for(let j=0;j<semester1.length;j++)
+				{
+					if(semester1[j].code===code)
+					{
+						codeExists=true;
+						break;
+					}
+				}
+				
+				if(codeExists)
+				{
+					disciplineCodes.push(code);
+				}
+			}
+		}
+
+		for(let i=0;i<tableTrSem2.length;i++)
+		{
+			if(tableTrSem2[i].children[6].children[0].checked)
+			{
+				let code=tableTrSem1[i].children[1].innerText;
+				let codeExists=false;
+
+				for(let j=0;j<semester2.length;j++)
+				{
+					if(semester2[j].code===code)
+					{
+						codeExists=true;
+						break;
+					}
+				}
+
+				if(codeExists)
+				{
+					disciplineCodes.push(tableTrSem2[i][1]);
+				}
+			}
+		}
+
+		let toSendJSON=JSON.stringify(disciplineCodes);
+
+		fetch('http://localhost:3000/api/student/contract/add',{method:'POST',body:toSendJSON});
+	}
 }
