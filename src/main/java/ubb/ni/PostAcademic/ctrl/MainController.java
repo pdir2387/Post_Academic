@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 
+import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,24 @@ public class MainController {
 
 
 	//STUDENT
+	@PostMapping(value = "/api/student/contract/add", consumes = "text/plain")
+	public void addMateriiToContract(@RequestBody String materii) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+		JSONArray json = new JSONArray(materii);
+
+		ArrayList<String> materii_list = new ArrayList<>();
+
+		for(Object object : json.toList()){
+			materii_list.add(object.toString());
+		}
+
+
+		disciplinaService.addMateriiToContract(user, materii_list);
+	}
+
+
 	@GetMapping(value = "/api/student/note/{disciplina}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public String getNoteByMaterie(@PathVariable("disciplina") String disciplina) {
@@ -203,6 +222,46 @@ public class MainController {
 		return wrapper.toString();
 	}
 
+//	@GetMapping(value = "/api/student/materii/all/{semestru}", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
+//	public String getAllMateriiBySemestru(@PathVariable("semestru") String semestru) {
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		User user = userService.getByUsername(auth.getName());
+//
+//		JSONArray wrapper = new JSONArray();
+//
+//		for (Disciplina m : disciplinaService.getAllDisciplineBySemestru(user, semestru)) {
+//			JSONObject disciplina_json = new JSONObject();
+//
+//			Boolean promovat = false;
+//
+//			String[] semestre = {semestru};
+//
+//			System.out.println(semestre);
+//
+//			for(Medie a: notaService.getMediiBySemestre(user, semestre)){
+//				System.out.println(a.getId());
+//				if(a.getDisciplina().equals(m)){
+//					promovat = a.getPromovat();
+//				}
+//			}
+//
+//			disciplina_json.put("code", m.getCodDisciplina());
+//            disciplina_json.put("name", m.getNume());
+//            disciplina_json.put("occupiedPlaces", m.getNumar_studenti_inscrisi());
+//            disciplina_json.put("totalPlaces", m.getNumar_locuri());
+//            disciplina_json.put("type", m.getTipDisciplina());
+//            disciplina_json.put("credits", m.getCredite());
+//			disciplina_json.put("promovat", promovat);
+//
+//
+//			wrapper.put(disciplina_json);
+//		}
+//
+//
+//		return wrapper.toString();
+//	}
+
 	@GetMapping(value = "/api/student/materii/{semestru}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public String getMateriiBySemestru(@PathVariable("semestru") String semestru) {
@@ -228,11 +287,11 @@ public class MainController {
 			}
 
 			disciplina_json.put("code", m.getCodDisciplina());
-            disciplina_json.put("name", m.getNume());
-            disciplina_json.put("occupiedPlaces", m.getNumar_studenti_inscrisi());
-            disciplina_json.put("totalPlaces", m.getNumar_locuri());
-            disciplina_json.put("type", m.getTipDisciplina());
-            disciplina_json.put("credits", m.getCredite());
+			disciplina_json.put("name", m.getNume());
+			disciplina_json.put("occupiedPlaces", m.getNumar_studenti_inscrisi());
+			disciplina_json.put("totalPlaces", m.getNumar_locuri());
+			disciplina_json.put("type", m.getTipDisciplina());
+			disciplina_json.put("credits", m.getCredite());
 			disciplina_json.put("promovat", promovat);
 
 
