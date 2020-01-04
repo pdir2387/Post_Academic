@@ -1,0 +1,9 @@
+Modificari orar:
+- /home -> /orar
+- Orele din orar sa se poata suprapune (2-3 materii diferite in aceeasi ora)
+- de adaugat prof, formatia(ex: 231/1, 235, I3 etc.), si sala in orar
+- de stabilit cum facem cu sapt1/2
+New features orar:
+- sa poti vedea orarul: tau, profilor, anumitor grupe, anumitor materii, sali
+- la click pe materie, in orar, sa iti dea orarul materiei
+- ^ same for sala/prof

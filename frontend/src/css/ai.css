@@ -1,0 +1,71 @@
+#ai-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    font-size: 18px;
+}
+
+#ai-left{
+    margin: 15px;
+    border: 2px solid blue;
+    flex: 2;
+}
+
+#ai-right{
+    margin: 15px;
+    border: 2px solid red;
+    flex: 1;
+    text-align: center;
+}
+
+#ai-right img{
+    max-width: 200px;
+}
+
+input{
+    border: 2px solid black;
+    margin: 10px;
+    font-size: 20px;
+}
+
+textarea{
+    width: 95%;
+    font-size: 18px;
+    border: 2px solid black
+}
+
+button{
+    font-size: 20px;
+    background-color: blue;
+    color: white;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    text-align: center;
+    color: black;
+    font-weight: 600;
+}
+
+table th{
+    background-color: #547598;
+    color: white;
+    font-weight: 900;
+    padding: 10px;
+}
+
+table tr{
+    background-color: #eeebd3;
+}
+
+table td{
+    padding: 10px;
+}
+
+table tr td:first-child{
+	text-align: left;
+}

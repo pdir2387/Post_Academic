@@ -12,10 +12,12 @@ import EmailPage from "./js/EmailPage"
 import SendEmailPage from "./js/SendEmailPage"
 import AdminOptionsPage from "./js/AdminOptionsPage"
 import React from 'react'
+import AI from "./js/AI";
 
 function App() {	
 	return (
 	    <Switch>
+			<Route path="/ai" component={AI} />
 	    	<Route path="/admin_options" component={AdminOptionsPage} />
 	    	<Route path="/send_email" component={SendEmailPage} />
 	    	<Route path="/email" component={EmailPage} />
