@@ -210,6 +210,7 @@
     margin: 10px 0;
     text-align: start;
     padding: 10px;
+    cursor: pointer;
 }
 
 #sendEmailAdditionalOptions{
@@ -219,6 +220,7 @@
 #toComposeEmailImage, #backToEmailsImage, #deleteEmailImage, #searchEmailImage, #saveDraftImage, #checkedImage{
     width: 50px;
     height: auto;
+    cursor: pointer;
 }
 
 #deleteButtonMail,#saveDraftButton{
@@ -267,6 +269,11 @@
 
 #searchField{
     width: 60%;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+    height: 50px;
+    font-size: 30px;
 }
 
 #messageDetailsFromTo:hover{
@@ -302,4 +309,53 @@
 .checkboxTh{
     width: 1%;
     white-space: nowrap;
+}
+
+#attachmentsArea{
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.attachmentsElement{
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    background-color: #f2f5f5;
+    cursor: pointer;
+}
+
+.attachmentsElement:hover{
+    background-color: #9e9da6;
+}
+
+.attachmentsExtension{
+    flex: 5;
+    font-size: 50px;
+    text-align: center;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.attachmentsName{
+    flex: 1;
+    padding: 5px;
+    background-color: #b4b3bd;
+    text-overflow: ellipsis;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
 }
