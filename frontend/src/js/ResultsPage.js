@@ -10,18 +10,30 @@ export default function ResultsPage()
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
-    return (
-        <div id={commons.page}>
-            <div id={commons.left}>
-                <NavBar />
-                <LogoutButton />
-            </div>
+    return <Page />;
 
-            <div id={commons.right}> 
-                <ResultsStudentOrProfessor />
-            </div>
-        </div>
-    );
+    function Page()
+    {
+        if(accountType==="student" || accountType==="professor")
+        {
+            return (
+                <div id={commons.page}>
+                    <div id={commons.left}>
+                        <NavBar />
+                        <LogoutButton />
+                    </div>
+        
+                    <div id={commons.right}> 
+                        <ResultsStudentOrProfessor />
+                    </div>
+                </div>
+            );
+        }
+        else
+        {
+            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+        }
+    }
 
     function NavBar()
     {

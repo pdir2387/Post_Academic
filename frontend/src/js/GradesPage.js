@@ -13,17 +13,29 @@ export default function GradesPage()
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
-    return (
-        <div id={commons.page}>
-            <div id={commons.left}>
-                <NavBar />
-                <LogoutButton />
-            </div>
-            <div id={commons.right}>
-                <Grades />
-            </div>
-        </div>
-    );
+    return <Page />;
+
+    function Page()
+    {
+        if(accountType==="student" || accountType==="professor")
+        {
+            return (
+                <div id={commons.page}>
+                    <div id={commons.left}>
+                        <NavBar />
+                        <LogoutButton />
+                    </div>
+                    <div id={commons.right}>
+                        <Grades />
+                    </div>
+                </div>
+            );        
+        }
+        else
+        {
+            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+        }
+    }
 
     function NavBar()
     {

@@ -10,19 +10,31 @@ import commons from '../css/commons.module.css'
 export default function SendEmailPage() 
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
+    
+    return <Page />;
 
-    return (
-        <div id={commons.page}>
-            <div id={commons.left}>
-                <NavBar />
-                <LogoutButton />
-            </div>
+    function Page()
+    {
+        if(accountType==="student" || accountType==="professor" || accountType==="admin")
+        {
+            return (
+                <div id={commons.page}>
+                    <div id={commons.left}>
+                        <NavBar />
+                        <LogoutButton />
+                    </div>
 
-            <div id={commons.right}> 
-                <SendEmail />
-            </div>
-        </div>
-    );
+                    <div id={commons.right}> 
+                        <SendEmail />
+                    </div>
+                </div>
+            );
+        }
+        else
+        {
+            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+        }
+    }
 
     function NavBar()
     {
