@@ -1,4 +1,4 @@
-#ai-content{
+#aiContent{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -6,43 +6,43 @@
     font-size: 18px;
 }
 
-#ai-left{
+#aiLeft{
     margin: 15px;
     border: 2px solid blue;
     flex: 2;
 }
 
-#ai-right{
+#aiRight{
     margin: 15px;
     border: 2px solid red;
     flex: 1;
     text-align: center;
 }
 
-#ai-right img{
+#aiRight img{
     max-width: 200px;
 }
 
-input{
+.input{
     border: 2px solid black;
     margin: 10px;
     font-size: 20px;
 }
 
-textarea{
+.textarea{
     width: 95%;
     font-size: 18px;
     border: 2px solid black
 }
 
-button{
+.button{
     font-size: 20px;
     background-color: blue;
     color: white;
     padding: 10px;
 }
 
-table {
+.table {
     width: 100%;
     max-width: 100%;
     max-height: 100%;
@@ -51,21 +51,21 @@ table {
     font-weight: 600;
 }
 
-table th{
+.table th{
     background-color: #547598;
     color: white;
     font-weight: 900;
     padding: 10px;
 }
 
-table tr{
+.table tr{
     background-color: #eeebd3;
 }
 
-table td{
+.table td{
     padding: 10px;
 }
 
-table tr td:first-child{
+.table tr td:first-child{
 	text-align: left;
 }
