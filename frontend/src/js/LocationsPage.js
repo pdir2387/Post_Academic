@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import Location from "./Location.js"
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
@@ -14,7 +15,7 @@ export default function LocationPage()
 
     function Page()
     {
-        if(accountType==="student" || accountType==="professor")
+        if(accountType==="student" || accountType==="profesor")
         {
             return (
                 <div id={commons.page}>
@@ -31,7 +32,7 @@ export default function LocationPage()
         }
         else
         {
-            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+            return <PermissionDeniedPage />;
         }
     }
 
@@ -43,7 +44,7 @@ export default function LocationPage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
                 return <ProfessorNavBar />;
             }

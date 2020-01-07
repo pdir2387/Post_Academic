@@ -5,6 +5,7 @@ import ViewContracts from "./ViewContracts"
 import CreateContracts from "./CreateContracts"
 import StudentContractPopup from './StudentContractPopup'
 import Modal from 'react-modal'
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
@@ -34,7 +35,7 @@ export default function ContractsPage()
         }
         else
         {
-            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+            return <PermissionDeniedPage />;
         }
     }
 

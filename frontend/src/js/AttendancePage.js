@@ -4,6 +4,7 @@ import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import AttendanceTable from "./AttendanceTable"
 import AttendanceTableProfessor from "./AttendanceTableProfessor"
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
@@ -15,7 +16,7 @@ export default function AttendancePage()
 
     function Page()
     {
-        if(accountType==="student" || accountType==="professor")
+        if(accountType==="student" || accountType==="profesor")
         {
             return (
                 <div id={commons.page}>
@@ -32,7 +33,7 @@ export default function AttendancePage()
         }
         else
         {
-            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+            return <PermissionDeniedPage />;
         }
     }
 
@@ -44,7 +45,7 @@ export default function AttendancePage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
                 return <ProfessorNavBar />;
             }
@@ -59,7 +60,7 @@ export default function AttendancePage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
                 return <AttendanceTableProfessor />;
             }

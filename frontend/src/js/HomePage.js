@@ -1,7 +1,10 @@
 import LogoutButton from "./LogoutButton.js"
 import React, {useState} from 'react'
 import StudentNavBar from "./StudentNavBar.js"
+import ProfessorNavBar from "./ProfessorNavBar.js"
+import AdminNavBar from "./AdminNavBar.js"
 import Orar from "./Orar.js"
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import home from '../css/home.module.css'
 
@@ -13,12 +16,12 @@ export default function HomePage() {
 
     function Page()
     {
-        if(accountType==="student" || accountType==="professor" || accountType==="admin")
+        if(accountType==="student" || accountType==="profesor" || accountType==="admin")
         {
             return (
                 <div id={home.homePage}>
                     <div id={home.homeLeft}>
-                        <StudentNavBar />
+                        <NavBar />
                         <LogoutButton />
                     </div>
                     <div id={home.homeRight}> 
@@ -29,7 +32,29 @@ export default function HomePage() {
         }
         else
         {
-            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+            return <PermissionDeniedPage />;
+        }
+    }
+
+    function NavBar()
+    {
+        if(accountType==="student")
+        {
+            return <StudentNavBar />;
+        }
+        else
+        {
+            if(accountType==="profesor")
+            {
+                return <ProfessorNavBar />;
+            }
+            else
+            {
+                if(accountType==="admin")
+                {
+                    return <AdminNavBar />;
+                }
+            }
         }
     }
 

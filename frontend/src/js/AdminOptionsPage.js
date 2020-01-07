@@ -2,6 +2,7 @@ import LogoutButton from "./LogoutButton.js"
 import React,{useState} from 'react'
 import AdminNavBar from "./AdminNavBar.js"
 import AdminOptions from "./AdminOptions.js"
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
@@ -30,7 +31,7 @@ export default function AdminOptionsPage()
         }
         else
         {
-            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+            return <PermissionDeniedPage />;
         }
     }
 

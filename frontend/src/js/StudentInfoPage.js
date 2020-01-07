@@ -2,6 +2,7 @@ import LogoutButton from "./LogoutButton.js"
 import React, {useState} from 'react'
 import StudentNavBar from "./StudentNavBar.js"
 import StudentInfo from "./StudentInfo"
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
@@ -29,7 +30,7 @@ export default function StudentInfoPage() {
         }
         else
         {
-            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+            return <PermissionDeniedPage />;
         }
     }
 

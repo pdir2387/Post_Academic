@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import StudentNavBar from './StudentNavBar'
 import TidorPage from './TidorPage'
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
@@ -27,7 +28,7 @@ export default function AI() {
         }
         else
         {
-            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+            return <PermissionDeniedPage />;
         }
     }
 
