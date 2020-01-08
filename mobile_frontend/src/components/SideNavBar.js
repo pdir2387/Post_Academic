@@ -7,6 +7,7 @@ import LogoImage from '../../assets/logo_facultate.png';
 import LoginPage from './LoginPage.js';
 import AttendancesScreen from './AttendancesScreen';
 import LocationsScreen from './LocationsScreen';
+import StudentInfoScrenn from './StudentInfoScreen';
 
 class SideNavBar extends Component
 {
@@ -40,7 +41,19 @@ const navBar=createDrawerNavigator({
     Attendances: {
         screen: AttendancesScreen,
         navigationOptions:{
-            title: 'Prezente'
+            title: 'Prezențe'
+        }
+    },
+    StudentInfo: {
+        screen: StudentInfoScrenn,
+        navigationOptions:{
+            title: 'Informații generale'
+        }
+    },
+    Locations: {
+        screen: LocationsScreen,
+        navigationOptions:{
+            drawerLabel: <Hidden />
         }
     },
     Login: {
@@ -50,12 +63,6 @@ const navBar=createDrawerNavigator({
             drawerLockMode: 'locked-closed'
         }
       },
-    Locations: {
-        screen: LocationsScreen,
-        navigationOptions:{
-            drawerLabel: <Hidden />
-        }
-    },
   },{
         initialRouteName: 'Login',
         contentComponent: SideNavBar,
