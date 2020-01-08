@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import { StyleSheet, Text, View, Picker } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener'
-import {Table,Row,Rows,Col,TableWrapper} from 'react-native-table-component'
+import {Table,Row,Rows,Col,TableWrapper} from 'react-native-table-component';
 
 export default class AttendancesScreen extends Component
 {
@@ -48,7 +48,7 @@ export default class AttendancesScreen extends Component
         <Content>
           <View style={styles.pageContainer}>
             <Text style={styles.title}>
-              Prezente
+              Prezențe
             </Text>
 
             <View style={styles.pickerContainer}>

@@ -3,9 +3,10 @@ import { StyleSheet,Image } from 'react-native';
 import { Container,Header,Body,Content } from 'native-base';
 import { DrawerItems } from 'react-navigation-drawer';
 import { createDrawerNavigator } from 'react-navigation-drawer'
+import LogoImage from '../../assets/logo_facultate.png';
 import LoginPage from './LoginPage.js';
 import AttendancesScreen from './AttendancesScreen';
-import LogoImage from '../../assets/logo_facultate.png';
+import LocationsScreen from './LocationsScreen';
 
 class SideNavBar extends Component
 {
@@ -27,6 +28,14 @@ class SideNavBar extends Component
     }
 }
 
+class Hidden extends Component 
+{
+    render() 
+    {
+      return null;
+    }
+}
+
 const navBar=createDrawerNavigator({
     Attendances: {
         screen: AttendancesScreen,
@@ -41,6 +50,12 @@ const navBar=createDrawerNavigator({
             drawerLockMode: 'locked-closed'
         }
       },
+    Locations: {
+        screen: LocationsScreen,
+        navigationOptions:{
+            drawerLabel: <Hidden />
+        }
+    },
   },{
         initialRouteName: 'Login',
         contentComponent: SideNavBar,
