@@ -5,6 +5,7 @@ import { DrawerItems } from 'react-navigation-drawer';
 import { createDrawerNavigator } from 'react-navigation-drawer'
 import LoginPage from './LoginPage.js';
 import AttendancesScreen from './AttendancesScreen';
+import LogoImage from '../../assets/logo_facultate.png';
 
 class SideNavBar extends Component
 {
@@ -14,7 +15,7 @@ class SideNavBar extends Component
             <Container>
                 <Header style={styles.drawerHeader}>
                     <Body>
-                        <Image style={styles.drawerImage} source={require('../assets/logo_facultate.png')}/>
+                        <Image style={styles.drawerImage} source={LogoImage}/>
                     </Body>
                 </Header>
 

@@ -11,8 +11,8 @@ export default class AttendancesScreen extends Component
     super(props);
     this.state={
       nrWeeks: 14,
-      tableHeader: [],
-      tableFirstColumn: [],
+      tableWeeks: [],
+      tableFirstRow: [],
       courseAttendances: [],
       seminarAttendances: [],
       labAttendances: [],
@@ -21,12 +21,12 @@ export default class AttendancesScreen extends Component
       labAttendancesCount: 0
     }
 
-    this.getTableHeaders = this.getTableHeaders.bind(this);
+    this.getTableWeeks = this.getTableWeeks.bind(this);
     this.setTableData = this.setTableData.bind(this);
-    this.getTableFirstColumn = this.getTableFirstColumn.bind(this);
+    this.getTableFirstRow = this.getTableFirstRow.bind(this);
 
-    this.state.tableHeader=this.getTableHeaders();
-    this.state.tableFirstColumn=this.getTableFirstColumn();
+    this.state.tableWeeks=this.getTableWeeks();
+    this.state.tableFirstRow=this.getTableFirstRow();
     this.setTableData("FP");
   }
 
@@ -44,12 +44,12 @@ export default class AttendancesScreen extends Component
             <View style={styles.tableContainer}>
               <Table>
                 <TableWrapper style={styles.wrapper} borderStyle={{borderWidth: 1, borderColor: 'black',}}>
-                  <Col data={this.state.tableFirstColumn} style={styles.firstColumn} textStyle={styles.text}/>
-                  <TableWrapper style={styles.wrapperRows} >
-                    <Row data={this.state.tableHeader} style={styles.head} textStyle={styles.text}/>
-                    <Row data={this.state.courseAttendances} style={styles.row} textStyle={styles.text}/>
-                    <Row data={this.state.seminarAttendances} style={styles.row} textStyle={styles.text}/>
-                    <Row data={this.state.labAttendances} style={styles.row} textStyle={styles.text}/>
+                  <Row data={this.state.tableFirstRow} style={styles.firstRow} textStyle={styles.text}/>
+                  <TableWrapper style={styles.wrapperCols} >
+                    <Col data={this.state.tableWeeks} style={styles.weeks} textStyle={styles.text}/>
+                    <Col data={this.state.courseAttendances} textStyle={styles.text}/>
+                    <Col data={this.state.seminarAttendances} textStyle={styles.text}/>
+                    <Col data={this.state.labAttendances} textStyle={styles.text}/>
                     {/* <Rows data={this.state.tableData} /> */}
                   </TableWrapper>
                 </TableWrapper>
@@ -73,7 +73,7 @@ export default class AttendancesScreen extends Component
     );
   }
 
-  getTableHeaders()
+  getTableWeeks()
   {
     let headers=[];
 
@@ -85,7 +85,7 @@ export default class AttendancesScreen extends Component
     return headers;
   }
 
-  getTableFirstColumn()
+  getTableFirstRow()
   {
     return ["Sapt.","Curs","Sem.","Lab."];
   }
@@ -161,23 +161,19 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignSelf: "stretch",      
     },
-    head: {  
-      height: 40,  
+    weeks: {  
       backgroundColor: '#547598'  
     },
     wrapper: { 
-      flexDirection: 'row' 
+      flexDirection: 'column' 
     },
-    wrapperRows:{
+    wrapperCols:{
       flex: 5,
-      flexDirection: "column"
+      flexDirection: "row"
     },
-    firstColumn: { 
+    firstRow: { 
       flex: 1,
       backgroundColor: '#547598' 
-    },
-    row: {  
-      height: 40  
     },
     text: { 
       textAlign: 'center' 
