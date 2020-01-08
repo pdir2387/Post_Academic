@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import {Header,Left,Icon,Content,Container} from 'native-base';
+import { StyleSheet, Text, View, Picker } from 'react-native';
+import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener'
 import {Table,Row,Rows,Col,TableWrapper} from 'react-native-table-component'
 
@@ -11,27 +11,37 @@ export default class AttendancesScreen extends Component
     super(props);
     this.state={
       nrWeeks: 14,
+      disciplines: [],
       tableWeeks: [],
       tableFirstRow: [],
       courseAttendances: [],
       seminarAttendances: [],
       labAttendances: [],
+      dropDownItems:[],
+      dropDownItemsPlaceholder: "---alege materia---",
+      selectedItemDropdown: "",
       courseAttendancesCount: 0,
       seminarAttendancesCount: 0,
       labAttendancesCount: 0
     }
 
+    this.getDisciplines = this.getDisciplines.bind(this);
     this.getTableWeeks = this.getTableWeeks.bind(this);
     this.setTableData = this.setTableData.bind(this);
     this.getTableFirstRow = this.getTableFirstRow.bind(this);
+    this.setDropDownItems = this.setDropDownItems.bind(this);
 
     this.state.tableWeeks=this.getTableWeeks();
     this.state.tableFirstRow=this.getTableFirstRow();
-    this.setTableData("FP");
+  }
+
+  componentDidMount()
+  {
+    this.getDisciplines();
   }
 
   render()
-  {
+  {    
     return (
       <Container>
         <NavBarOpener navigation={this.props.navigation}/>
@@ -41,9 +51,13 @@ export default class AttendancesScreen extends Component
               Prezente
             </Text>
 
+            <View style={styles.pickerContainer}>
+              <Picker style={styles.pickerStyle} selectedValue={this.state.selectedItemDropdown} onValueChange={(value) => {this.setState({selectedItemDropdown:value});this.setTableData(value)}}>{this.state.dropDownItems}</Picker>
+            </View>
+
             <View style={styles.tableContainer}>
               <Table>
-                <TableWrapper style={styles.wrapper} borderStyle={{borderWidth: 1, borderColor: 'black',}}>
+                <TableWrapper style={styles.wrapper} borderStyle={{borderWidth: 1, borderColor: 'black'}}>
                   <Row data={this.state.tableFirstRow} style={styles.firstRow} textStyle={styles.text}/>
                   <TableWrapper style={styles.wrapperCols} >
                     <Col data={this.state.tableWeeks} style={styles.weeks} textStyle={styles.text}/>
@@ -73,6 +87,26 @@ export default class AttendancesScreen extends Component
     );
   }
 
+  getDisciplines()
+  {
+    this.setState({disciplines:["FP","OOP"]},()=>this.setDropDownItems());
+  }
+
+  setDropDownItems()
+  {
+    let placeholder=this.state.dropDownItemsPlaceholder;
+    let newItems=[];
+    newItems.push(<Picker.Item key={0} value='' label={placeholder} disabled/>);
+
+    for(let i=0;i<this.state.disciplines.length;i++)
+    {
+      let item=<Picker.Item key={i+1} value={this.state.disciplines[i]} label={this.state.disciplines[i]}/>;
+      newItems.push(item);
+    }
+
+    this.setState({dropDownItems:newItems});
+  }
+
   getTableWeeks()
   {
     let headers=[];
@@ -92,27 +126,14 @@ export default class AttendancesScreen extends Component
 
   setTableData(discipline)
   {
-    let c=[true,false,false,true,true,true,false,true,true,true,true,false,false,true];
-    let s=[false,true,false,true,true,true,false,true,true,true,true,false,false,true];
-    let l=[false,false,true,true,true,true,false,true,true,true,true,false,false,true];
+    if(discipline!=="")
+    {
+      let c=[true,false,false,true,true,true,false,true,true,true,true,false,false,true];
+      let s=[false,true,false,true,true,true,false,true,true,true,true,false,false,true];
+      let l=[false,false,true,true,true,true,false,true,true,true,true,false,false,true];
 
-    let counter=0;
-    this.state.courseAttendances=c.map(el=>{
-      if(el===true)
-      {
-          counter+=1;
-          return "x";
-      }
-      else
-      {
-          return "";
-      }
-    });
-
-    this.state.courseAttendancesCount=counter;
-    counter=0;
-
-    this.state.seminarAttendances=s.map(el=>{
+      let counter=0;
+      let attendancesCourse=c.map(el=>{
         if(el===true)
         {
             counter+=1;
@@ -122,24 +143,43 @@ export default class AttendancesScreen extends Component
         {
             return "";
         }
-    });
+      });
 
-    this.state.seminarAttendancesCount=counter;
-    counter=0;
-    
-    this.state.labAttendances=l.map(el=>{
-        if(el===true)
-        {
-            counter+=1;
-            return "x";
-        }
-        else
-        {
-            return "";
-        }
-    });
+      this.setState({courseAttendances:attendancesCourse});
+      this.setState({courseAttendancesCount:counter})
+      counter=0;
 
-    this.state.labAttendancesCount=counter;
+      let attendancesSeminar=s.map(el=>{
+          if(el===true)
+          {
+              counter+=1;
+              return "x";
+          }
+          else
+          {
+              return "";
+          }
+      });
+
+      this.setState({seminarAttendances:attendancesSeminar});
+      this.setState({seminarAttendancesCount:counter})
+      counter=0;
+      
+      let attendancesLab=l.map(el=>{
+          if(el===true)
+          {
+              counter+=1;
+              return "x";
+          }
+          else
+          {
+              return "";
+          }
+      });
+
+      this.setState({labAttendances:attendancesLab});
+      this.setState({labAttendancesCount:counter});
+    }
   }
 }
 
@@ -179,8 +219,20 @@ const styles = StyleSheet.create({
       textAlign: 'center' 
     },
     attendanceInfoContainer: {
-      flex: 3,
+      flex: 2,
       padding: 10,
       alignSelf:"flex-start"
+    },
+    pickerStyle:{  
+      height: 50,  
+      width: "100%",  
+      color: '#344953',  
+      justifyContent: 'center',
+    },
+    pickerContainer: {
+      width:"80%",
+      borderColor:"black",
+      borderStyle:"solid",
+      borderWidth:1
     }
 });
