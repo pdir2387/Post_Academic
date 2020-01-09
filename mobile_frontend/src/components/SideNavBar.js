@@ -9,6 +9,7 @@ import AttendancesScreen from './AttendancesScreen';
 import LocationsScreen from './LocationsScreen';
 import StudentInfoScrenn from './StudentInfoScreen';
 import ViewMailsScreen from './ViewMailsScreen';
+import SendMailScreen from './SendMailScreen';
 
 class SideNavBar extends Component
 {
@@ -55,6 +56,12 @@ const navBar=createDrawerNavigator({
         screen: ViewMailsScreen,
         navigationOptions:{
             title: 'E-mail'
+        }
+    },
+    SendMail: {
+        screen: SendMailScreen,
+        navigationOptions:{
+            drawerLabel: <Hidden />
         }
     },
     Locations: {

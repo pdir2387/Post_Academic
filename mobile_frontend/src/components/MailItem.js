@@ -17,7 +17,7 @@ export default class MailItem extends Component
   {    
     return (
         <View style={styles.itemContainer}>
-            <TouchableOpacity style={styles.container} onPress={()=>this.props.viewMail(this.props.mailData)}>
+            <TouchableOpacity style={styles.container} onPress={()=>this.props.viewMail(this.props.mailData,this.props.type)}>
                 <View style={styles.toFromDateContainer}>
                     <View style={styles.toFromContainer}>
                         <Text style={styles.text}>{this.props.toFromText}</Text>
