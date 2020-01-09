@@ -4,6 +4,8 @@ import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
+import MailAttachmentItem from './MailAttachmentItem';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default class SendMailScreen extends Component
 {
@@ -11,15 +13,18 @@ export default class SendMailScreen extends Component
     {
         super(props);
         this.state={
-            to: props.navigation.getParam("to","yes"),
-            subject: props.navigation.getParam("subject","works"),
+            to: props.navigation.getParam("to",""),
+            subject: props.navigation.getParam("subject",""),
             message: props.navigation.getParam("message",""),
-            files: []
+            attachmentFiles: [],
+            attachmentItems: []
         }
 
         this.goToEmails = this.goToEmails.bind(this);
         this.saveDraft = this.saveDraft.bind(this);
+        this.chooseFile = this.chooseFile.bind(this);
         this.attachFile = this.attachFile.bind(this);
+        this.removeAttachment = this.removeAttachment.bind(this);
     }
 
     componentDidMount()
@@ -38,7 +43,7 @@ export default class SendMailScreen extends Component
                     <View style={styles.options}>
                         <Icon.Button backgroundColor="#a5a5a5" name='back' size={30} style={styles.iconButton} onPress={()=>this.goToEmails()}/>
                         <Icon.Button backgroundColor="#a5a5a5" name='save' size={30} style={styles.iconButton} onPress={()=>this.saveDraft()}/>
-                        <Icon2.Button backgroundColor="#a5a5a5" name='ios-attach' style={styles.iconButton} size={30} onPress={()=>this.attachFile()}/>
+                        <Icon2.Button backgroundColor="#a5a5a5" name='ios-attach' style={styles.iconButton} size={30} onPress={()=>this.chooseFile()}/>
                     </View>
 
                     <View style={styles.sendMailContainer}>
@@ -68,6 +73,17 @@ export default class SendMailScreen extends Component
                                             numberOfLines={10}/>
                             </View>
                         </ScrollView>
+
+                        <ScrollView>
+                            <View style={styles.attachmentContainer}>
+                                {/* <MailAttachmentItem extension="txt" fileName="text.txt"/>
+                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
+                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
+                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
+                                <MailAttachmentItem extension="txt" fileName="text.txt"/> */}
+                                {this.state.attachmentItems}
+                            </View>
+                        </ScrollView>
                     </View>
                 </View>
             </Content>
@@ -82,12 +98,43 @@ export default class SendMailScreen extends Component
 
     saveDraft()
     {
-
+        
     }
 
-    attachFile()
+    async chooseFile()
     {
+        let file = await DocumentPicker.getDocumentAsync({});
 
+        if(file.type==="success")
+        {
+            this.attachFile(file)
+        }
+    }
+
+    attachFile(file)
+    {
+        let fileName=file.name;
+        let newItems=this.state.attachmentItems;
+        let fileExtension=fileName.split(".")[1];
+        let attachmentItem=<MailAttachmentItem uri={file.uri} file={file} extension={fileExtension} fileName={fileName} removeAttachment={this.removeAttachment}/>
+        newItems.push(attachmentItem);
+        this.setState({attachmentItems:newItems});
+    }
+
+    removeAttachment(uri)
+    {
+        let newItems=[];
+        for(let i=0;i<this.state.attachmentItems.length;i++)
+        {
+            let item=this.state.attachmentItems[i];
+
+            if(item.props.uri!==uri)
+            {
+                newItems.push(item);
+            }
+        }
+
+        this.setState({attachmentItems:newItems});
     }
 }
 
@@ -126,6 +173,7 @@ const styles = StyleSheet.create({
         borderColor: "black",
         borderStyle: "solid",
         borderBottomWidth: 2,
+        borderTopWidth: 2,
         padding: 5
     },
     mailInfoCategory: {
@@ -169,6 +217,12 @@ const styles = StyleSheet.create({
     },
     messageViewContainer:{
         height:"100%",
-        
-    }
+        borderBottomWidth: 1
+    },
+    attachmentContainer:{
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        padding: 10,
+    },
 });
