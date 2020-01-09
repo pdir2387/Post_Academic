@@ -8,6 +8,7 @@ import LoginPage from './LoginPage.js';
 import AttendancesScreen from './AttendancesScreen';
 import LocationsScreen from './LocationsScreen';
 import StudentInfoScrenn from './StudentInfoScreen';
+import ViewMailsScreen from './ViewMailsScreen';
 
 class SideNavBar extends Component
 {
@@ -48,6 +49,12 @@ const navBar=createDrawerNavigator({
         screen: StudentInfoScrenn,
         navigationOptions:{
             title: 'Informații generale'
+        }
+    },
+    ViewMails: {
+        screen: ViewMailsScreen,
+        navigationOptions:{
+            title: 'E-mail'
         }
     },
     Locations: {
