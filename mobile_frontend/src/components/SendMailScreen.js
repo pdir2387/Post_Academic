@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import MailAttachmentItem from './MailAttachmentItem';
 import * as DocumentPicker from 'expo-document-picker';
+import * as mime from 'react-native-mime-types';
 
 export default class SendMailScreen extends Component
 {
@@ -117,13 +118,26 @@ export default class SendMailScreen extends Component
         let newItems=this.state.attachmentItems;
         let fileExtension=fileName.split(".")[1];
         let attachmentItem=<MailAttachmentItem uri={file.uri} file={file} extension={fileExtension} fileName={fileName} removeAttachment={this.removeAttachment}/>
+        
         newItems.push(attachmentItem);
         this.setState({attachmentItems:newItems});
+
+        let mimeType=mime.lookup(file.uri);
+
+        const newFile={
+            uri: file.uri,
+            type: mimeType,
+            name: file.name
+        }
+
+        this.state.attachmentFiles.push(newFile);
     }
 
     removeAttachment(uri)
     {
         let newItems=[];
+        let newFiles=[];
+
         for(let i=0;i<this.state.attachmentItems.length;i++)
         {
             let item=this.state.attachmentItems[i];
@@ -135,6 +149,18 @@ export default class SendMailScreen extends Component
         }
 
         this.setState({attachmentItems:newItems});
+
+        for(let i=0;i<this.state.attachmentFiles.length;i++)
+        {
+            let item=this.state.attachmentFiles[i];
+
+            if(item.uri!==uri)
+            {
+                newFiles.push(item);
+            }
+        }
+
+        this.setState({attachmentFiles:newFiles});
     }
 }
 
