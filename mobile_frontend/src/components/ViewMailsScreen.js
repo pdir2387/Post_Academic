@@ -34,7 +34,7 @@ export default class ViewMailsScreen extends Component
 
     componentDidMount()
     {
-        
+        this.pickScreen();
     }
 
     willFocus = this.props.navigation.addListener('willFocus',(payload) => {

@@ -26,11 +26,14 @@ export default class MailContentScreen extends Component
         this.viewSent = this.viewSent.bind(this);
         this.setAttachmentFiles=this.setAttachmentFiles.bind(this);
         this.setupInfo=this.setupInfo.bind(this);
+        this.MailButton=this.MailButton.bind(this);
+        this.reply=this.reply.bind(this);
+        this.editDraft=this.editDraft.bind(this);
     }
 
     componentDidMount()
     {
-
+        this.setupInfo();
     }
 
     willFocus = this.props.navigation.addListener('willFocus',(payload) => {
@@ -38,7 +41,7 @@ export default class MailContentScreen extends Component
         {
             let newMail=JSON.parse(payload.action.params.mail);
             let newType=payload.action.params.type;
-            this.setState({mail:newMail,type:newType},()=>{this.setupInfo()});
+            this.setState({mail:newMail,type:newType,attachmentItems:[]},()=>{this.setupInfo()});
         }
     }
 );
@@ -51,6 +54,8 @@ export default class MailContentScreen extends Component
 
             <Content style={styles.content}>
                 <View style={styles.pageContainer}>
+                    <this.MailButton/>
+
                     <View style={styles.viewMailContainer}>
                         <View style={styles.mailInfo}>
                             <View style={styles.toContainer}>
@@ -82,6 +87,35 @@ export default class MailContentScreen extends Component
             <MailFooter viewInbox={this.viewInbox} viewDrafts={this.viewDrafts} viewSent={this.viewSent}/>
         </Container>
         );
+    }
+
+    MailButton()
+    {
+        let type=this.state.type;
+
+        if(type==="inbox")
+        {
+            return(
+                <TouchableOpacity style={styles.mailButton} onPress={()=>this.reply()}>
+                    <Text style={styles.mailButtonText}>Răspunde</Text>
+                </TouchableOpacity>
+            );
+        }
+        else
+        {
+            if(type==="drafts")
+            {
+                return(
+                    <TouchableOpacity style={styles.mailButton} onPress={()=>this.editDraft()}>
+                        <Text style={styles.mailButtonText}>Editeaza schița</Text>
+                    </TouchableOpacity>
+                );
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 
     setupInfo()
@@ -123,6 +157,30 @@ export default class MailContentScreen extends Component
     viewSent()
     {
         this.props.navigation.navigate('ViewMails',{category:"sent"});
+    }
+
+    reply()
+    {
+        let mail=this.state.mail;
+        let to=mail.from;
+        let subject=mail.subject;
+        let message=mail.message;
+
+        if(subject[0]!=="R" || subject[1]!=="e" || subject[2]!==":")
+        {
+            subject="Re: "+subject;
+        }
+
+        this.props.navigation.navigate("SendMail",{to:to,subject:subject,message:message});
+    }
+
+    editDraft()
+    {
+        let mail=this.state.mail;
+        let to=mail.to;
+        let subject=mail.subject;
+        let message=mail.message;
+        this.props.navigation.navigate("SendMail",{to:to,subject:subject,message:message});
     }
 
     setAttachmentFiles()
@@ -225,5 +283,21 @@ const styles = StyleSheet.create({
     },
     messageText:{
         fontSize: 15,
+    },
+    mailButton:{
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 5,
+        width:"100%",
+        backgroundColor: "#3333ff",
+        borderRadius: 0,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    mailButtonText:{
+        fontSize: 20,
+        color: "white"
     }
 });

@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -26,12 +26,23 @@ export default class SendMailScreen extends Component
         this.chooseFile = this.chooseFile.bind(this);
         this.attachFile = this.attachFile.bind(this);
         this.removeAttachment = this.removeAttachment.bind(this);
+        this.sendMail=this.sendMail.bind(this);
     }
 
     componentDidMount()
     {
         
     }
+
+    willFocus = this.props.navigation.addListener('willFocus',(payload) => {
+        if(payload.action.params)
+        {
+            let newTo=payload.action.params.to;
+            let newSubject=payload.action.params.subject;
+            let newMessage=payload.action.params.message;
+            this.setState({to:newTo,subject:newSubject,message:newMessage});
+        }
+    });
 
     render()
     {    
@@ -46,6 +57,10 @@ export default class SendMailScreen extends Component
                         <Icon.Button backgroundColor="#a5a5a5" name='save' size={30} style={styles.iconButton} onPress={()=>this.saveDraft()}/>
                         <Icon2.Button backgroundColor="#a5a5a5" name='ios-attach' style={styles.iconButton} size={30} onPress={()=>this.chooseFile()}/>
                     </View>
+
+                    <TouchableOpacity style={styles.sendButton} onPress={()=>this.sendMail()}>
+                            <Text style={styles.sendButtonText}>Trimite</Text>
+                    </TouchableOpacity>
 
                     <View style={styles.sendMailContainer}>
                         <View style={styles.mailInfo}>
@@ -69,6 +84,7 @@ export default class SendMailScreen extends Component
                         <ScrollView contentContainerStyle ={styles.messageAreaContainer}>
                             <View style={styles.messageViewContainer}>
                                 <TextInput placeholder="Mesaj mail..." 
+                                            defaultValue={this.state.message}
                                             style={styles.messageArea}
                                             multiline={true}
                                             numberOfLines={10}/>
@@ -85,6 +101,11 @@ export default class SendMailScreen extends Component
             </Content>
         </Container>
         );
+    }
+
+    sendMail()
+    {
+
     }
 
     goToEmails()
@@ -259,4 +280,20 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         padding: 10,
     },
+    sendButton:{
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 5,
+        width: "100%",
+        backgroundColor: "#3333ff",
+        borderRadius: 0,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    sendButtonText:{
+        fontSize: 20,
+        color: "white"
+    }
 });

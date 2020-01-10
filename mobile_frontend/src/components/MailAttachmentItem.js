@@ -8,7 +8,7 @@ export default class MailAttachmentItem extends Component
   {
     super(props);
 
-    this.MenuBar=this.MenuBar(this);
+    this.MenuBar=this.MenuBar.bind(this);
     this.removeAttachment = this.removeAttachment.bind(this);
     this.downloadFile=this.downloadFile.bind(this);
   }
@@ -23,7 +23,7 @@ export default class MailAttachmentItem extends Component
     return (
         <View style={styles.itemContainer}>
             <View style={styles.item}>
-                {this.MenuBar}
+                <this.MenuBar/>
 
                 <TouchableOpacity style={styles.touchable} onPress={()=>this.downloadFile()}>
                     <View style={styles.extensionContainer}>
