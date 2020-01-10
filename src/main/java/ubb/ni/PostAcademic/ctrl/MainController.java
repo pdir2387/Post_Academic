@@ -405,6 +405,12 @@ public class MainController {
 		return wrapper.toString();
 	}
 
+	//TO DO - DELETE THIS ENDPOINT WHEN EVERYTHING IS FUNCTIONAL
+	@GetMapping(value = "/api/orar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public String getOrar() {
+		return "[{\"zi\":\"luni\",\"color\":\"red\",\"nume\":\"Limbaje formale si tehnici de compilare\",\"start\":12,\"durata\":2,\"tip\":\"curs\",\"optional\":false},{\"zi\":\"luni\",\"color\":\"green\",\"nume\":\"Programare paralela\",\"start\":14,\"durata\":2,\"tip\":\"curs\",\"optional\":false},{\"zi\":\"miercuri\",\"color\":\"yellow\",\"nume\":\"IT IS WEDNESDAY MY DUDES\",\"start\":14,\"durata\":2,\"tip\":\"laborator\",\"optional\":true}]";
+	}
+
 	@GetMapping(value = "/api/student/ore", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public String getOre(@PathVariable("disciplina") String disciplina) {

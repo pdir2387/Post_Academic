@@ -9,90 +9,103 @@ function isIterable(obj) {
     return typeof obj[Symbol.iterator] === 'function';
 }
 
-function createTableRow(columnList, columnClassName) {
-    return <tr>{createTableData(columnList, columnClassName)}</tr>;
-}
-
-function createTableData(columnList, columnClassName) {
-    let TDList = [];
-    let index = 0;
-
-    for (let column of columnList) {
-        TDList.push(
-            <td key={index} className={columnClassName}>{column}</td>
-        );
-        index++;
-    }
-        
-    return TDList;
-}
-
 function getClassFromTimeAndDay(orar, time, day) {
     if (isIterable(orar))
         for (let course of orar) {
             if (course.zi === day && time >= course.start && time < (course.start + course.durata))
-                return tableCss.course;
+                return course;
         }
 
     return null;
 }
 
-function getFormattedOrar(orar) {
-    let TRList = [];
-    let time = 8;
-    let days = ['luni', 'marti', 'miercuri', 'joi', 'vineri'];
+function generateColumnV2(columnData) {
+    let defaultCellHeight = 60;
+    let rowArray = [];
 
-    while (time <= 20) {
-        let TDList = [];
-        TDList.push(
-            <div>{time}:00</div>
-        )
+    for (let column of columnData) {
+        if (typeof column == "object") {
+            let key = column.tip + " " + column.nume;
+            let cellHeight = defaultCellHeight * column.durata + 1.5
+            var style = {
+                height : cellHeight + "px",
+                backgroundColor : column.color
+            }
 
-        for (let day of days) {
-            let course = getClassFromTimeAndDay(orar, time, day);
-
-            if (course !== null)
-                TDList.push(
-                    <div className={course.color}>{course.nume}<br/>{course.tip}</div> 
-                )
-            else
-                TDList.push(
-                    <div></div>
-                )
+            rowArray.push(
+                <div className={tableCss.cell} style={style}>{key}</div>
+            )
         }
-
-        TRList.push(createTableRow(TDList));
-        time++;
+        else {
+            rowArray.push(
+                <div className={tableCss.cell}>{column}</div>
+            )
+        }
     }
 
-    return TRList;
+    return <div className={tableCss.column}>{rowArray}</div>;
+}
+
+function generateOrar(orar) {
+    console.log(orar);
+    let columnsArray = [];
+    let days = ['luni', 'marti', 'miercuri', 'joi', 'vineri'];
+    columnsArray.push(generateColumnV2(["", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]));
+
+    for (let day of days) {
+        let time = 8;
+        let columnForToday = [day];
+
+        while (time <= 20) {
+            let course = getClassFromTimeAndDay(orar, time, day);
+
+            if (course !== null) {
+
+                columnForToday.push(course);
+                time += course.durata;
+            }
+            else {
+                columnForToday.push("");
+
+                time++;
+            }
+        }
+
+        columnsArray.push(generateColumnV2(columnForToday));
+    }
+
+    return columnsArray;
 }
 
 function Orar(){
     let [orar, setOrar] = useState(0);
 
 
-    fetch('http://localhost:3000/api/orar')
-    .then(res => res.json())
-    .then(data => setOrar(data));
-
-    
-    // console.log("Am ora luni incepand cu ora 12? " + doIHaveClassNow(orar, 12, "luni"));
-    // console.log("Am ora marti incepand cu ora 12? " + doIHaveClassNow(orar, 14, "marti"));
-    // console.log("Am ora miercuri incepand cu ora 15? " + doIHaveClassNow(orar, 15, "miercuri"));
+    useEffect(() => 
+	{
+        fetchOrar();
+    }, []);
 
     return(
-
         <div id={tableCss.orar}>
-            {/*TO DO: orar logic*/}
-            <table>
-                <tbody>
-                    {createTableRow(["", "Luni", "Marti", "Miercuri", "Joi", "Vineri"], tableCss.th)}
-                    {getFormattedOrar(orar)}
-                </tbody>
-            </table>
+            { }
+            {
+                orar ?
+                generateOrar(orar)
+                :
+                <div>Loading</div>
+            }
         </div>
     )
+
+    function fetchOrar() {
+        fetch('http://localhost:3000/api/orar')
+        .then(res => res.json())
+        .then(data => {
+            setOrar(data);
+        });
+    }
+
 }
 
 export default Orar
