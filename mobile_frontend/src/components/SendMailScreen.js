@@ -77,11 +77,6 @@ export default class SendMailScreen extends Component
 
                         <ScrollView>
                             <View style={styles.attachmentContainer}>
-                                {/* <MailAttachmentItem extension="txt" fileName="text.txt"/>
-                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
-                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
-                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
-                                <MailAttachmentItem extension="txt" fileName="text.txt"/> */}
                                 {this.state.attachmentItems}
                             </View>
                         </ScrollView>
