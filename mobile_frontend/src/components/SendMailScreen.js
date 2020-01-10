@@ -117,20 +117,33 @@ export default class SendMailScreen extends Component
         let fileName=file.name;
         let newItems=this.state.attachmentItems;
         let fileExtension=fileName.split(".")[1];
-        let attachmentItem=<MailAttachmentItem uri={file.uri} file={file} extension={fileExtension} fileName={fileName} removeAttachment={this.removeAttachment}/>
-        
-        newItems.push(attachmentItem);
-        this.setState({attachmentItems:newItems});
+        let attachmentItem=<MailAttachmentItem key={file.uri} uri={file.uri} file={file} extension={fileExtension} fileName={fileName} removeAttachment={this.removeAttachment}/>;
+        let willAttach=true;
 
-        let mimeType=mime.lookup(file.uri);
-
-        const newFile={
-            uri: file.uri,
-            type: mimeType,
-            name: file.name
+        for(let i=0;i<newItems.length;i++)
+        {
+            if(newItems[i].props.uri===file.uri)
+            {
+                willAttach=false;
+                break;
+            }
         }
 
-        this.state.attachmentFiles.push(newFile);
+        if(willAttach)
+        {
+            newItems.push(attachmentItem);
+            this.setState({attachmentItems:newItems});
+
+            let mimeType=mime.lookup(file.uri);
+
+            const newFile={
+                uri: file.uri,
+                type: mimeType,
+                name: file.name
+            }
+
+            this.state.attachmentFiles.push(newFile);
+        }
     }
 
     removeAttachment(uri)
