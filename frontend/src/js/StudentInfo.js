@@ -21,7 +21,7 @@ export default function StudentInfo()
             	<span className={studentInfoCss.bold}>CNP:</span> <span id="cnpSpan"></span><br/>
             	<span className={studentInfoCss.bold}>Nr. matricol:</span> <span id="codeSpan"></span><br/>
             	<span className={studentInfoCss.bold}>Grupa:</span> <span id="groupNumberSpan"></span><br/>
-            	<span className={studentInfoCss.bold}>An de studiu:</span> <span id="yearSpan"></span><br/>
+            	<span className={studentInfoCss.bold}>Anul de studiu:</span> <span id="yearSpan"></span><br/>
             	<span className={studentInfoCss.bold}>Semestrul curent:</span> <span id="semesterNumberSpan"></span><br/>
             </div>
         </div>

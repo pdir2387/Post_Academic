@@ -4,6 +4,7 @@ import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import AdminNavBar from "./AdminNavBar.js"
 import Email from "./Email.js"
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
@@ -15,7 +16,7 @@ export default function EmailPage()
 
     function Page()
     {
-        if(accountType==="student" || accountType==="professor" || accountType==="admin")
+        if(accountType==="student" || accountType==="profesor" || accountType==="admin")
         {
             return (
                 <div id={commons.page}>
@@ -32,7 +33,7 @@ export default function EmailPage()
         }
         else
         {
-            return <div>Nu ai permisiunea necesara sa vizualizezi pagina</div>;
+            return <PermissionDeniedPage />;
         }
     }
 
@@ -44,7 +45,7 @@ export default function EmailPage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
                 return <ProfessorNavBar />;
             }

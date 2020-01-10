@@ -1,0 +1,44 @@
+#locationInfoContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+#locationOptionsContainer{
+    flex: 1;
+}
+
+#table{
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#table td,#table th{
+    border: 1px solid grey;
+    padding: 5px;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#table th{
+    font-weight: bold;
+}
+
+#table td{
+    cursor: pointer;
+}
+
+#table td:hover{
+    color: blue;
+    text-decoration: underline;
+}
+
+#map{
+    height: 500px;
+    flex: 4;
+    display: none;
+}

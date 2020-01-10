@@ -1,9 +1,9 @@
 import React,{Component} from 'react';
 import { StyleSheet, Text, View,TextInput,KeyboardAvoidingView,TouchableOpacity,AsyncStorage, Image} from 'react-native';
 import { CheckBox } from  'react-native-elements';
-import mainLogo from '../assets/logo_facultate.png';
-import userPng from '../assets/username.png';
-import passPng from '../assets/password.png';
+import mainLogo from '../../assets/logo_facultate.png';
+import userPng from '../../assets/username.png';
+import passPng from '../../assets/password.png';
 
 export default class Login extends Component
 {

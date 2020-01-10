@@ -3,8 +3,13 @@ import { StyleSheet,Image } from 'react-native';
 import { Container,Header,Body,Content } from 'native-base';
 import { DrawerItems } from 'react-navigation-drawer';
 import { createDrawerNavigator } from 'react-navigation-drawer'
+import LogoImage from '../../assets/logo_facultate.png';
 import LoginPage from './LoginPage.js';
 import AttendancesScreen from './AttendancesScreen';
+import LocationsScreen from './LocationsScreen';
+import StudentInfoScrenn from './StudentInfoScreen';
+import ViewMailsScreen from './ViewMailsScreen';
+import SendMailScreen from './SendMailScreen';
 
 class SideNavBar extends Component
 {
@@ -14,7 +19,7 @@ class SideNavBar extends Component
             <Container>
                 <Header style={styles.drawerHeader}>
                     <Body>
-                        <Image style={styles.drawerImage} source={require('../assets/logo_facultate.png')}/>
+                        <Image style={styles.drawerImage} source={LogoImage}/>
                     </Body>
                 </Header>
 
@@ -26,11 +31,43 @@ class SideNavBar extends Component
     }
 }
 
+class Hidden extends Component 
+{
+    render() 
+    {
+      return null;
+    }
+}
+
 const navBar=createDrawerNavigator({
     Attendances: {
         screen: AttendancesScreen,
         navigationOptions:{
-            title: 'Prezente'
+            title: 'Prezențe'
+        }
+    },
+    StudentInfo: {
+        screen: StudentInfoScrenn,
+        navigationOptions:{
+            title: 'Informații generale'
+        }
+    },
+    ViewMails: {
+        screen: ViewMailsScreen,
+        navigationOptions:{
+            title: 'E-mail'
+        }
+    },
+    SendMail: {
+        screen: SendMailScreen,
+        navigationOptions:{
+            drawerLabel: <Hidden />
+        }
+    },
+    Locations: {
+        screen: LocationsScreen,
+        navigationOptions:{
+            drawerLabel: <Hidden />
         }
     },
     Login: {
