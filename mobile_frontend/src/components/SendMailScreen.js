@@ -4,6 +4,7 @@ import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
+import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import MailAttachmentItem from './MailAttachmentItem';
 import * as DocumentPicker from 'expo-document-picker';
 import * as mime from 'react-native-mime-types';
@@ -17,6 +18,8 @@ export default class SendMailScreen extends Component
             to: props.navigation.getParam("to",""),
             subject: props.navigation.getParam("subject",""),
             message: props.navigation.getParam("message",""),
+            checkmarkMessage: "",
+            showMessage: false,
             attachmentFiles: [],
             attachmentItems: []
         }
@@ -56,10 +59,17 @@ export default class SendMailScreen extends Component
                         <Icon.Button backgroundColor="#a5a5a5" name='back' size={30} style={styles.iconButton} onPress={()=>this.goToEmails()}/>
                         <Icon.Button backgroundColor="#a5a5a5" name='save' size={30} style={styles.iconButton} onPress={()=>this.saveDraft()}/>
                         <Icon2.Button backgroundColor="#a5a5a5" name='ios-attach' style={styles.iconButton} size={30} onPress={()=>this.chooseFile()}/>
+                        
+                        {
+                            this.state.showMessage && <View style={styles.checkmarkContainer}>
+                                <Icon3 name="check" size={30}/>
+                                <Text style={{fontSize: 20}}>{this.state.checkmarkMessage}</Text>
+                            </View>
+                        }   
                     </View>
 
                     <TouchableOpacity style={styles.sendButton} onPress={()=>this.sendMail()}>
-                            <Text style={styles.sendButtonText}>Trimite</Text>
+                        <Text style={styles.sendButtonText}>Trimite</Text>
                     </TouchableOpacity>
 
                     <View style={styles.sendMailContainer}>
@@ -105,7 +115,9 @@ export default class SendMailScreen extends Component
 
     sendMail()
     {
-
+        this.setState({checkmarkMessage:"Trimis",showMessage:true},()=>{setInterval(() => {
+            this.setState({showMessage:false});
+        }, 2000)});
     }
 
     goToEmails()
@@ -115,7 +127,9 @@ export default class SendMailScreen extends Component
 
     saveDraft()
     {
-        
+        this.setState({checkmarkMessage:"Salvat",showMessage:true},()=>{setInterval(() => {
+            this.setState({showMessage:false});
+        }, 2000)});
     }
 
     async chooseFile()
@@ -295,5 +309,15 @@ const styles = StyleSheet.create({
     sendButtonText:{
         fontSize: 20,
         color: "white"
+    },
+    checkmarkContainer:{
+        backgroundColor: "green",
+        textAlign: "center",
+        justifyContent: "center",
+        borderRadius: 5,
+        marginTop: 5,
+        marginBottom: 5,
+        padding: 5,
+        flexDirection:"row",
     }
 });
