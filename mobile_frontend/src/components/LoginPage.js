@@ -137,7 +137,7 @@ export default class Login extends Component
         })
         .done();*/
 
-        this.props.navigation.navigate('Attendances');
+        this.props.navigation.navigate('Locations');
     }
 
 

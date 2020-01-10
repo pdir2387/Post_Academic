@@ -39,7 +39,7 @@ export default class LocationsScreen extends Component
             </Text>
 
             <View style={styles.pickerContainer}>
-              <Picker style={styles.pickerStyle} selectedValue={this.state.selectedItemDropdown} onValueChange={(value) => {this.setState({selectedItemDropdown:value});this.setMarker(value)}}>{this.state.dropDownItems}</Picker>
+              <Picker style={styles.pickerStyle} selectedValue={this.state.selectedItemDropdown} onValueChange={(value) => {this.setState({selectedItemDropdown:value});if(value!==""){this.setMarker(value);}}}>{this.state.dropDownItems}</Picker>
             </View>
 
             <MapView style={styles.map} region={this.state.region}>{this.state.marker}</MapView>
