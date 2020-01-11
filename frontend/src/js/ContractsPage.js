@@ -3,8 +3,6 @@ import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
 import ViewContracts from "./ViewContracts"
 import CreateContracts from "./CreateContracts"
-import StudentContractPopup from './StudentContractPopup'
-import Modal from 'react-modal'
 import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
@@ -41,7 +39,7 @@ export default function ContractsPage()
 
     function getAccountType()
     {
-        return "student";
+        return "profesor";
     }
 
     function getPeriod()
