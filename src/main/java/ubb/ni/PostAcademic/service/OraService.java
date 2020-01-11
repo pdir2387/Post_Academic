@@ -25,6 +25,7 @@ public class OraService {
         ArrayList<Ora> ore = new ArrayList<Ora>();
         if(user.getAccountType().equals(AccountType.student)){
             Student student = userService.getStudentByUsername(user.getUsername());
+            if(student!= null)
             for(ContractStudii c : student.getContracteStudii()){
                 for(Disciplina d : c.getDiscipline()){
                     if(d.getSemestru().equals(student.getSemestru())){
@@ -39,6 +40,7 @@ public class OraService {
     public ArrayList<Ora> getOreByMaterie(User user, String disciplina){
         if(user.getAccountType().equals(AccountType.student)){
             Student student = userService.getStudentByUsername(user.getUsername());
+            if(student!= null)
             for(ContractStudii c : student.getContracteStudii()){
                 for(Disciplina d : c.getDiscipline()){
                     if(d.getCodDisciplina().equals(disciplina)){
