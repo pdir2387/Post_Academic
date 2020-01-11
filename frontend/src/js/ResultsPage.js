@@ -4,6 +4,7 @@ import ProfessorNavBar from "./ProfessorNavBar.js"
 import StudentNavBar from "./StudentNavBar.js"
 import Results from "./Results"
 import PermissionDeniedPage from "./PermissionDeniedPage"
+import ResultsProfesor from "./ResultsProfesor"
 
 import commons from '../css/commons.module.css'
 
@@ -61,13 +62,13 @@ export default function ResultsPage()
         {
             if(accountType==="profesor")
             {
-                return <Results />;
+                return <ResultsProfesor />;
             }
         }
     }
 
     function getAccountType()
     {
-        return "student";
+        return "profesor";
     }
 }

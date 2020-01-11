@@ -4,40 +4,26 @@ import Popup from "reactjs-popup";
 import commons from '../css/commons.module.css'
 import gradesCss from '../css/teacher_grades.module.css'
 
-export default function TeacherGrades() {
+export default function ResultsProfesor() {
     let materii = ["Mate", "Info", "Romana"];
-    let [grades, setGrades]  = useState([{materie:"Romana", nume:"Andrei",saptamana:"7",tip:"Curs",nota:"7",observatii:"-", grupa:221},{materie:"Romana", nume:"Alex",saptamana:"5",tip:"Curs",nota:"5",observatii:"prost", grupa:222}]);
-    let filter = ["Curs", "Laborator", "Seminar"];
+    let [grades, setGrades]  = useState([{materie:"Romana", nume:"Andrei",nota:"7",observatii:"-", grupa:221},{materie:"Romana", nume:"Alex",nota:"5",observatii:"prost", grupa:222}]);
     let groups = [221,222,223,224,225,226,227];
     let [students, setStudents] = useState([{nume:"Andrei", grupa: 221},{nume:"Alex", grupa:222}]);
 
     let [selectedCourse, setSelectedCourse] = useState('');
-    let [selectedTip, setSelectedTip] = useState('');
     let [selectedGroup, setSelectedGroup] = useState('');
 
     function handleSelectCourse(e) {
         setSelectedCourse(e.target.value);
-
-        if(selectedTip !== '')
-            refillTable(grades, filter);
-    }
-
-    function handleSelectType(e) {
-        setSelectedTip(e.target.value);
-
-        if(selectedCourse !== '')
-            refillTable(grades, filter);
     }
 
     function handleSelectGroup(e) {
         setSelectedGroup(e.target.value);
-        refillTable(grades, filter);
+        refillTable(grades);
     }
 
-    function addGrade(nume, saptamana, nota, observatii, tipul, grupa){
-        console.log({materie:selectedCourse, nume:nume,saptamana:saptamana,tip:tipul,nota:nota,observatii:observatii, grupa:grupa})
-        setGrades([...grades, {materie:selectedCourse, nume:nume,saptamana:saptamana,tip:tipul,nota:nota,observatii:observatii, grupa:grupa}]);
-        console.log(grades);
+    function addGrade(nume, saptamana, nota, observatii, grupa){
+        setGrades([...grades, {materie:selectedCourse, nume:nume,nota:nota,observatii:observatii, grupa:grupa}]);
     }
 
     return(
@@ -49,10 +35,6 @@ export default function TeacherGrades() {
                     {getOptions(materii)}
                 </select>
 
-                <select id="type-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectType}>
-                    {getOptionsTypes(filter)}
-                </select>
-
                 <select id="group-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectGroup}>
                     {getOptionsGroups(groups)}
                 </select>
@@ -61,12 +43,11 @@ export default function TeacherGrades() {
             <table className={commons.table}>
                 <tr>
                     <th>STUDENT</th>
-                    <th>SAPTAMANA</th>
                     <th>NOTA</th>
                     <th>OBSERVATII</th>
                     <th>BUTTONS</th>
                 </tr>
-                {getTrs(grades, selectedCourse, selectedTip)}
+                {getTrs(grades, selectedCourse)}
             </table>
 
             <table id="students-table">
@@ -111,30 +92,19 @@ function getThsStudentsTable(student, addGrade){
                 <div>
                     {student.nume} - {student.grupa}
                     <form>
-                        <select id="select-tip-add-nota">
-                            <option value='Curs'>Curs</option>
-                            <option value='Laborator'>Laborator</option>
-                            <option value='Seminar'>Seminar</option>
-                        </select><br/>
-
                         <label>Nota:</label>
                         <input id = "nota-add-value" type="text"></input>
-
-                        <label>Saptamana:</label>
-                        <input id = "saptamana-add-value" type="text"></input>
 
                         <label>Observatii:</label>
                         <input id = "obs-add-value" type="text"></input>
                     </form>
                     <button onClick={() => {
                         let nume = student.nume;
-                        let saptamana = document.getElementById("saptamana-add-value").value;
                         let nota = document.getElementById("nota-add-value").value;
                         let observatii = document.getElementById("obs-add-value").value;
-                        let tipul = document.getElementById("select-tip-add-nota").options[document.getElementById("select-tip-add-nota").selectedIndex].value;
                         let grupa = student.grupa;
 
-                        addGrade(nume, saptamana, nota, observatii, tipul, grupa);
+                        addGrade(nume, nota, observatii, grupa);
                     }}>Add</button>
                 </div>
             </Popup>
@@ -192,10 +162,10 @@ function getOptionsGroups(groups){
     return optionList;
 }
 
-function getTrs(grades, materie, selectedTip){
+function getTrs(grades, materie){
     let TRList = [];
     for(let grade of grades){
-       if(grade.tip === selectedTip && grade.materie === materie)
+       if(grade.materie === materie)
             TRList.push(
                 <tr>{getThs(grade)}</tr>
             );
@@ -211,13 +181,13 @@ function getThs(grade){
         <td>{grade.nume}</td>
     );
     THList.push(
-        <td>{grade.saptamana}</td>
-    );
-    THList.push(
         <td>{grade.nota}</td>
     );
     THList.push(
         <td>{grade.observatii}</td>
+    );
+    THList.push(
+        <td></td>
     );
 
     return THList;
@@ -242,10 +212,10 @@ function getThsTitle(){
     return THList;
 }
 
-function refillTable(grades, filter, materie, selectedTip){
+function refillTable(grades, materie, selectedTip){
     let TRs = [];
     let table = document.getElementById("student-grades-table");
 
     TRs.push(<tr>{getThsTitle()}</tr>)
-    TRs.push(<tr>{getTrs(grades, filter, materie, selectedTip)}</tr>);
+    TRs.push(<tr>{getTrs(grades, materie, selectedTip)}</tr>);
 }
