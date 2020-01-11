@@ -27,7 +27,9 @@ public class DisciplinaService {
                     c.getDiscipline().clear();
 
                     for(String materie : materii){
-                        c.getDiscipline().add(findDisciplina(materie));
+                        Disciplina disciplina =findDisciplina(materie);
+                        if(disciplina!=null)
+                            c.getDiscipline().add(disciplina);
                     }
                 }
             }
@@ -86,7 +88,7 @@ public class DisciplinaService {
 
         if(user.getAccountType().equals(AccountType.student)){
             for(Disciplina d : disciplinaRepo.findAll()){
-                if(d.getSpecializare().equals(specializare) && d.getSemestru().equals(Integer.getInteger(semestru))){
+                if(d.getSpecializare().getNume().equals(specializare) && d.getSemestru().equals(Integer.parseInt(semestru))){
                     discipline.add(d);
                 }
             }
