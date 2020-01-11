@@ -31,7 +31,7 @@ public class GrupaService {
 
     public ArrayList<Grupa> getGrupeByMaterie(User user, String cod_materie){
         ArrayList<Grupa> grupe = new ArrayList<>();
-        if(user.getAccountType().equals(AccountType.profesor)){
+        if(user.getAccountType().equals(AccountType.profesor) && disciplinaService.findDisciplina(cod_materie)!= null){
             for(Grupa g: grupaRepo.findAll()){
                 if(g.getSpecializare().equals(disciplinaService.findDisciplina(cod_materie).getSpecializare())){
                     grupe.add(g);
