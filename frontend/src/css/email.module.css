@@ -348,8 +348,14 @@
 
 .attachmentsName{
     flex: 1;
+    margin: 0;
     padding: 5px;
+    padding-bottom: 15px;
     background-color: #b4b3bd;
+    justify-content: center;
+    width: 90px;
+    overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
 
     -moz-user-select: -moz-none;

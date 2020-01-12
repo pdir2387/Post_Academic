@@ -10,8 +10,8 @@ import '../../node_modules/leaflet/dist/leaflet.js'
 
 export default function Location() 
 {
-    let [clujLat,setClujLat]=useState(46.770920);
-    let [clujLng,setClujLng]=useState(23.589920);
+    let [lat,setLat]=useState(46.770920);
+    let [lng,setLng]=useState(23.589920);
     let [locations,setLocations]=useState([]);
     let [mapToShow,setMapToShow]=useState(null);
     let [marker,setMarker]=useState(null);
@@ -20,20 +20,16 @@ export default function Location()
     useEffect(() => 
     {
         getLocations();
+        createMap(lat,lng);
 
         let urlString=window.location.href;
         let url=new URL(urlString);
+        let roomId=url.searchParams.get("sala_id");
 
-        let lat=url.searchParams.get("lat");
-        let lng=url.searchParams.get("lng");
-
-        if(lat && lng)
+        if(roomId)
         {
-            createMap(lat,lng);
-        }
-        else
-        {
-            createMap(clujLat,clujLng);
+            let coords=getInitialCoordinates(roomId);
+            changeMarkerLocation(coords.lat,coords.long);
         }
     }, []);
 
@@ -108,6 +104,12 @@ export default function Location()
             id: 'mapbox/streets-v11',
             accessToken: 'pk.eyJ1IjoicGMyMDIwIiwiYSI6ImNrNTJ5cnMwMjAyZWEzZXBneTkwOHEyMTgifQ.wE3UaPU8-YHnyn4xvMIBtQ'
         }).addTo(mapToShow);
+    }
+
+    function getInitialCoordinates(roomid)
+    {
+        let coords={"lat":"46.773077","long":"23.620982"};
+        return coords;
     }
 
     function changeMarkerLocation(latitude,longitude)
