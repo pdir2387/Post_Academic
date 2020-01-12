@@ -1,5 +1,6 @@
 import React from 'react'
 import styleCss from '../css/trade.module.css'
+import PopupCreate from '../js/PopupCreateTrade.js'
 
 class Popup extends React.Component {
 	constructor(props){
@@ -25,6 +26,7 @@ class Popup extends React.Component {
 	handleSubmit(event) {
 		alert('A name was submitted: ' + this.state.name + '|' + this.state.ora);
 		event.preventDefault();
+		this.props.closePopup()
 	}
 	
 
@@ -54,6 +56,7 @@ class Trade extends React.Component {
 		super(props)
 		this.state = {
 			showPopup: false,
+			showPopupCreate: false,
 			selectedID: -1,
 			deals: [
 				{id: 1, materie: 'Laborator - MAS', user1: 'user1', ora: '12:00', saptamana: '7', taken: true},
@@ -68,6 +71,12 @@ class Trade extends React.Component {
 		this.setState({
 			selectedID: id,
 		  	showPopup: !this.state.showPopup
+		});
+	}
+
+	togglePopupCreate() {
+		this.setState({
+		  	showPopupCreate: !this.state.showPopupCreate
 		});
 	}
 
@@ -95,10 +104,14 @@ class Trade extends React.Component {
     render() {
         return (
 		<div>
+			<div>
+				<button onClick={this.togglePopupCreate.bind(this)}>Adauga un schimb</button>
+			</div>
 			<div className={styleCss.scrollerTradeStyle}>
 				{ this.renderData() }
 			</div>
-			{this.state.showPopup ?  <Popup text='ID' idx={this.state.selectedID} closePopup={this.togglePopup.bind(this)}/> : null }
+			{this.state.showPopupCreate ?  <PopupCreate text='Creaza' closePopup={this.togglePopupCreate.bind(this)}/> : null }
+			{this.state.showPopup ?  <Popup text='Propune' idx={this.state.selectedID} closePopup={this.togglePopup.bind(this)}/> : null }
 		</div>
         );
     }
