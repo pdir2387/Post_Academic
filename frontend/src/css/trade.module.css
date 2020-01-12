@@ -25,6 +25,7 @@
 	background-color: rgba(0,0,0, 0.5);  
   }  
   .popup_inner {  
+	height: 450px;
 	position: absolute;  
 	left: 25%;  
 	right: 25%;  
@@ -34,3 +35,20 @@
 	border-radius: 20px;  
 	background: white;  
   }
+
+  .dealMiniStyle{
+	border-radius: 18px;
+	width: 300px;
+	height: 100px;
+	margin-bottom: 20px;
+	padding: 20px 20px 20px 20px;
+	box-shadow: 0px 0px 10px 1px rgba(88,89,92,0.19);
+}
+
+.scrollerTradeMiniStyle{
+	position: relative;
+	height: 300px;
+	overflow: scroll;
+	display: table;
+	margin: 0 auto;
+}

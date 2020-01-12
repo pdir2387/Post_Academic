@@ -15,10 +15,12 @@ import LocationsPage from "./js/LocationsPage"
 import React from 'react'
 import AI from "./js/AI";
 import Trade from "./js/Trade"
+import MyTrade from "./js/MyTrade"
 
 function App() {	
 	return (
 	    <Switch>
+			<Route path="/mytrade/" component={MyTrade} />
 			<Route path="/trade" component={Trade} />
 			<Route path="/location" component={LocationsPage} />
 			<Route path="/ai" component={AI} />
