@@ -14,10 +14,12 @@ import AdminOptionsPage from "./js/AdminOptionsPage"
 import LocationsPage from "./js/LocationsPage"
 import React from 'react'
 import AI from "./js/AI";
+import Trade from "./js/Trade"
 
 function App() {	
 	return (
 	    <Switch>
+			<Route path="/trade" component={Trade} />
 			<Route path="/location" component={LocationsPage} />
 			<Route path="/ai" component={AI} />
 	    	<Route path="/admin_options" component={AdminOptionsPage} />
