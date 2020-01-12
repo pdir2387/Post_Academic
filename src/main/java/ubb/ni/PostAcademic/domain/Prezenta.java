@@ -1,6 +1,5 @@
 package ubb.ni.PostAcademic.domain;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;

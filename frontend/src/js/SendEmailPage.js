@@ -4,25 +4,38 @@ import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import AdminNavBar from "./AdminNavBar.js"
 import SendEmail from "./SendEmail.js"
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
 export default function SendEmailPage() 
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
+    
+    return <Page />;
 
-    return (
-        <div id={commons.page}>
-            <div id={commons.left}>
-                <NavBar />
-                <LogoutButton />
-            </div>
+    function Page()
+    {
+        if(accountType==="student" || accountType==="profesor" || accountType==="admin")
+        {
+            return (
+                <div id={commons.page}>
+                    <div id={commons.left}>
+                        <NavBar />
+                        <LogoutButton />
+                    </div>
 
-            <div id={commons.right}> 
-                <SendEmail />
-            </div>
-        </div>
-    );
+                    <div id={commons.right}> 
+                        <SendEmail />
+                    </div>
+                </div>
+            );
+        }
+        else
+        {
+            return <PermissionDeniedPage />;
+        }
+    }
 
     function NavBar()
     {
@@ -32,7 +45,7 @@ export default function SendEmailPage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
                 return <ProfessorNavBar />;
             }

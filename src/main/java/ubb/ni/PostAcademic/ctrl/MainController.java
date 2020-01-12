@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 
-import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -514,6 +513,12 @@ public class MainController {
 		return wrapper.toString();
 	}
 
+	//TO DO - DELETE THIS ENDPOINT WHEN EVERYTHING IS FUNCTIONAL
+	@GetMapping(value = "/api/orar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public String getOrar() {
+		return "[{\"zi\":\"luni\",\"sala_id\": 2,\"sala\":\"2/I\",\"profesor_id\":1,\"profesor\":\"Dan Mircea Suciu\",\"color\":\"red\",\"nume\":\"Limbaje formale si tehnici de compilare\",\"start\":12,\"durata\":2,\"tip\":\"curs\",\"optional\":false},{\"zi\":\"luni\",\"color\":\"green\",\"sala_id\": 3,\"sala\":\"L001\",\"profesor_id\":1,\"profesor\":\"Dan Mircea Suciu\",\"nume\":\"Programare paralela\",\"start\":14,\"durata\":2,\"tip\":\"seminar\",\"optional\":false},{\"zi\":\"miercuri\",\"color\":\"yellow\",\"sala_id\": 2,\"sala\":\"2/I\",\"profesor_id\":1,\"profesor\":\"Dan Mircea Suciu\",\"nume\":\"IT IS WEDNESDAY MY DUDES\",\"start\":14,\"durata\":2,\"tip\":\"laborator\",\"optional\":true}]";
+	}
+
 	@GetMapping(value = "/api/student/ore", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public String getOre() {
@@ -533,7 +538,11 @@ public class MainController {
 			medie_json.put("durata", o.getOraEnd() - o.getOraStart());
 			medie_json.put("tip", o.getTipOra());
 			medie_json.put("tipDisciplina", o.getDisciplina().getTipDisciplina());
-
+			medie_json.put("profesor", o.getProfesor().getNume());
+			medie_json.put("profesor_id", o.getProfesor().getId());
+			medie_json.put("sala", o.getSala().getNume());
+			medie_json.put("sala_id", o.getSala().getId());
+			
 			wrapper.put(medie_json);
 		}
 

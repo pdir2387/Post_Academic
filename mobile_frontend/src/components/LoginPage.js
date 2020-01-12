@@ -1,12 +1,12 @@
-import React from 'react';
+import React,{Component} from 'react';
 import { StyleSheet, Text, View,TextInput,KeyboardAvoidingView,TouchableOpacity,AsyncStorage, Image} from 'react-native';
 import { CheckBox } from  'react-native-elements';
-import mainLogo from '../img/logo_facultate.png';
-import userPng from '../img/username.png';
-import passPng from '../img/password.png';
+import mainLogo from '../../assets/logo_facultate.png';
+import userPng from '../../assets/username.png';
+import passPng from '../../assets/password.png';
 
-
-export default class Login extends React.Component{
+export default class Login extends Component
+{
     constructor(props){
         super(props);
         this.state ={
@@ -16,17 +16,17 @@ export default class Login extends React.Component{
         }
     }
 
-    componentDidMount(){
-        this._loadInitialState().done();
-    }
+    // componentDidMount(){
+    //     this._loadInitialState().done();
+    // }
 
-    _loadInitialState=async()=>{
-        var value=await AsyncStorage.getItem('user');
+    // _loadInitialState=async()=>{
+    //     var value=await AsyncStorage.getItem('user');
 
-        if(value!==null){
-            this.props.navigation.navigate('Profile');
-        }
-    }
+    //     if(value!==null){
+    //         this.props.navigation.navigate('Profile');
+    //     }
+    // }
 
     render(){
     return(
@@ -137,28 +137,28 @@ export default class Login extends React.Component{
         })
         .done();*/
 
-        this.props.navigation.navigate('HomePg');
+        this.props.navigation.navigate('Locations');
     }
 
 
 }
 
-async function saveUser(userToSave)
-{
-    let json=await AsyncStorage.setItem('user',JSON.stringify(userToSave));
-}
+// async function saveUser(userToSave)
+// {
+//     let json=await AsyncStorage.setItem('user',JSON.stringify(userToSave));
+// }
 
-async function saveJwt(jwt)
-{
-    await AsyncStorage.setItem('jwt',jwt);
-}
+// async function saveJwt(jwt)
+// {
+//     await AsyncStorage.setItem('jwt',jwt);
+// }
 
-async function getUser()
-{
-    const retrievedItem =  await AsyncStorage.getItem('user');
-    const item = JSON.parse(retrievedItem);
-    return item;
-}
+// async function getUser()
+// {
+//     const retrievedItem =  await AsyncStorage.getItem('user');
+//     const item = JSON.parse(retrievedItem);
+//     return item;
+// }
 
 const styles=StyleSheet.create({
     wrapper:{

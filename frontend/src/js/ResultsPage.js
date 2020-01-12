@@ -3,6 +3,8 @@ import React, {useState} from 'react'
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import StudentNavBar from "./StudentNavBar.js"
 import Results from "./Results"
+import PermissionDeniedPage from "./PermissionDeniedPage"
+import ResultsProfesor from "./ResultsProfesor"
 
 import commons from '../css/commons.module.css'
 
@@ -10,18 +12,30 @@ export default function ResultsPage()
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
-    return (
-        <div id={commons.page}>
-            <div id={commons.left}>
-                <NavBar />
-                <LogoutButton />
-            </div>
+    return <Page />;
 
-            <div id={commons.right}> 
-                <ResultsStudentOrProfessor />
-            </div>
-        </div>
-    );
+    function Page()
+    {
+        if(accountType==="student" || accountType==="profesor")
+        {
+            return (
+                <div id={commons.page}>
+                    <div id={commons.left}>
+                        <NavBar />
+                        <LogoutButton />
+                    </div>
+        
+                    <div id={commons.right}> 
+                        <ResultsStudentOrProfessor />
+                    </div>
+                </div>
+            );
+        }
+        else
+        {
+            return <PermissionDeniedPage />;
+        }
+    }
 
     function NavBar()
     {
@@ -31,7 +45,7 @@ export default function ResultsPage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
                 return <ProfessorNavBar />;
             }
@@ -46,15 +60,15 @@ export default function ResultsPage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
-                return <Results />;
+                return <ResultsProfesor />;
             }
         }
     }
 
     function getAccountType()
     {
-        return "student";
+        return "profesor";
     }
 }

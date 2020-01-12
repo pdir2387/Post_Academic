@@ -1,33 +1,30 @@
-import LogoutButton from "./LogoutButton.js"
-import React,{useState} from 'react'
-import AdminNavBar from "./AdminNavBar.js"
-import AdminOptions from "./AdminOptions.js"
+import React, {useState} from 'react'
+import StudentNavBar from './StudentNavBar'
+import TidorPage from './TidorPage'
 import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
-export default function AdminOptionsPage() 
-{
+export default function AI() {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
-    return <Page />
+    return <Page />;
 
     function Page()
     {
-        if(accountType==="admin")
+        if(accountType==="student")
         {
-            return (
+            return(
                 <div id={commons.page}>
                     <div id={commons.left}>
-                        <AdminNavBar />
-                        <LogoutButton />
+                        <StudentNavBar />
                     </div>
-        
-                    <div id={commons.right}> 
-                        <AdminOptions />
+                    
+                    <div id={commons.right}>
+                        <TidorPage />
                     </div>
                 </div>
-            );
+            )
         }
         else
         {
@@ -37,6 +34,6 @@ export default function AdminOptionsPage()
 
     function getAccountType()
     {
-        return "admin";
+        return "student";
     }
 }

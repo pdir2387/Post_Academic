@@ -2,30 +2,30 @@ import LogoutButton from "./LogoutButton.js"
 import React, {useState} from 'react'
 import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
-import AdminNavBar from "./AdminNavBar.js"
-import Orar from "./Orar.js"
+import Location from "./Location.js"
 import PermissionDeniedPage from "./PermissionDeniedPage"
 
-import home from '../css/home.module.css'
+import commons from '../css/commons.module.css'
 
-export default function HomePage() {
+export default function LocationPage() 
+{
     let [accountType,setAccountType]=useState(()=>getAccountType());
-    fetchCall();
 
     return <Page />;
 
     function Page()
     {
-        if(accountType==="student" || accountType==="profesor" || accountType==="admin")
+        if(accountType==="student" || accountType==="profesor")
         {
             return (
-                <div id={home.homePage}>
-                    <div id={home.homeLeft}>
+                <div id={commons.page}>
+                    <div id={commons.left}>
                         <NavBar />
                         <LogoutButton />
                     </div>
-                    <div id={home.homeRight}> 
-                        <Orar />
+        
+                    <div id={commons.right}> 
+                        <Location />
                     </div>
                 </div>
             );
@@ -48,13 +48,6 @@ export default function HomePage() {
             {
                 return <ProfessorNavBar />;
             }
-            else
-            {
-                if(accountType==="admin")
-                {
-                    return <AdminNavBar />;
-                }
-            }
         }
     }
 
@@ -62,11 +55,4 @@ export default function HomePage() {
     {
         return "student";
     }
-}
-
-function fetchCall() {
-    // fetch('http://localhost:3000/api/authority')
-    //     .then(response => response.text())
-    //     .then(alo => alert(alo))
-    //     .catch( e => alert(e));
 }

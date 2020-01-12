@@ -3,27 +3,44 @@ import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
 import ViewContracts from "./ViewContracts"
 import CreateContracts from "./CreateContracts"
-import StudentContractPopup from './StudentContractPopup'
-import Modal from 'react-modal'
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 
 export default function ContractsPage() 
 {
     let [period,setPeriod]=useState(()=>getPeriod());
+    let [accountType,setAccountType]=useState(()=>getAccountType());
 
-    return (
-        <div id={commons.page}>
-            <div id={commons.left}>
-                <StudentNavBar />
-                <LogoutButton />
-            </div>
+    return <Page />;
 
-            <div id={commons.right}> 
-                <ContractsPageContent />
-            </div>
-        </div>
-    );
+    function Page()
+    {
+        if(accountType==="student")
+        {
+            return (
+                <div id={commons.page}>
+                    <div id={commons.left}>
+                        <StudentNavBar />
+                        <LogoutButton />
+                    </div>
+        
+                    <div id={commons.right}> 
+                        <ContractsPageContent />
+                    </div>
+                </div>
+            );
+        }
+        else
+        {
+            return <PermissionDeniedPage />;
+        }
+    }
+
+    function getAccountType()
+    {
+        return "profesor";
+    }
 
     function getPeriod()
     {

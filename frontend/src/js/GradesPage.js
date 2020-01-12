@@ -5,6 +5,7 @@ import StudentNavBar from "./StudentNavBar.js"
 import ProfessorNavBar from "./ProfessorNavBar.js"
 import StudentGrades from "./StudentGrades.js"
 import TeacherGrades from "./TeacherGrades.js"
+import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
 import grades from '../css/grades.module.css'
@@ -13,17 +14,29 @@ export default function GradesPage()
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
 
-    return (
-        <div id={commons.page}>
-            <div id={commons.left}>
-                <NavBar />
-                <LogoutButton />
-            </div>
-            <div id={commons.right}>
-                <Grades />
-            </div>
-        </div>
-    );
+    return <Page />;
+
+    function Page()
+    {
+        if(accountType==="student" || accountType==="profesor")
+        {
+            return (
+                <div id={commons.page}>
+                    <div id={commons.left}>
+                        <NavBar />
+                        <LogoutButton />
+                    </div>
+                    <div id={commons.right}>
+                        <Grades />
+                    </div>
+                </div>
+            );        
+        }
+        else
+        {
+            return <PermissionDeniedPage />;
+        }
+    }
 
     function NavBar()
     {
@@ -35,7 +48,7 @@ export default function GradesPage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
                 return <ProfessorNavBar />;
             }
@@ -50,7 +63,7 @@ export default function GradesPage()
         }
         else
         {
-            if(accountType==="professor")
+            if(accountType==="profesor")
             {
                 return <TeacherGrades />;
             }
@@ -59,6 +72,6 @@ export default function GradesPage()
 
     function getAccountType()
     {
-        return "professor";
+        return "profesor";
     }
 }
