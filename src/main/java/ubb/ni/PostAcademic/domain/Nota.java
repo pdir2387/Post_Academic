@@ -11,7 +11,7 @@ public class Nota {
     @Column
     private Long id;
     @Column
-    private LocalDateTime data;
+    private Integer saptamana;
     @ManyToOne
     @JoinColumn
     private Ora ora;
@@ -27,8 +27,8 @@ public class Nota {
 
     }
 
-    public Nota(LocalDateTime data, Ora ora, Integer nota, String notita, Student student) {
-        this.data = data;
+    public Nota(Integer saptamana, Ora ora, Integer nota, String notita, Student student) {
+        this.saptamana = saptamana;
         this.ora = ora;
         this.nota = nota;
         this.notita = notita;
@@ -43,12 +43,12 @@ public class Nota {
         this.id = id;
     }
 
-    public LocalDateTime getData() {
-        return data;
+    public Integer getSaptamana() {
+        return saptamana;
     }
 
-    public void setData(LocalDateTime data) {
-        this.data = data;
+    public void setSaptamana(Integer saptamana) {
+        this.saptamana = saptamana;
     }
 
     public Ora getOra() {
