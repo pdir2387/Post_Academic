@@ -10,6 +10,8 @@ import '../../node_modules/leaflet/dist/leaflet.js'
 
 export default function Location() 
 {
+    let [clujLat,setClujLat]=useState(46.770920);
+    let [clujLng,setClujLng]=useState(23.589920);
     let [locations,setLocations]=useState([]);
     let [mapToShow,setMapToShow]=useState(null);
     let [marker,setMarker]=useState(null);
@@ -18,7 +20,21 @@ export default function Location()
     useEffect(() => 
     {
         getLocations();
-        createMap(46.770920,23.589920);
+
+        let urlString=window.location.href;
+        let url=new URL(urlString);
+
+        let lat=url.searchParams.get("lat");
+        let lng=url.searchParams.get("lng");
+
+        if(lat && lng)
+        {
+            createMap(lat,lng);
+        }
+        else
+        {
+            createMap(clujLat,clujLng);
+        }
     }, []);
 
     return(
