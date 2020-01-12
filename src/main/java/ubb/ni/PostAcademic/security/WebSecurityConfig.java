@@ -19,6 +19,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	DataSource dataSource;
+	@Autowired
+	CustomAuthenticationSuccessHandler authenticationSuccessHandler;
 
 
 	@Override
@@ -34,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			  .loginPage("/login")
 			  .loginProcessingUrl("/api/login")
 			  .defaultSuccessUrl("/home")
+			  .successHandler(authenticationSuccessHandler)
 			  .and()
       	.logout()
 				.permitAll()
@@ -45,15 +48,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
    	
 	@Autowired
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-		
-	  auth.jdbcAuthentication()
-	  	.passwordEncoder(new BCryptPasswordEncoder())
-	  	.dataSource(dataSource)
-		.usersByUsernameQuery(
-			"select username, password, 1 as enabled from users where username=?")
-		.authoritiesByUsernameQuery(
-			"select username, account_type as authority from users where username=?");
-	}
+		auth.eraseCredentials(false);
 
+		auth.jdbcAuthentication()
+				.passwordEncoder(new BCryptPasswordEncoder())
+				.dataSource(dataSource)
+				.usersByUsernameQuery(
+						"select username, password, 1 as enabled from users where username=?")
+				.authoritiesByUsernameQuery(
+						"select username, account_type as authority from users where username=?");
+	}
 	
 }
