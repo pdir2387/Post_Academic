@@ -22,15 +22,15 @@ export default class MailFooter extends Component
             <Footer style={styles.footer}>
                 <FooterTab style={styles.footerTab}>
                     <View style={styles.iconContainer}>
-                        <Icon.Button style={styles.iconButton} backgroundColor="transparent" name='inbox' size={30} onPress={()=>this.viewInbox()}/>
+                        <Icon.Button style={styles.iconButton} iconStyle={styles.icon} backgroundColor="transparent" name='inbox' size={30} onPress={()=>this.viewInbox()}/>
                     </View>
 
                     <View style={styles.iconContainer}>
-                        <Icon2.Button style={styles.iconButton} backgroundColor="transparent" name='drafts' size={30} onPress={()=>this.viewDrafts()}/>
+                        <Icon2.Button style={styles.iconButton} iconStyle={styles.icon} backgroundColor="transparent" name='drafts' size={30} onPress={()=>this.viewDrafts()}/>
                     </View>
 
                     <View style={styles.iconContainer}>
-                        <Icon3.Button style={styles.iconButton} backgroundColor="transparent" name='md-send' size={30} onPress={()=>this.viewSent()}/>
+                        <Icon3.Button style={styles.iconButton} iconStyle={styles.icon} backgroundColor="transparent" name='md-send' size={30} onPress={()=>this.viewSent()}/>
                     </View>
                 </FooterTab>
             </Footer>
@@ -72,7 +72,11 @@ const styles = StyleSheet.create({
     },
     iconButton:{
         textAlign: "center",
+        justifyContent: "center",
         width: "100%",
         height: "100%"
+    },
+    icon:{
+        marginLeft: "10%"
     }
 });

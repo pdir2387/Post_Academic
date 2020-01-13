@@ -4,10 +4,7 @@ package ubb.ni.PostAcademic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ubb.ni.PostAcademic.domain.*;
-import ubb.ni.PostAcademic.repo.ContractRepo;
-import ubb.ni.PostAcademic.repo.OraRepo;
-import ubb.ni.PostAcademic.repo.PrezentaRepo;
-import ubb.ni.PostAcademic.repo.UserRepo;
+import ubb.ni.PostAcademic.repo.*;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -20,6 +17,8 @@ public class OraService {
     ContractRepo contractRepo;
     @Autowired
     UserService userService;
+    @Autowired
+    OraRepo oraRepo;
 
     public ArrayList<Ora> getOre(User user){
         ArrayList<Ora> ore = new ArrayList<Ora>();
@@ -48,5 +47,16 @@ public class OraService {
             }
         }
         return new ArrayList<>();
+    }
+
+    public Ora getOraByMaterieAndTip(User user, String disciplina, String tip){
+        if(user.getAccountType().equals(AccountType.student)){
+            for(Ora d: oraRepo.findAll()){
+                if(d.getDisciplina().getCodDisciplina().equals(disciplina) && d.getTipOra().toString().equals(tip)){
+                    return d;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -35,6 +35,8 @@ public class UserService {
         return null;
     }
 
+
+
     public Student getStudentByUsername(String username){
         for(Student s : studentRepo.findAll()){
             if(s.getUser().getUsername().equals(username)){
@@ -42,6 +44,59 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    public Student getStudentByName(String name){
+        for(Student s : studentRepo.findAll()){
+            if(s.getNume().equals(name)){
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Student> getStudentiByMaterie(User user, String disciplina){
+        ArrayList<Student> students = new ArrayList<>();
+        if(user.getAccountType().equals(AccountType.profesor)) {
+            for (Student s : studentRepo.findAll()) {
+                boolean b = false;
+                for (ContractStudii c : s.getContracteStudii()) {
+                    for (Disciplina d : c.getDiscipline()) {
+                        if (d.getCodDisciplina().equals(disciplina)) {
+                            b = true;
+                            break;
+                        }
+                    }
+                }
+                if (b) {
+                    students.add(s);
+                }
+            }
+        }
+        return students;
+    }
+
+    public ArrayList<Student> getStudentiByMaterieAndGrupa(User user, String disciplina, String grupa){
+        ArrayList<Student> students = new ArrayList<>();
+        if(user.getAccountType().equals(AccountType.profesor)) {
+            for (Student s : studentRepo.findAll()) {
+                if(s.getGrupa().getNume().equals(grupa)){
+                    boolean b = false;
+                    for (ContractStudii c : s.getContracteStudii()) {
+                        for (Disciplina d : c.getDiscipline()) {
+                            if (d.getCodDisciplina().equals(disciplina)) {
+                                b = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (b) {
+                        students.add(s);
+                    }
+                }
+            }
+        }
+        return students;
     }
 
     public Profesor getProfesorByUsername(String username){

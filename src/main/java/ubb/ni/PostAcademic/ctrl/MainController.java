@@ -15,6 +15,7 @@
  */
 package ubb.ni.PostAcademic.ctrl;
 
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +24,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 
-import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +37,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ubb.ni.PostAcademic.domain.*;
 import ubb.ni.PostAcademic.service.*;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.validation.constraints.Email;
 
 
 @RestController
@@ -55,16 +59,120 @@ public class MainController {
 	FacultateService facultateService;
 	@Autowired
 	GrupaService grupaService;
+	@Autowired
+	EmailService emailService;
 
 	@GetMapping(value = "/api/authority")
 	@ResponseBody
 	public String auth() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
 		if (auth instanceof AnonymousAuthenticationToken) {
 			return "anon";
 		}
 		return auth.getAuthorities().toArray()[0].toString();
 	}
+
+	@GetMapping(value = "/api/all/emails/getAll")
+	@ResponseBody
+	public String getEmails() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+
+		JSONArray wrapper = new JSONArray();
+
+		for (ArrayList<String> m : emailService.getAll("INBOX")) {
+			JSONObject nota_object = new JSONObject();
+
+			nota_object.put("id", m.get(0));
+			nota_object.put("read", m.get(1));
+			nota_object.put("subject", m.get(2));
+			nota_object.put("from", m.get(3));
+			nota_object.put("date", m.get(4));
+			nota_object.put("message", m.get(5));
+
+			JSONArray attach = new JSONArray();
+
+			for(int i=6;i<m.size();i++){
+				JSONObject attach_ob = new JSONObject();
+				attach_ob.put("id", i-6);
+				attach_ob.put("name", m.get(i));
+
+				attach.put(attach_ob);
+			}
+
+			nota_object.put("attachments", attach);
+
+
+			wrapper.put(nota_object);
+		}
+
+		return wrapper.toString();
+	}
+
+	@GetMapping(value = "/api/all/emails/getDrafts")
+	@ResponseBody
+	public String getDrafts() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+
+		JSONArray wrapper = new JSONArray();
+
+		for (ArrayList<String> m : emailService.getAll("Drafts")) {
+			JSONObject nota_object = new JSONObject();
+
+			nota_object.put("id", m.get(0));
+			nota_object.put("subject", m.get(1));
+			nota_object.put("to", m.get(2));
+			nota_object.put("date", m.get(3));
+			nota_object.put("message", m.get(4));
+
+
+			wrapper.put(nota_object);
+		}
+
+		return wrapper.toString();
+	}
+
+	@GetMapping(value = "/api/all/emails/getSent")
+	@ResponseBody
+	public String getSent() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+
+		JSONArray wrapper = new JSONArray();
+
+		for (ArrayList<String> m : emailService.getAll("Sent")) {
+			JSONObject nota_object = new JSONObject();
+
+			nota_object.put("id", m.get(0));
+			nota_object.put("subject", m.get(1));
+			nota_object.put("to", m.get(2));
+			nota_object.put("date", m.get(3));
+			nota_object.put("message", m.get(4));
+
+
+			JSONArray attach = new JSONArray();
+
+			for(int i=5;i<m.size();i++){
+				JSONObject attach_ob = new JSONObject();
+				attach_ob.put("id", i-5);
+				attach_ob.put("name", m.get(i));
+
+				attach.put(attach_ob);
+			}
+
+			nota_object.put("attachments", attach);
+
+			wrapper.put(nota_object);
+		}
+
+		return wrapper.toString();
+	}
+
 
 	//ADMIN
 	@PostMapping("/api/admin/addStudent")
@@ -146,7 +254,7 @@ public class MainController {
 		for (Nota nota : notaService.getNoteByMaterie(user, disciplina)) {
 			JSONObject nota_object = new JSONObject();
 			nota_object.put("materie", nota.getOra().getDisciplina());
-			nota_object.put("data", nota.getData().toString());
+			nota_object.put("saptamana", nota.getSaptamana().toString());
 			nota_object.put("nota", nota.getNota());
 			nota_object.put("tip", nota.getOra().getTipOra().toString());
 			nota_object.put("observatii", nota.getNotita());
@@ -408,12 +516,12 @@ public class MainController {
 	//TO DO - DELETE THIS ENDPOINT WHEN EVERYTHING IS FUNCTIONAL
 	@GetMapping(value = "/api/orar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String getOrar() {
-		return "[{\"zi\":\"luni\",\"color\":\"red\",\"nume\":\"Limbaje formale si tehnici de compilare\",\"start\":12,\"durata\":2,\"tip\":\"curs\",\"optional\":false},{\"zi\":\"luni\",\"color\":\"green\",\"nume\":\"Programare paralela\",\"start\":14,\"durata\":2,\"tip\":\"curs\",\"optional\":false},{\"zi\":\"miercuri\",\"color\":\"yellow\",\"nume\":\"IT IS WEDNESDAY MY DUDES\",\"start\":14,\"durata\":2,\"tip\":\"laborator\",\"optional\":true}]";
+		return "[{\"zi\":\"luni\",\"sala_id\": 2,\"sala\":\"2/I\",\"profesor_id\":1,\"profesor\":\"Dan Mircea Suciu\",\"color\":\"red\",\"nume\":\"Limbaje formale si tehnici de compilare\",\"start\":12,\"durata\":2,\"tip\":\"curs\",\"optional\":false},{\"zi\":\"luni\",\"color\":\"green\",\"sala_id\": 3,\"sala\":\"L001\",\"profesor_id\":1,\"profesor\":\"Dan Mircea Suciu\",\"nume\":\"Programare paralela\",\"start\":14,\"durata\":2,\"tip\":\"seminar\",\"optional\":false},{\"zi\":\"miercuri\",\"color\":\"yellow\",\"sala_id\": 2,\"sala\":\"2/I\",\"profesor_id\":1,\"profesor\":\"Dan Mircea Suciu\",\"nume\":\"IT IS WEDNESDAY MY DUDES\",\"start\":14,\"durata\":2,\"tip\":\"laborator\",\"optional\":true}]";
 	}
 
 	@GetMapping(value = "/api/student/ore", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public String getOre(@PathVariable("disciplina") String disciplina) {
+	public String getOre() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getByUsername(auth.getName());
 
@@ -430,7 +538,11 @@ public class MainController {
 			medie_json.put("durata", o.getOraEnd() - o.getOraStart());
 			medie_json.put("tip", o.getTipOra());
 			medie_json.put("tipDisciplina", o.getDisciplina().getTipDisciplina());
-
+			medie_json.put("profesor", o.getProfesor().getNume());
+			medie_json.put("profesor_id", o.getProfesor().getId());
+			medie_json.put("sala", o.getSala().getNume());
+			medie_json.put("sala_id", o.getSala().getId());
+			
 			wrapper.put(medie_json);
 		}
 
@@ -610,7 +722,7 @@ public class MainController {
         for (Nota nota : notaService.getNoteByStudentAndMaterie(user, student, disciplina)) {
             JSONObject nota_object = new JSONObject();
             nota_object.put("materie", nota.getOra().getDisciplina());
-            nota_object.put("data", nota.getData().toString());
+            nota_object.put("saptamana", nota.getSaptamana().toString());
             nota_object.put("nota", nota.getNota());
             nota_object.put("tip", nota.getOra().getTipOra().toString());
             nota_object.put("observatii", nota.getNotita());
@@ -649,19 +761,19 @@ public class MainController {
         return wrapper.toString();
     }
 
-    @GetMapping(value = "/api/profesor/note/{disciplina}/{tip}/{grupa}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/profesor/note/disciplina/{disciplina}/{tip}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getNoteByMaterieAndTip(@PathVariable("disciplina") String disciplina, @PathVariable("tip") String tip, @PathVariable("grupa") String grupa) {
+    public String getNoteByMaterieAndTip(@PathVariable("disciplina") String disciplina, @PathVariable("tip") String tip) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getByUsername(auth.getName());
 
         JSONArray wrapper = new JSONArray();
 
-        for (Nota nota : notaService.getNoteByMaterieAndTipAndGrupa(user, disciplina, tip, grupa)) {
+        for (Nota nota : notaService.getNoteByMaterieAndTip(user, disciplina, tip)) {
             JSONObject nota_object = new JSONObject();
-            nota_object.put("materie", nota.getOra().getDisciplina());
+            nota_object.put("materie", nota.getOra().getDisciplina().getNume());
             nota_object.put("student", nota.getStudent().getNume());
-            nota_object.put("data", nota.getData().toString());
+            nota_object.put("saptamana", nota.getSaptamana().toString());
             nota_object.put("nota", nota.getNota());
             nota_object.put("tip", nota.getOra().getTipOra().toString());
             nota_object.put("observatii", nota.getNotita());
@@ -671,5 +783,96 @@ public class MainController {
 
         return wrapper.toString();
     }
+
+    @GetMapping(value = "/api/profesor/note/disciplina/{disciplina}/{tip}/{grupa}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getNoteByMaterieAndTipAndGrupa(@PathVariable("disciplina") String disciplina, @PathVariable("tip") String tip, @PathVariable("grupa") String grupa) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        JSONArray wrapper = new JSONArray();
+
+        for (Nota nota : notaService.getNoteByMaterieAndTipAndGrupa(user, disciplina, tip, grupa)) {
+            JSONObject nota_object = new JSONObject();
+            nota_object.put("materie", nota.getOra().getDisciplina().getNume());
+            nota_object.put("student", nota.getStudent().getNume());
+            nota_object.put("saptamana", nota.getSaptamana().toString());
+            nota_object.put("nota", nota.getNota());
+            nota_object.put("tip", nota.getOra().getTipOra().toString());
+            nota_object.put("observatii", nota.getNotita());
+
+            wrapper.put(nota_object);
+        }
+
+        return wrapper.toString();
+    }
+
+
+    @GetMapping(value = "/api/profesor/studenti/{disciplina}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getStudentiByMaterie(@PathVariable("disciplina") String disciplina) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        JSONArray wrapper = new JSONArray();
+
+        for (Student student : userService.getStudentiByMaterie(user, disciplina)) {
+            JSONObject nota_object = new JSONObject();
+            nota_object.put("nume", student.getNume());
+            nota_object.put("grupa", student.getGrupa().getNume());
+            wrapper.put(nota_object);
+        }
+
+        return wrapper.toString();
+    }
+
+    @GetMapping(value = "/api/profesor/studenti/{disciplina}/{grupa}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getStudentiByMaterieAndGrupa(@PathVariable("disciplina") String disciplina, @PathVariable("grupa") String grupa) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        JSONArray wrapper = new JSONArray();
+
+        for (Student student : userService.getStudentiByMaterieAndGrupa(user, disciplina, grupa)) {
+            JSONObject nota_object = new JSONObject();
+            nota_object.put("nume", student.getNume());
+            nota_object.put("grupa", student.getGrupa().getNume());
+            wrapper.put(nota_object);
+        }
+
+        return wrapper.toString();
+    }
+
+    @GetMapping(value = "/api/profesor/materii", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getDisciplineProf() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        JSONArray wrapper = new JSONArray();
+
+        for (Disciplina d : disciplinaService.getDisciplineProf(user)) {
+            JSONObject nota_object = new JSONObject();
+            nota_object.put("nume", d.getNume());
+			nota_object.put("cod", d.getCodDisciplina());
+            wrapper.put(nota_object);
+        }
+
+        return wrapper.toString();
+    }
+
+	@PostMapping(value = "/api/profesor/addGrade", consumes = "application/json")
+	public String addNota(@RequestBody String body){//@RequestBody String materie, @RequestBody String student, @RequestBody String saptamana, @RequestBody String nota, @RequestBody String tip, @RequestBody String observatii) {
+		JSONObject json = new JSONObject(body);
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+		Student student_ob = userService.getStudentByName(auth.getName());
+		Disciplina disciplina = disciplinaService.findDisciplina(json.getString("materie"));
+
+		return notaService.addNota(user, disciplina, student_ob, json.getString("saptamana"), json.getString("nota"), json.getString("tip"), json.getString("observatii"));
+	}
 
 }

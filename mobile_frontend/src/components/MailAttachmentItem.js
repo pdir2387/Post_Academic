@@ -8,7 +8,9 @@ export default class MailAttachmentItem extends Component
   {
     super(props);
 
+    this.MenuBar=this.MenuBar.bind(this);
     this.removeAttachment = this.removeAttachment.bind(this);
+    this.downloadFile=this.downloadFile.bind(this);
   }
 
   componentDidMount()
@@ -21,26 +23,50 @@ export default class MailAttachmentItem extends Component
     return (
         <View style={styles.itemContainer}>
             <View style={styles.item}>
-                <View style={styles.menuBar}>
-                    <Icon.Button name='ios-close' 
-                                    style={styles.closeButton} 
-                                    color={"red"} 
-                                    size={15} 
-                                    backgroundColor="transparent" 
-                                    iconStyle={styles.closeIcon}
-                                    onPress={()=>this.removeAttachment(this.props.uri)}/>
-                </View>
+                <this.MenuBar/>
 
-                <View style={styles.extensionContainer}>
-                    <Text>{this.props.extension}</Text>
-                </View>
+                <TouchableOpacity style={styles.touchable} onPress={()=>this.downloadFile()}>
+                    <View style={styles.extensionContainer}>
+                        <Text>{this.props.extension}</Text>
+                    </View>
 
-                <View style={styles.fileNameContainer}>
-                    <Text numberOfLines={1}>{this.props.fileName}</Text>
-                </View>
+                    <View style={styles.fileNameContainer}>
+                        <Text numberOfLines={1}>{this.props.fileName}</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     );
+  }
+
+  MenuBar()
+  {
+      if(this.props.uri!==undefined && this.props.removeAttachment!==undefined)
+      {
+        return(
+            <View style={styles.menuBar}>
+                <Icon.Button name='ios-close' 
+                                style={styles.closeButton} 
+                                color={"red"} 
+                                size={15} 
+                                backgroundColor="transparent" 
+                                iconStyle={styles.closeIcon}
+                                onPress={()=>this.removeAttachment(this.props.uri)}/>
+            </View>
+        );
+      }
+      else
+      {
+          return null;
+      }
+  }
+
+  downloadFile()
+  {
+      if(this.props.downloadFile!==undefined && this.props.fileId!==undefined)
+      {
+          this.props.downloadFile(this.props.fileId);
+      }
   }
 
   removeAttachment(uri)
@@ -93,5 +119,8 @@ const styles = StyleSheet.create({
     },
     closeButton:{
         width: 30
+    },
+    touchable:{
+        flex: 4
     }
 });

@@ -4,22 +4,19 @@ import Popup from "reactjs-popup";
 import commons from '../css/commons.module.css'
 import gradesCss from '../css/teacher_grades.module.css'
 
-export default function TeacherGrades() {
+export default function ResultsProfesor() {
     let [materii, setMaterii] = useState([]);
-    let [grades, setGrades]  = useState([{materie:"Romana", nume:"Andrei",saptamana:"7",tip:"curs",nota:"7",observatii:"-", grupa:221},{materie:"Romana", nume:"Alex",saptamana:"5",tip:"curs",nota:"5",observatii:"prost", grupa:222}]);
-    let filter = ["curs", "laborator", "seminar"];
+    let [grades, setGrades]  = useState([{materie:"Romana", nume:"Andrei",saptamana:"7",nota:"7",observatii:"-", grupa:221},{materie:"Romana", nume:"Alex",saptamana:"5",nota:"5",observatii:"prost", grupa:222}]);
     let [groups, setGroups] = useState([]);
     let [students, setStudents] = useState([]);
 
     let [selectedCourse, setSelectedCourse] = useState('');
-    let [selectedTip, setSelectedTip] = useState('');
     let [selectedGroup, setSelectedGroup] = useState('');
 
     function handleSelectCourse(e) {
         setSelectedCourse(materii.find((el) => el.nume === e.target.value));
 
-        if(selectedTip !== '')
-            refillTable(grades, filter);
+         refillTable(grades);
     }
 
     function getStudentsByCourse(){
@@ -34,12 +31,12 @@ export default function TeacherGrades() {
     }
 
     function getGradesByStuff(){
-        if(selectedTip != '' && selectedCourse != '' && selectedGroup != '')
-            fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod+ '/'+selectedTip +'/'+selectedGroup)
+        if(selectedCourse != '' && selectedGroup != '')
+            fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod+'/'+selectedGroup)
                 .then(res => res.json())
                 .then(res => setGrades(res));
-        else if(selectedTip != '' && selectedCourse != '')
-            fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod+ '/'+selectedTip)
+        else if(selectedCourse != '')
+            fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod)
                 .then(res => res.json())
                 .then(res => setGrades(res));
     }
@@ -69,20 +66,13 @@ export default function TeacherGrades() {
             .catch(() => setMaterii([]));
     }
 
-    function handleSelectType(e) {
-        setSelectedTip(e.target.value);
-
-        if(selectedCourse !== '')
-            refillTable(grades, filter);
-    }
-
     function handleSelectGroup(e) {
         setSelectedGroup(e.target.value);
-        refillTable(grades, filter);
+        refillTable(grades);
     }
 
-    function addGrade(nume, saptamana, nota, observatii, tipul, grupa){
-        setGrades([...grades, {materie:selectedCourse.nume, nume:nume,saptamana:saptamana,tip:tipul,nota:nota,observatii:observatii, grupa:grupa}]);
+    function addGrade(nume, nota, observatii, grupa){
+        setGrades([...grades, {materie:selectedCourse.nume, nume:nume,nota:nota,observatii:observatii, grupa:grupa}]);
 
         (async () => {
             const rawResponse = await fetch('http://localhost:3000/api/profesor/addGrade/', {
@@ -92,7 +82,7 @@ export default function TeacherGrades() {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                materie:selectedCourse.cod, nume:nume,saptamana:saptamana,tip:tipul,nota:nota,observatii:observatii, grupa:grupa,
+                materie:selectedCourse.nume, nume:nume,nota:nota,observatii:observatii, grupa:grupa
               })
             }).then(() => getGradesByStuff());
           })();
@@ -110,10 +100,6 @@ export default function TeacherGrades() {
     }, [selectedGroup]);
 
     useEffect(() => {
-        getGradesByStuff();
-    }, [selectedTip])
-
-    useEffect(() => {
         getMaterii();
     },[]);
 
@@ -126,10 +112,6 @@ export default function TeacherGrades() {
                     {getOptions(materii)}
                 </select>
 
-                <select id="type-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectType}>
-                    {getOptionsTypes(filter)}
-                </select>
-
                 <select id="group-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectGroup}>
                     {getOptionsGroups(groups)}
                 </select>
@@ -138,12 +120,11 @@ export default function TeacherGrades() {
             <table className={commons.table}>
                 <tr>
                     <th>STUDENT</th>
-                    <th>SAPTAMANA</th>
                     <th>NOTA</th>
                     <th>OBSERVATII</th>
                     <th>BUTTONS</th>
                 </tr>
-                {getTrs(grades, selectedCourse.nume, selectedTip)}
+                {getTrs(grades, selectedCourse.nume)}
             </table>
 
             <table id="students-table">
@@ -189,30 +170,19 @@ function getThsStudentsTable(student, addGrade){
                 <div>
                     {student.nume} - {student.grupa}
                     <form>
-                        <select id="select-tip-add-nota">
-                            <option value='curs'>Curs</option>
-                            <option value='laborator'>Laborator</option>
-                            <option value='seminar'>Seminar</option>
-                        </select><br/>
-
                         <label>Nota:</label>
                         <input id = "nota-add-value" type="text"></input>
-
-                        <label>Saptamana:</label>
-                        <input id = "saptamana-add-value" type="text"></input>
 
                         <label>Observatii:</label>
                         <input id = "obs-add-value" type="text"></input>
                     </form>
                     <button onClick={() => {
                         let nume = student.nume;
-                        let saptamana = document.getElementById("saptamana-add-value").value;
                         let nota = document.getElementById("nota-add-value").value;
                         let observatii = document.getElementById("obs-add-value").value;
-                        let tipul = document.getElementById("select-tip-add-nota").options[document.getElementById("select-tip-add-nota").selectedIndex].value;
                         let grupa = student.grupa;
 
-                        addGrade(nume, saptamana, nota, observatii, tipul, grupa);
+                        addGrade(nume, nota, observatii, grupa);
                     }}>Add</button>
                 </div>
             </Popup>
@@ -271,12 +241,12 @@ function getOptionsGroups(groups){
     return optionList;
 }
 
-function getTrs(grades, materie, selectedTip){
+function getTrs(grades, materie){
     console.log("V");
     console.log(grades);
     let TRList = [];
     for(let grade of grades){
-       if(grade.tip === selectedTip && grade.materie === materie)
+       if(grade.materie === materie)
             TRList.push(
                 <tr>{getThs(grade)}</tr>
             );
@@ -290,9 +260,6 @@ function getThs(grade){
 
     THList.push(
         <td>{grade.student}</td>
-    );
-    THList.push(
-        <td>{grade.saptamana}</td>
     );
     THList.push(
         <td>{grade.nota}</td>
@@ -314,9 +281,6 @@ function getThsTitle(){
         <td>STUDENT</td>
     );
     THList.push(
-        <td>SAPTAMANA</td>
-    );
-    THList.push(
         <td>NOTA</td>
     );
     THList.push(
@@ -326,10 +290,10 @@ function getThsTitle(){
     return THList;
 }
 
-function refillTable(grades, filter, materie, selectedTip){
+function refillTable(grades, materie){
     let TRs = [];
     let table = document.getElementById("student-grades-table");
 
     TRs.push(<tr>{getThsTitle()}</tr>)
-    TRs.push(<tr>{getTrs(grades, filter, materie, selectedTip)}</tr>);
+    TRs.push(<tr>{getTrs(grades, materie)}</tr>);
 }

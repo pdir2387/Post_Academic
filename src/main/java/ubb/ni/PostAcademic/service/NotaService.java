@@ -19,6 +19,8 @@ public class NotaService {
     MedieRepo medieRepo;
     @Autowired
     UserService userService;
+    @Autowired
+    OraService oraService;
 
 
     public ArrayList<Nota> getNoteByMaterie(User user, String disciplina){
@@ -106,7 +108,7 @@ public class NotaService {
         ArrayList<Nota> note = new ArrayList<>();
         if(user.getAccountType().equals(AccountType.profesor)){
             for(Nota nota: notaRepo.findAll()){
-                if(nota.getOra().getDisciplina().getNume().equals(disciplina) && nota.getOra().getTipOra().equals(TipOra.valueOf(tip))){
+                if(nota.getOra().getDisciplina().getCodDisciplina().equals(disciplina) && nota.getOra().getTipOra().equals(TipOra.valueOf(tip))){
                     note.add(nota);
                 }
             }
@@ -116,13 +118,21 @@ public class NotaService {
 
     public ArrayList<Nota> getNoteByMaterieAndTipAndGrupa(User user,String disciplina, String tip, String grupa){
         ArrayList<Nota> note = new ArrayList<>();
-        if(user.getAccountType().equals(AccountType.profesor)){
+        if(user.getAccountType().equals(AccountType.profesor)) {
             for(Nota nota: notaRepo.findAll()){
-                if(nota.getOra().getDisciplina().getNume().equals(disciplina) && nota.getOra().getTipOra().equals(TipOra.valueOf(tip)) && nota.getStudent().getGrupa().getNume().equals(grupa)){
+                if(nota.getOra().getDisciplina().getCodDisciplina().equals(disciplina) && nota.getOra().getTipOra().equals(TipOra.valueOf(tip)) && nota.getStudent().getGrupa().getNume().equals(grupa)){
                     note.add(nota);
                 }
             }
         }
         return note;
+    }
+
+    public String addNota(User user, Disciplina materie, Student student, String saptamana, String nota, String tip, String observatii){
+        String error = "";
+        if(user.getAccountType().equals(AccountType.profesor)) {
+            notaRepo.save(new Nota(Integer.parseInt(saptamana), oraService.getOraByMaterieAndTip(user, materie.getCodDisciplina(), tip), Integer.parseInt(nota), observatii, student));
+        }
+        return error;
     }
 }

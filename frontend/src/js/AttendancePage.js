@@ -69,6 +69,6 @@ export default function AttendancePage()
 
     function getAccountType()
     {
-        return "student";
+        return "profesor";
     }
 }

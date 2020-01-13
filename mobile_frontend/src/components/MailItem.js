@@ -29,7 +29,7 @@ export default class MailItem extends Component
                 </View>
 
                 <View style={styles.subjectContainer}>
-                    <Text style={this.props.read===true ? styles.bold : styles.text}>{this.props.subject}</Text>
+                    <Text style={this.props.read==true ? styles.text : styles.bold}>{this.props.subject}</Text>
                 </View>
             </TouchableOpacity>
         </View>

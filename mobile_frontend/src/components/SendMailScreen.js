@@ -1,9 +1,10 @@
 import React,{Component} from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
+import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import MailAttachmentItem from './MailAttachmentItem';
 import * as DocumentPicker from 'expo-document-picker';
 import * as mime from 'react-native-mime-types';
@@ -17,6 +18,8 @@ export default class SendMailScreen extends Component
             to: props.navigation.getParam("to",""),
             subject: props.navigation.getParam("subject",""),
             message: props.navigation.getParam("message",""),
+            checkmarkMessage: "",
+            showMessage: false,
             attachmentFiles: [],
             attachmentItems: []
         }
@@ -26,12 +29,23 @@ export default class SendMailScreen extends Component
         this.chooseFile = this.chooseFile.bind(this);
         this.attachFile = this.attachFile.bind(this);
         this.removeAttachment = this.removeAttachment.bind(this);
+        this.sendMail=this.sendMail.bind(this);
     }
 
     componentDidMount()
     {
         
     }
+
+    willFocus = this.props.navigation.addListener('willFocus',(payload) => {
+        if(payload.action.params)
+        {
+            let newTo=payload.action.params.to;
+            let newSubject=payload.action.params.subject;
+            let newMessage=payload.action.params.message;
+            this.setState({to:newTo,subject:newSubject,message:newMessage});
+        }
+    });
 
     render()
     {    
@@ -45,7 +59,18 @@ export default class SendMailScreen extends Component
                         <Icon.Button backgroundColor="#a5a5a5" name='back' size={30} style={styles.iconButton} onPress={()=>this.goToEmails()}/>
                         <Icon.Button backgroundColor="#a5a5a5" name='save' size={30} style={styles.iconButton} onPress={()=>this.saveDraft()}/>
                         <Icon2.Button backgroundColor="#a5a5a5" name='ios-attach' style={styles.iconButton} size={30} onPress={()=>this.chooseFile()}/>
+                        
+                        {
+                            this.state.showMessage && <View style={styles.checkmarkContainer}>
+                                <Icon3 name="check" size={30}/>
+                                <Text style={{fontSize: 20}}>{this.state.checkmarkMessage}</Text>
+                            </View>
+                        }   
                     </View>
+
+                    <TouchableOpacity style={styles.sendButton} onPress={()=>this.sendMail()}>
+                        <Text style={styles.sendButtonText}>Trimite</Text>
+                    </TouchableOpacity>
 
                     <View style={styles.sendMailContainer}>
                         <View style={styles.mailInfo}>
@@ -69,6 +94,7 @@ export default class SendMailScreen extends Component
                         <ScrollView contentContainerStyle ={styles.messageAreaContainer}>
                             <View style={styles.messageViewContainer}>
                                 <TextInput placeholder="Mesaj mail..." 
+                                            defaultValue={this.state.message}
                                             style={styles.messageArea}
                                             multiline={true}
                                             numberOfLines={10}/>
@@ -77,11 +103,6 @@ export default class SendMailScreen extends Component
 
                         <ScrollView>
                             <View style={styles.attachmentContainer}>
-                                {/* <MailAttachmentItem extension="txt" fileName="text.txt"/>
-                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
-                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
-                                <MailAttachmentItem extension="txt" fileName="text.txt"/>
-                                <MailAttachmentItem extension="txt" fileName="text.txt"/> */}
                                 {this.state.attachmentItems}
                             </View>
                         </ScrollView>
@@ -92,6 +113,13 @@ export default class SendMailScreen extends Component
         );
     }
 
+    sendMail()
+    {
+        this.setState({checkmarkMessage:"Trimis",showMessage:true},()=>{setInterval(() => {
+            this.setState({showMessage:false});
+        }, 2000)});
+    }
+
     goToEmails()
     {
         this.props.navigation.navigate('ViewMails');
@@ -99,7 +127,9 @@ export default class SendMailScreen extends Component
 
     saveDraft()
     {
-        
+        this.setState({checkmarkMessage:"Salvat",showMessage:true},()=>{setInterval(() => {
+            this.setState({showMessage:false});
+        }, 2000)});
     }
 
     async chooseFile()
@@ -117,20 +147,33 @@ export default class SendMailScreen extends Component
         let fileName=file.name;
         let newItems=this.state.attachmentItems;
         let fileExtension=fileName.split(".")[1];
-        let attachmentItem=<MailAttachmentItem uri={file.uri} file={file} extension={fileExtension} fileName={fileName} removeAttachment={this.removeAttachment}/>
-        
-        newItems.push(attachmentItem);
-        this.setState({attachmentItems:newItems});
+        let attachmentItem=<MailAttachmentItem key={file.uri} uri={file.uri} file={file} extension={fileExtension} fileName={fileName} removeAttachment={this.removeAttachment}/>;
+        let willAttach=true;
 
-        let mimeType=mime.lookup(file.uri);
-
-        const newFile={
-            uri: file.uri,
-            type: mimeType,
-            name: file.name
+        for(let i=0;i<newItems.length;i++)
+        {
+            if(newItems[i].props.uri===file.uri)
+            {
+                willAttach=false;
+                break;
+            }
         }
 
-        this.state.attachmentFiles.push(newFile);
+        if(willAttach)
+        {
+            newItems.push(attachmentItem);
+            this.setState({attachmentItems:newItems});
+
+            let mimeType=mime.lookup(file.uri);
+
+            const newFile={
+                uri: file.uri,
+                type: mimeType,
+                name: file.name
+            }
+
+            this.state.attachmentFiles.push(newFile);
+        }
     }
 
     removeAttachment(uri)
@@ -251,4 +294,30 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         padding: 10,
     },
+    sendButton:{
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 5,
+        width: "100%",
+        backgroundColor: "#3333ff",
+        borderRadius: 0,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    sendButtonText:{
+        fontSize: 20,
+        color: "white"
+    },
+    checkmarkContainer:{
+        backgroundColor: "green",
+        textAlign: "center",
+        justifyContent: "center",
+        borderRadius: 5,
+        marginTop: 5,
+        marginBottom: 5,
+        padding: 5,
+        flexDirection:"row",
+    }
 });

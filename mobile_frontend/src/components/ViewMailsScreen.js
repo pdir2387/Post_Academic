@@ -12,6 +12,7 @@ export default class ViewMailsScreen extends Component
     {
         super(props);
         this.state={
+        toOpen:props.navigation.getParam("category","inbox"),
         title:"Mesaje primite",
         inbox:[],
         drafts:[],
@@ -28,12 +29,22 @@ export default class ViewMailsScreen extends Component
         this.getDrafts = this.getDrafts.bind(this);
         this.getSent = this.getSent.bind(this);
         this.setShownItems = this.setShownItems.bind(this);
+        this.pickScreen = this.pickScreen.bind(this);
     }
 
     componentDidMount()
     {
-        this.viewInbox();
+        this.pickScreen();
     }
+
+    willFocus = this.props.navigation.addListener('willFocus',(payload) => {
+            if(payload.action.params)
+            {
+                let newCategory=payload.action.params.category;
+                this.setState({toOpen:newCategory},()=>{this.pickScreen()});
+            }
+        }
+    );
 
     render()
     {    
@@ -62,6 +73,30 @@ export default class ViewMailsScreen extends Component
         );
     }
 
+    pickScreen()
+    {
+        let category=this.state.toOpen;
+
+        if(category==="inbox")
+        {
+            this.viewInbox();
+        }
+        else
+        {
+            if(category==="drafts")
+            {
+                this.viewDrafts();
+            }
+            else
+            {
+                if(category==="sent")
+                {
+                    this.viewSent();
+                }
+            }
+        }
+    }
+
     viewInbox()
     {
         this.setState({title:"Mesaje primite"});
@@ -82,7 +117,8 @@ export default class ViewMailsScreen extends Component
 
     viewMail(mail,type)
     {
-        
+        let mailJson=JSON.stringify(mail);
+        this.props.navigation.navigate('MailContent',{mail:mailJson,type:type});
     }
 
     composeMail()
@@ -98,6 +134,7 @@ export default class ViewMailsScreen extends Component
         {
             let mail=items[i];
             let mailDestination;
+            let read;
 
             if(destination==="from")
             {
@@ -111,7 +148,16 @@ export default class ViewMailsScreen extends Component
                 }
             }
 
-            let item=<MailItem type={mailType} toFrom={destination} toFromText={mailDestination} date={mail.date} subject={mail.subject} read={mail.read} viewMail={this.viewMail} mailData={mail}/>;
+            if(mail.read==="false")
+            {
+                read=false;
+            }
+            else
+            {
+                read=true;
+            }
+
+            let item=<MailItem type={mailType} toFrom={destination} toFromText={mailDestination} date={mail.date} subject={mail.subject} read={read} viewMail={this.viewMail} mailData={mail}/>;
             newItems.push(item);
         }
 
