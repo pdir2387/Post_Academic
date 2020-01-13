@@ -35,6 +35,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ubb.ni.PostAcademic.Demo;
 import ubb.ni.PostAcademic.domain.*;
 import ubb.ni.PostAcademic.service.*;
 
@@ -55,6 +56,16 @@ public class MainController {
 	FacultateService facultateService;
 	@Autowired
 	GrupaService grupaService;
+	@Autowired
+	Demo demo;
+
+	@GetMapping(value = "/fill/DB")
+	@ResponseBody
+	public String fillDB()
+	{
+		demo.run();
+		return "done";
+	}
 
 	@GetMapping(value = "/api/authority")
 	@ResponseBody

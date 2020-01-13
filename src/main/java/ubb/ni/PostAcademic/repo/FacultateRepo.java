@@ -5,5 +5,7 @@ import ubb.ni.PostAcademic.domain.Facultate;
 
 
 public interface FacultateRepo extends CrudRepository<Facultate, Long> {
+
+    Facultate getFacultateByNume(String nume);
 }
 

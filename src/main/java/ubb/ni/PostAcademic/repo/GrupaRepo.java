@@ -5,4 +5,5 @@ import ubb.ni.PostAcademic.domain.ContractStudii;
 import ubb.ni.PostAcademic.domain.Grupa;
 
 public interface GrupaRepo extends CrudRepository<Grupa, Long> {
+    Grupa getGrupaByNume(String nume);
 }

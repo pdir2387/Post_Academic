@@ -1,5 +1,9 @@
 package ubb.ni.PostAcademic.repo;
 
-public interface SalaRepo
+import org.springframework.data.repository.CrudRepository;
+import ubb.ni.PostAcademic.domain.Sala;
+
+public interface SalaRepo extends CrudRepository<Sala, Long>
 {
+    Sala getSalaByNume(String nume);
 }
