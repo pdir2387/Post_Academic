@@ -19,8 +19,7 @@ export default function Email()
 
 	useEffect(() => 
 	{
-		getInfo().then((res)=>{
-			emails=res;
+		getInfo().then(()=>{
 			openInbox();
         	startEmailFetcher();
 		});
@@ -97,8 +96,7 @@ export default function Email()
 			sent=res;
 		});
 
-		let mails= await getEmails();
-		return mails;
+		emails= await getEmails();
 	}
 
 	function openInbox()
@@ -157,7 +155,7 @@ export default function Email()
 
 	function startEmailFetcher()
 	{
-		emailFetcher=setInterval(function(){ getEmails(); }, 30000);
+		emailFetcher=setInterval(function(){ getInfo(); }, 30000);
 	}
 
 	function deselectCategories()
@@ -315,6 +313,7 @@ export default function Email()
 			let tdTo=document.createElement("td");
 			let tdDate=document.createElement("td");
 			let tdMessage=document.createElement("td");
+			let tdMailId=document.createElement("td");
 
 			let checkboxRow = document.createElement("input");
 			checkboxRow.type="checkbox";
@@ -324,14 +323,17 @@ export default function Email()
 			tdTo.innerText=toFill[i].to;
 			tdDate.innerText=toFill[i].date;
 			tdMessage.innerText=toFill[i].message.replace("\n","\\n");
+			tdMailId.innertext=toFill[i].id;
 
 			tdMessage.style.display="none";
+			tdMailId.style.display="none";
 
 			trEmail.appendChild(tdCheck);
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdTo);
 			trEmail.appendChild(tdDate);
 			trEmail.appendChild(tdMessage);
+			trEmail.appendChild(tdMailId);
 
 			tbodyEmail.appendChild(trEmail)
 
@@ -651,10 +653,11 @@ export default function Email()
 			let tbodyEmail=document.getElementById(emailCss.tbodyEmail);
 			document.getElementById("tbodyTableEmailInfo").innerHTML="";
 			document.getElementById(emailCss.messageArea).innerHTML="";
+			let toDeleteMailsIds=[];
 
 			for(let i=0;i<selectedEmails.length;i++)
 			{
-				sendDeleteRequest(selectedEmails[i].children[1].innerText,selectedEmails[i].children[2].innerText,selectedEmails[i].children[3].innerText,selectedEmails[i].children[4].innerText);
+				toDeleteMailsIds.push(selectedEmails[i].children[5].innerText);
 
 				if(currentlySelectedCategory==="inbox")
 				{
@@ -682,6 +685,8 @@ export default function Email()
 					currentlySelectedMail=null;
 				}
 			}
+
+			sendDeleteRequest(toDeleteMailsIds);
 
 			selectedEmails=[];
 		}
@@ -814,9 +819,17 @@ export default function Email()
 		window.location="/send_email";
 	}
 
-	function sendDeleteRequest(subject,fromTo,date,message)
+	function sendDeleteRequest(idArray)
 	{
-
+		// fetch('http://localhost:3000/api/all/emails/send', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 		},
+		// 	body:JSON.stringify({
+		// 		idArray:idArray
+		// 	})
+		// });
 	}
 
 	function sendReadEmail(id)
