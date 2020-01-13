@@ -4,9 +4,9 @@ import home from '../css/home.module.css'
 
 function LogoutButton(){
     return(
-        <div className={home.NavBarItem}>
+        <div>
             <a href="/api/logout">
-                <button>Logout</button>
+                <button className={home.NavBarItem}>Logout</button>
             </a>
         </div>
     )
