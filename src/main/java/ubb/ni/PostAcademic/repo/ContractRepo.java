@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface ContractRepo extends CrudRepository<ContractStudii, Long> {
     ContractStudii findContractStudiiByAnStart(Integer anStart);
+
+    ContractStudii findFirstByAnStart(Integer anStart);
 }

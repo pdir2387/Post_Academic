@@ -15,27 +15,21 @@
  */
 package ubb.ni.PostAcademic.ctrl;
 
-import java.sql.SQLOutput;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
 
 //import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ubb.ni.PostAcademic.Demo;
+import ubb.ni.PostAcademic.DBDataInsertion;
 import ubb.ni.PostAcademic.domain.*;
 import ubb.ni.PostAcademic.service.*;
 
@@ -57,14 +51,14 @@ public class MainController {
 	@Autowired
 	GrupaService grupaService;
 	@Autowired
-	Demo demo;
+	DBDataInsertion demo;
 
 	@GetMapping(value = "/fill/DB")
 	@ResponseBody
 	public String fillDB()
 	{
-		demo.run();
-		return "done";
+		String message = demo.run();
+		return "done\n" + message;
 	}
 
 	@GetMapping(value = "/api/authority")

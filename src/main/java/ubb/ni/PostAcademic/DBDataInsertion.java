@@ -8,11 +8,12 @@ import ubb.ni.PostAcademic.repo.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Service
 @Transactional
-public class Demo
+public class DBDataInsertion
 {
     @Autowired
     UserRepo userRepo;
@@ -60,20 +61,24 @@ public class Demo
 
     private final int BASE_COUNT = 20;
 
-    public void run()
+    public String run()
     {
-        addUsers();
-        addFacultati();
-        addSpecializari();
-        addGrupe();
-        addProfesori();
-        addDiscipline();
-        addSali();
-        addOre();
-        addStudenti();
+        String message = "";
+        message += addUsers();
+        message += addFacultati();
+        message += addSpecializari();
+        message += addGrupe();
+        message += addProfesori();
+        message += addDiscipline();
+        message += addSali();
+        message += addOre();
+        message += addContracte();
+        message += addStudenti();
+
+        return message;
     }
 
-    private void addUsers()
+    private String addUsers()
     {
         List<User> userList = new ArrayList<>();
 
@@ -90,10 +95,15 @@ public class Demo
         users = userList;
 
         if (userRepo.count() == 0)
+        {
             userRepo.saveAll(userList);
+            return "Added users\n";
+        }
+        else
+            return "Skipped users\n";
     }
 
-    private void addFacultati()
+    private String addFacultati()
     {
         List<Facultate> facultateList = new ArrayList<>();
 
@@ -103,10 +113,15 @@ public class Demo
         facultati = facultateList;
 
         if (facultateRepo.count() == 0)
+        {
             facultateRepo.saveAll(facultateList);
+            return "Added facultati\n";
+        }
+        else
+            return "Skipped facultati\n";
     }
 
-    private void addSpecializari()
+    private String addSpecializari()
     {
         List<Specializare> specializareList = new ArrayList<>();
 
@@ -118,10 +133,15 @@ public class Demo
         specializari = specializareList;
 
         if (specializareRepo.count() == 0)
+        {
             specializareRepo.saveAll(specializareList);
+            return "Added specializari\n";
+        }
+        else
+            return "Skipped specializari\n";
     }
 
-    private void addGrupe()
+    private String addGrupe()
     {
         List<Grupa> grupaList = new ArrayList<>();
 
@@ -137,10 +157,15 @@ public class Demo
         grupe = grupaList;
 
         if (grupaRepo.count() == 0)
+        {
             grupaRepo.saveAll(grupaList);
+            return "Added grupe\n";
+        }
+        else
+            return "Skipped grupe\n";
     }
 
-    private void addProfesori()
+    private String addProfesori()
     {
         List<Profesor> profesorList = new ArrayList<>();
 
@@ -174,10 +199,15 @@ public class Demo
         profesori = profesorList;
 
         if (profesorRepo.count() == 0)
+        {
             profesorRepo.saveAll(profesorList);
+            return "Added profesori\n";
+        }
+        else
+            return "Skipped profesori\n";
     }
 
-    private void addDiscipline()
+    private String addDiscipline()
     {
         List<Disciplina> disciplinaList = new ArrayList<>();
 
@@ -202,10 +232,15 @@ public class Demo
         discipline = disciplinaList;
 
         if (disciplinaRepo.count() == 0)
+        {
             disciplinaRepo.saveAll(disciplinaList);
+            return "Added discipline\n";
+        }
+        else
+            return "Skipped discipline\n";
     }
 
-    private void addSali()
+    private String addSali()
     {
         List<Sala> salaList = new ArrayList<>();
 
@@ -220,7 +255,12 @@ public class Demo
         sali = salaList;
 
         if (salaRepo.count() == 0)
+        {
             salaRepo.saveAll(salaList);
+            return "Added sali\n";
+        }
+        else
+            return "Skipped sali\n";
     }
 
     private String getDay(int i)
@@ -245,9 +285,11 @@ public class Demo
         }
     }
 
-    private void addOre()
+    private String addOre()
     {
         List<Ora> oraList = new ArrayList<>();
+        List<Disciplina> disciplinaList = new ArrayList<>();
+        List<Integer> oneToMany = new ArrayList<>();
 
         for (int i = 0; i < BASE_COUNT * 5; i++)
         {
@@ -256,7 +298,11 @@ public class Demo
             for (int j = 0; j < i % 3 + 1; j++)
                 formatie.add(grupaRepo.getGrupaByNume(grupe.get((i + j) % grupe.size()).getNume()));
 
-            Disciplina disciplina = discipline.get(i % discipline.size());
+            oneToMany.add(i % discipline.size());
+
+            //Disciplina disciplina = discipline.get(i % discipline.size());
+            //disciplina.getOre().add(oraList.get(oraList.size() - 1));
+            //disciplinaRepo.save(disciplina);
 
             oraList.add(new Ora(getDay(i),
                     (i % 5) * 2 + 8,
@@ -264,23 +310,36 @@ public class Demo
                     i % 2 + 1,
                     salaRepo.getSalaByNume(sali.get(i % sali.size()).getNume()),
                     formatie,
-                    disciplina,
+
+                    null,
+                    //NULL
+
                     profesorRepo.getProfesorByNume(profesori.get(i % profesori.size()).getNume()),
                     i % 3 == 0 ? TipOra.curs : i % 3 == 1 ? TipOra.seminar : TipOra.laborator,
                     "CFCFCF"));
-
-            disciplina.getOre().add(oraList.get(oraList.size() - 1));
-
-            disciplinaRepo.save(disciplina);
         }
 
         ore = oraList;
 
         if (oraRepo.count() == 0)
+        {
             oraRepo.saveAll(oraList);
+            for (int i = 0; i < oneToMany.size(); i++)
+            {
+                Ora ora = oraList.get(i);
+                Disciplina disciplina = discipline.get(oneToMany.get(i));
+                disciplina.getOre().add(ora);
+                ora.setDisciplina(disciplina);
+                disciplinaRepo.save(disciplina);
+                oraRepo.save(ora);
+            }
+            return "Added ore\n";
+        }
+        else
+            return "Skipped ore\n";
     }
 
-    private void addContracte()
+    private String addContracte()
     {
         List<ContractStudii> contractStudiiList = new ArrayList<>();
 
@@ -300,10 +359,15 @@ public class Demo
         contracteStudii = contractStudiiList;
 
         if (contractRepo.count() == 0)
+        {
             contractRepo.saveAll(contractStudiiList);
+            return "Added contracte\n";
+        }
+        else
+            return "Skipped contracte\n";
     }
 
-    private void addStudenti()
+    private String addStudenti()
     {
         List<Student> studentList = new ArrayList<>();
 
@@ -320,9 +384,9 @@ public class Demo
             User user = users.get(offset);
             ContractStudii contractStudii = contracteStudii.get(i % contracteStudii.size());
             List<ContractStudii> temp = new ArrayList<>();
-            temp.add(contractRepo.findContractStudiiByAnStart(contractStudii.getAnStart()));
+            temp.add(contractRepo.findFirstByAnStart(contractStudii.getAnStart()));
             contractStudii = contracteStudii.get(i % contracteStudii.size());
-            temp.add(contractRepo.findContractStudiiByAnStart(contractStudii.getAnStart()));
+            temp.add(contractRepo.findFirstByAnStart(contractStudii.getAnStart()));
 
             studentList.add(new Student("Student " + i,
                     "1234567890123",
@@ -340,6 +404,11 @@ public class Demo
         students = studentList;
 
         if (studentRepo.count() == 0)
+        {
             studentRepo.saveAll(studentList);
+            return "Added studenti\n";
+        }
+        else
+            return "Skipped studenti\n";
     }
 }
