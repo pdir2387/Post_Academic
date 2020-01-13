@@ -13,6 +13,14 @@
 #createContractButton{
     align-self: center;
 }
+#createContractButton:hover {
+	background-color: #0d1734
+}
+#createContractButton:active {
+	background-color: #0d1734;
+	box-shadow: 0 5px #666;
+	transform: translateY(4px);
+}
 
 .title{
 	flex: 1;
