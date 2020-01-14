@@ -124,10 +124,23 @@ public class MainController {
 			JSONObject nota_object = new JSONObject();
 
 			nota_object.put("id", m.get(0));
-			nota_object.put("subject", m.get(1));
-			nota_object.put("to", m.get(2));
-			nota_object.put("date", m.get(3));
-			nota_object.put("message", m.get(4));
+			nota_object.put("read", m.get(1));
+			nota_object.put("subject", m.get(2));
+			nota_object.put("to", m.get(3));
+			nota_object.put("date", m.get(4));
+			nota_object.put("message", m.get(5));
+
+			JSONArray attach = new JSONArray();
+
+			for(int i=6;i<m.size();i++){
+				JSONObject attach_ob = new JSONObject();
+				attach_ob.put("id", i-6);
+				attach_ob.put("name", m.get(i));
+
+				attach.put(attach_ob);
+			}
+
+			nota_object.put("attachments", attach);
 
 
 			wrapper.put(nota_object);
@@ -149,17 +162,18 @@ public class MainController {
 			JSONObject nota_object = new JSONObject();
 
 			nota_object.put("id", m.get(0));
-			nota_object.put("subject", m.get(1));
-			nota_object.put("to", m.get(2));
-			nota_object.put("date", m.get(3));
-			nota_object.put("message", m.get(4));
+			nota_object.put("read", m.get(1));
+			nota_object.put("subject", m.get(2));
+			nota_object.put("to", m.get(3));
+			nota_object.put("date", m.get(4));
+			nota_object.put("message", m.get(5));
 
 
 			JSONArray attach = new JSONArray();
 
-			for(int i=5;i<m.size();i++){
+			for(int i=6;i<m.size();i++){
 				JSONObject attach_ob = new JSONObject();
-				attach_ob.put("id", i-5);
+				attach_ob.put("id", i-6);
 				attach_ob.put("name", m.get(i));
 
 				attach.put(attach_ob);
@@ -171,6 +185,53 @@ public class MainController {
 		}
 
 		return wrapper.toString();
+	}
+
+	@PostMapping(value = "/api/all/emails/send", consumes = "application/json")
+	public String sendEmail(@RequestBody String body){
+		JSONObject json = new JSONObject(body);
+
+		return emailService.sendEmail(json.getString("to"), json.getString("subject"), json.getString("message"), json.getJSONArray("attachments"));
+	}
+
+	@PostMapping(value = "/api/all/emails/draft", consumes = "application/json")
+	public String saveDraft(@RequestBody String body){
+		JSONObject json = new JSONObject(body);
+
+		return emailService.saveDraft(json.getString("to"), json.getString("subject"), json.getString("message"), json.getJSONArray("attachments"));
+	}
+
+	@PostMapping(value = "/api/all/emails/read/{folder}", consumes = "application/json")
+	public String read(@RequestBody String body, @PathVariable("folder") String folder){
+		JSONObject json = new JSONObject(body);
+
+		if(!(folder.equals("Inbox") || folder.equals("Drafts") || folder.equals("Sent"))){
+			return "Error";
+		}
+
+		return emailService.read(json.getString("id"), folder);
+	}
+
+	@PostMapping(value = "/api/all/emails/delete/{folder}", consumes = "application/json")
+	public String deleteMail(@RequestBody String body, @PathVariable("folder") String folder){
+		JSONObject json = new JSONObject(body);
+
+		if(!(folder.equals("Inbox") || folder.equals("Drafts") || folder.equals("Sent"))){
+			return "Error";
+		}
+
+		return emailService.delete(json.getJSONArray("idArray"), folder);
+	}
+
+	@PostMapping(value = "/api/all/emails/down/{folder}", consumes = "application/json")
+	public String down(@RequestBody String body, @PathVariable("folder") String folder){
+		JSONObject json = new JSONObject(body);
+
+		if(!(folder.equals("Inbox") || folder.equals("Drafts") || folder.equals("Sent"))){
+			return "Error";
+		}
+
+		return emailService.down(json.get("mailId").toString() ,json.get("fileId").toString() , folder).toString();
 	}
 
 
