@@ -15,22 +15,34 @@
     font-weight: 900;
     background-color: #1f4976;
     border: none;
-    font-size: 20px;
+    opacity: 0.9;
+    font-size: 17px;
     margin: 10px;
     text-align: start;
     padding: 10px;
-
     text-transform: uppercase;
     width: 250px;
     height: 65px;
-    margin-bottom: 10px;
-    border-radius: 2px;
+    border-radius: 5px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
 }
+.navBarButton:hover {
+    background-color: #0d1734
+}
+.navBarButton:active {
+    background-color: #0d1734;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
 
-.NavBarItem a{
+.NavBarItem a {
     color: #FFFFFF;
     text-decoration: none;
+}
+.NavBarItem:hover {
+    background-color: #afafaf;
+    padding: 6px;
+    border-radius: 3px;
 }
 
 #homeLeft {

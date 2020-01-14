@@ -10,7 +10,7 @@ import emailCss from '../css/email.module.css'
 export default function SendEmail() 
 {
     let [filesToSend,setFilesToSend]=useState([]);
-    let [draftSaver,setDraftSaver]=useState(null);
+	let [draftSaver,setDraftSaver]=useState(null);
 
 	useEffect(() => 
 	{
@@ -26,22 +26,25 @@ export default function SendEmail()
     		</div>
 
     		<div id={emailCss.emailDetails}>
-				<label className={emailCss.emailDetailsInput}>Destinatar: </label><input type="text" id="toInput"/><br/>
-				<label className={emailCss.emailDetailsInput}>Subiect: </label><input type="text" id="subjectInput"/>
+				<label className={emailCss.emailDetailsInput}>Destinatar: </label><input id={emailCss.toInput} type="text" /><br/>
+				<label className={emailCss.emailDetailsInput}>Subiect: </label><input id={emailCss.subjectInput} type="text"/>
     		</div>
 
 			<div id={emailCss.emailContent}>
-	    		<div id={emailCss.emailMessage}>
-	    			<textarea rows="20" cols="70" id={emailCss.emailMessageInput} />
+				<div id={emailCss.messageAndSendButtonContainer}>
+					<div id={emailCss.emailMessage}>
+						<textarea rows="20" cols="70" id={emailCss.emailMessageInput} />
+					</div>
+
 					<button id={emailCss.sendEmailButton} onClick={sendEmail}>Trimite</button>
-	    		</div>
+				</div>
 
 	    		<div id={emailCss.emailAttachments}>
 	    			<div id={emailCss.ulAttachmentsTitle}>Atașamente</div>
 	    			<div id={emailCss.attachmentsTableContainer}>
 		    			<table id={emailCss.attachmentsTable}>
 		    				<thead></thead>
-		    				<tbody></tbody>
+		    				<tbody id="attachmentsTableBody"></tbody>
 		    			</table>
 	    			</div>
 					
@@ -55,30 +58,94 @@ export default function SendEmail()
 
     function startDraftSaver()
     {
-		draftSaver=setInterval(function(){ saveDraft(); }, 30000);
-    }
+		draftSaver=setInterval(function(){ saveDraft(); }, 60000);
+	}
+	
+	function getBytesOfFile(file)
+	{
+		return new Promise((resolve, reject) => 
+		{
+			let reader= new FileReader();
+			reader.onload=function(fileToRead){
+				resolve(fileToRead.target.result);
+			}
+			reader.onerror = reject;
+			reader.readAsDataURL(file);
+		});
+	}
 
-    function sendEmail()
+	async function getFilesInfo(files)
+	{
+		let fileInfo=[];
+
+		for(const file of files)
+		{
+			let bytesToSend= await getBytesOfFile(file);
+			let bytesString=bytesToSend.split(',')[1];
+
+			let obj={
+				lastModified: file.lastModified,
+				lastModifiedDate: file.lastModifiedDate,
+				name:file.name,
+				size: file.size,
+				type: file.type,
+				bytes: bytesString
+			}
+
+			fileInfo.push(obj);
+		}
+
+		return fileInfo;
+	}
+
+    async function sendEmail()
     {
-    	let to=document.getElementById("toInput").value;
-    	let subject=document.getElementById("subjectInput").value;
-    	let message=document.getElementById(emailCss.emailMessageInput).value;
+    	let to=document.getElementById(emailCss.toInput).value;
+    	let subject=document.getElementById(emailCss.subjectInput).value;
+		let message=document.getElementById(emailCss.emailMessageInput).value;
 
-		
+		if(to !== "")
+		{
+			getFilesInfo(filesToSend).then((files)=>{
+				fetch('http://localhost:3000/api/all/emails/send', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body:JSON.stringify({
+						to:to,
+						subject:subject,
+						message:message,
+						attachments:files
+					})
+				})
+			})
+			
 
-		document.getElementById(emailCss.attachmentsTable).children[0].innerHTML="";
-		document.getElementById(emailCss.attachmentsTable).children[1].innerHTML="";
-    	filesToSend=[];
+			showConfirmation("Trimis");
+			// document.getElementById(emailCss.attachmentsTable).children[0].innerHTML="";
+			// document.getElementById(emailCss.attachmentsTable).children[1].innerHTML="";
+			// document.getElementById(emailCss.toInput).value="";
+			// document.getElementById(emailCss.subjectInput).value="";
+			// document.getElementById(emailCss.emailMessageInput).value="";
+			// filesToSend=[];
+		}
+		else
+		{
+			alert("Introdu destinatarul");
+		}
     }
 
     function addFile(inputFile)
     {
-    	let fileTable=document.getElementById(emailCss.attachmentsTable);
+    	let fileTable=document.getElementById("attachmentsTableBody");
     	let files=inputFile.files;
 
     	for(let i=0;i<files.length;i++)
     	{
-			filesToSend.push(files[i]);
+			let aux=files[i];
+
+			filesToSend.push(aux);
 			
 			let trFile=document.createElement("tr");
 			let tdImg=document.createElement("td");
@@ -93,12 +160,12 @@ export default function SendEmail()
 
 			imgRemoveFile.addEventListener('click',function(){
 			    fileTable.removeChild(trFile);
-			    filesToSend.splice(filesToSend.indexOf(files[i]),1);
+			    filesToSend.splice(filesToSend.indexOf(aux),1);
 			});
 
 			tdImg.appendChild(imgRemoveFile);
-			tdName.innerText=files[i].name;
-			tdFile.innerText=files[i];
+			tdName.innerText=aux.name;
+			tdFile.innerText=aux;
 			tdFile.style.display="none";
 
 			trFile.appendChild(tdImg);
@@ -133,21 +200,21 @@ export default function SendEmail()
     		localStorage.removeItem("message");
     	}
 
-    	document.getElementById("toInput").value=to;
-    	document.getElementById("subjectInput").value=subject;
+    	document.getElementById(emailCss.toInput).value=to;
+    	document.getElementById(emailCss.subjectInput).value=subject;
     	document.getElementById(emailCss.emailMessageInput).value=message;
-    }
-
-    function createSaveDraftMessage()
-    {
-    	let divMessage=document.createElement("div");
+	}
+	
+	function showConfirmation(message)
+	{
+		let divMessage=document.createElement("div");
     	let imgChecked=document.createElement("img");
     	let spanMessage=document.createElement("span")
 
     	imgChecked.src=CheckedIcon;
     	imgChecked.id=emailCss.checkedImage;
     	imgChecked.style.verticalAlign="middle";
-    	spanMessage.innerText="Schiță salvată";
+    	spanMessage.innerText=message;
     	spanMessage.style.marginLeft="20px";
 
     	divMessage.appendChild(imgChecked);
@@ -162,17 +229,30 @@ export default function SendEmail()
     	container.appendChild(divMessage);
 
     	setTimeout(function(){container.removeChild(divMessage);},4000);
-    }
+	}
 
     function saveDraft()
     {
-    	let to=document.getElementById("toInput").value;
-    	let subject=document.getElementById("subjectInput").value;
+    	let to=document.getElementById(emailCss.toInput).value;
+    	let subject=document.getElementById(emailCss.subjectInput).value;
     	let message=document.getElementById(emailCss.emailMessageInput).value
 
     	if(to!=="" || subject!== "" || message!=="")
     	{
-			createSaveDraftMessage();
+			getFilesInfo(filesToSend).then((files)=>{
+				fetch('http://localhost:3000/api/all/emails/draft', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body:JSON.stringify({
+						to:to,
+						subject:subject,
+						message:message,
+						attachments:files
+					})
+				}).then(()=>showConfirmation("Schiță salvată"));
+			})
     	}
     }
 }

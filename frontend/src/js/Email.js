@@ -19,8 +19,10 @@ export default function Email()
 
 	useEffect(() => 
 	{
-        openInbox();
-        startEmailFetcher();
+		getInfo().then(()=>{
+			openInbox();
+        	startEmailFetcher();
+		});
     }, []);
 
     return (
@@ -82,7 +84,20 @@ export default function Email()
 	            </div>
 	        </div>
         </div>
-    );
+	);
+	
+	async function getInfo()
+	{
+		getDrafts().then((res)=>{
+			drafts=res;
+		});
+
+		getSent().then((res)=>{
+			sent=res;
+		});
+
+		emails= await getEmails();
+	}
 
 	function openInbox()
 	{
@@ -140,7 +155,7 @@ export default function Email()
 
 	function startEmailFetcher()
 	{
-		emailFetcher=setInterval(function(){ getEmails(); }, 30000);
+		emailFetcher=setInterval(function(){ getInfo(); }, 30000);
 	}
 
 	function deselectCategories()
@@ -156,14 +171,15 @@ export default function Email()
 
 	function fillEmailTable()
 	{
-		getEmails();
+		document.getElementById(emailCss.tbodyEmail).innerHTML="";
+
 		fillEmailTableWithArray(emails);
+		updateUnreadCount();
 	}
 
 	function fillEmailTableWithArray(toFill)
 	{
 		let tbodyEmail=document.getElementById(emailCss.tbodyEmail);
-		tbodyEmail.innerHTML="";
 
 		document.getElementById("fromToTh").innerText="Expeditor";
 
@@ -175,6 +191,7 @@ export default function Email()
 			let tdFrom=document.createElement("td");
 			let tdDate=document.createElement("td");
 			let tdMessage=document.createElement("td");
+			let tdMailId=document.createElement("td");
 
 			let checkboxRow = document.createElement("input");
 			checkboxRow.type="checkbox";
@@ -184,6 +201,7 @@ export default function Email()
 			tdFrom.innerText=toFill[i].from;
 			tdDate.innerText=toFill[i].date;
 			tdMessage.innerText=toFill[i].message.replace("\n","\\n");
+			tdMailId.innerText=toFill[i].id;
 			
 			if(toFill[i].read==="false")
 			{
@@ -193,12 +211,14 @@ export default function Email()
 			}
 
 			tdMessage.style.display="none";
+			tdMailId.style.display="none";
 			
 			trEmail.appendChild(tdCheck);
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdFrom);
 			trEmail.appendChild(tdDate);
 			trEmail.appendChild(tdMessage);
+			trEmail.appendChild(tdMailId);
 
 			tbodyEmail.appendChild(trEmail)
 
@@ -259,11 +279,11 @@ export default function Email()
 					}
 
 					aux.read="true";
-					sendReadEmail(aux);
+					sendReadEmail(aux.id,"inbox");
 				}
 
 				fillMessageBox(this,"email");
-				showAttachments(aux.attachments);
+				showAttachments(aux.id,aux.attachments,"inbox");
 				currentlySelectedMail=this;
 			});
 		}
@@ -271,20 +291,21 @@ export default function Email()
 
 	function fillDraftsTable()
 	{
-		getDrafts();
+		document.getElementById(emailCss.tbodyEmail).innerHTML="";
+
 		fillDraftsOrSentTableWithArray(drafts,"draft");
 	}
 
 	function fillSentTable()
 	{
-		getSent();
+		document.getElementById(emailCss.tbodyEmail).innerHTML="";
+
 		fillDraftsOrSentTableWithArray(sent,"sent");
 	}
 
 	function fillDraftsOrSentTableWithArray(toFill,source)
 	{
 		let tbodyEmail=document.getElementById(emailCss.tbodyEmail);
-		tbodyEmail.innerHTML="";
 
 		document.getElementById("fromToTh").innerText="Destinatar";
 
@@ -296,6 +317,7 @@ export default function Email()
 			let tdTo=document.createElement("td");
 			let tdDate=document.createElement("td");
 			let tdMessage=document.createElement("td");
+			let tdMailId=document.createElement("td");
 
 			let checkboxRow = document.createElement("input");
 			checkboxRow.type="checkbox";
@@ -305,14 +327,24 @@ export default function Email()
 			tdTo.innerText=toFill[i].to;
 			tdDate.innerText=toFill[i].date;
 			tdMessage.innerText=toFill[i].message.replace("\n","\\n");
+			tdMailId.innerText=toFill[i].id;
+
+			if(toFill[i].read==="false")
+			{
+				tdSubject.style.fontWeight="bold";
+				tdTo.style.fontWeight="bold";
+				tdDate.style.fontWeight="bold";
+			}
 
 			tdMessage.style.display="none";
+			tdMailId.style.display="none";
 
 			trEmail.appendChild(tdCheck);
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdTo);
 			trEmail.appendChild(tdDate);
 			trEmail.appendChild(tdMessage);
+			trEmail.appendChild(tdMailId);
 
 			tbodyEmail.appendChild(trEmail)
 
@@ -334,12 +366,7 @@ export default function Email()
 				}
 			});
 			
-			let aux=null;
-
-			if(source==="sent")
-			{
-				aux=toFill[i].attachments;
-			}
+			let aux=toFill[i];
 
 			trEmail.addEventListener("click",function()
 			{
@@ -357,12 +384,22 @@ export default function Email()
 				this.style.backgroundColor="#e30707";
 				this.style.color="white";
 
+				let emailTd=this.children;
+
+				if(aux.read==="false")
+				{
+					for(let j=0;j<emailTd.length;j++)
+					{
+						emailTd[j].style.fontWeight="normal";
+					}
+
+					aux.read="true";
+					sendReadEmail(aux.id,source);
+				}
+
 				fillMessageBox(this,source);
 
-				if(source==="sent")
-				{
-					showAttachments(aux);
-				}
+				showAttachments(aux.id,aux.attachments,source);
 
 				currentlySelectedMail=this;
 			});
@@ -483,7 +520,7 @@ export default function Email()
 		messageContainer.appendChild(message);
 	}
 
-	function showAttachments(attachments)
+	function showAttachments(mailId,attachments,source)
 	{
 		let attachmentsArea=document.getElementById(emailCss.attachmentsArea);
 
@@ -504,15 +541,87 @@ export default function Email()
 
 			attachmentElement.appendChild(attachmentElmentExtension);
 			attachmentElement.appendChild(attachmentElementFileName);
-			attachmentElement.addEventListener('click',function(){downloadFile(id)});
+			attachmentElement.addEventListener('click',function(){downloadFile(mailId,id,source)});
 
 			attachmentsArea.appendChild(attachmentElement);
 		}
 	}
 
-	function downloadFile(id)
+	function saveFileToDisk(file,fileName)
 	{
-		
+		if (window.navigator.msSaveOrOpenBlob)
+		{ // IE10+
+			window.navigator.msSaveOrOpenBlob(file, fileName);
+		}
+		else 
+		{ // Others
+			var a = document.createElement("a"),
+					url = URL.createObjectURL(file);
+			a.href = url;
+			a.download = fileName;
+			document.body.appendChild(a);
+			a.click();
+			setTimeout(function() {
+				document.body.removeChild(a);
+				window.URL.revokeObjectURL(url);  
+			}, 0); 
+		}
+	}
+
+	function dataURLtoFile(bytes, type, fileName) 
+	{
+		let bstr = atob(bytes);
+		let n = bstr.length;
+		let u8arr = new Uint8Array(n);
+            
+		while(n--)
+		{
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        
+        return new File([u8arr], fileName, {type:type});
+    }
+
+	function downloadFile(mailId,fileId,source)
+	{
+		let location="";
+
+		if(source==="inbox")
+		{
+			location="Inbox"
+		}
+		else
+		{
+			if(source==="draft")
+			{
+				location="Drafts";
+			}
+			else
+			{
+				if(source==="sent")
+				{
+					location="Sent";
+				}
+			}
+		}
+
+		fetch('http://localhost:3000/api/all/emails/down/'+location, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body:JSON.stringify({
+				mailId:mailId,
+				fileId:fileId
+			})
+		})
+		.then((res)=>res.json())
+		.then((res)=>{
+			let type=res.type.split(";")[0];
+			console.log(res);
+			let file=dataURLtoFile(res.bytes,type,res.name);
+			saveFileToDisk(file,res.name);
+		});
 	}
 
 	function getBlockQuoteHTML(lines)
@@ -579,10 +688,11 @@ export default function Email()
 		return blockQuoteHtml;
 	}
 
-	function getEmails()
+	async function getEmails()
 	{
-		emails=JSON.parse('{"emails":[{"read":"true","subject":"subject1","from":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok.\\nfuk da cops","attachments":[{"id":"1","name":"file1.txt"},{"id":"2","name":"file2.txt"}]},{"read":"false","subject":"subject2","from":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz","attachments":[{"id":"3","name":"file3.txt"},{"id":"4","name":"file4.txt"}]},{"read":"false","subject":"subject3","from":"Big Smoke3","date":"2017-01-01 12:12","message":"lul u. wont betray. eveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer","attachments":[{"id":"5","name":"file5.txt"},{"id":"6","name":"file6.txt"}]},{"read":"true","subject":"subject4","from":"Big Smoke4","date":"2014-01-01 12:12","message":"fo da hood","attachments":[{"id":"7","name":"file7.txt"},{"id":"8","name":"file8.txt"}]},{"read":"false","subject":"subject5","from":"Big Smoke5","date":"2015-01-01 12:12","message":"need some numba 9s","attachments":[{"id":"9","name":"file9.txt"},{"id":"10","name":"file10.txt"},{"id":"11","name":"file11.txt"},{"id":"12","name":"file12.txt"},{"id":"13","name":"file13.txt"},{"id":"14","name":"file14.txt"}]}]}').emails;
-		updateUnreadCount();
+		//emails=JSON.parse('{"emails":[{"read":"true","subject":"subject1","from":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok.\\nfuk da cops","attachments":[{"id":"1","name":"file1.txt"},{"id":"2","name":"file2.txt"}]},{"read":"false","subject":"subject2","from":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz","attachments":[{"id":"3","name":"file3.txt"},{"id":"4","name":"file4.txt"}]},{"read":"false","subject":"subject3","from":"Big Smoke3","date":"2017-01-01 12:12","message":"lul u. wont betray. eveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer","attachments":[{"id":"5","name":"file5.txt"},{"id":"6","name":"file6.txt"}]},{"read":"true","subject":"subject4","from":"Big Smoke4","date":"2014-01-01 12:12","message":"fo da hood","attachments":[{"id":"7","name":"file7.txt"},{"id":"8","name":"file8.txt"}]},{"read":"false","subject":"subject5","from":"Big Smoke5","date":"2015-01-01 12:12","message":"need some numba 9s","attachments":[{"id":"9","name":"file9.txt"},{"id":"10","name":"file10.txt"},{"id":"11","name":"file11.txt"},{"id":"12","name":"file12.txt"},{"id":"13","name":"file13.txt"},{"id":"14","name":"file14.txt"}]}]}').emails;
+		let res= await fetch('http://localhost:3000/api/all/emails/getAll').then(res => res.json());
+		return res;
 	}
 
 	function updateUnreadCount()
@@ -609,14 +719,19 @@ export default function Email()
 		}
 	}
 
-	function getDrafts()
+	async function getDrafts()
 	{
-		drafts=JSON.parse('{"drafts":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok draft. fuk da cops"},{"subject":"subject2","to":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz"}]}').drafts;
+		// drafts=JSON.parse('{"drafts":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":"lul got big smok draft. fuk da cops"},{"subject":"subject2","to":"Big Smoke2","date":"2018-01-01 11:12","message":"luv drugz"}]}').drafts;
+		
+		let res= await fetch('http://localhost:3000/api/all/emails/getDrafts').then(res => res.json());
+        return res;
 	}
 
-	function getSent()
+	async function getSent()
 	{
-		sent=JSON.parse('{"sent":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":">lul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. ful got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fukul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent. da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da cops>>ima black\\n>>nigga","attachments":[{"id":"15","name":"file15.txt"}]}]}').sent;
+		//sent=JSON.parse('{"sent":[{"subject":"subject1","to":"Big Smoke","date":"2019-01-01 12:12","message":">lul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. ful got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fukul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent.ul got big smok sent. fuk da copsk da copsul got big smok sent. fuk da copsul got big smok sent. da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da copsul got big smok sent. fuk da cops>>ima black\\n>>nigga","attachments":[{"id":"15","name":"file15.txt"}]}]}').sent;
+		let res= await fetch('http://localhost:3000/api/all/emails/getSent').then(res => res.json());
+		return res;
 	}
 
 	function deleteSelectedMails()
@@ -626,10 +741,11 @@ export default function Email()
 			let tbodyEmail=document.getElementById(emailCss.tbodyEmail);
 			document.getElementById("tbodyTableEmailInfo").innerHTML="";
 			document.getElementById(emailCss.messageArea).innerHTML="";
+			let toDeleteMailsIds=[];
 
 			for(let i=0;i<selectedEmails.length;i++)
 			{
-				sendDeleteRequest(selectedEmails[i].children[1].innerText,selectedEmails[i].children[2].innerText,selectedEmails[i].children[3].innerText,selectedEmails[i].children[4].innerText);
+				toDeleteMailsIds.push(parseInt(selectedEmails[i].children[5].innerText));
 
 				if(currentlySelectedCategory==="inbox")
 				{
@@ -657,6 +773,8 @@ export default function Email()
 					currentlySelectedMail=null;
 				}
 			}
+
+			sendDeleteRequest(toDeleteMailsIds);
 
 			selectedEmails=[];
 		}
@@ -789,13 +907,72 @@ export default function Email()
 		window.location="/send_email";
 	}
 
-	function sendDeleteRequest(subject,fromTo,date,message)
+	function sendDeleteRequest(idArray)
 	{
+		let source=currentlySelectedCategory;
+		let location="";
 
+		if(source==="inbox")
+		{
+			location="Inbox"
+		}
+		else
+		{
+			if(source==="draft")
+			{
+				location="Drafts";
+			}
+			else
+			{
+				if(source==="sent")
+				{
+					location="Sent";
+				}
+			}
+		}
+
+		fetch('http://localhost:3000/api/all/emails/delete/'+location, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body:JSON.stringify({
+				idArray:idArray
+			})
+		});
 	}
 
-	function sendReadEmail(email)
+	function sendReadEmail(id,source)
 	{
+		let location="";
 
+		if(source==="inbox")
+		{
+			location="Inbox"
+		}
+		else
+		{
+			if(source==="draft")
+			{
+				location="Drafts";
+			}
+			else
+			{
+				if(source==="sent")
+				{
+					location="Sent";
+				}
+			}
+		}
+
+		fetch('http://localhost:3000/api/all/emails/read/'+location, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body:JSON.stringify({
+				id:id
+			})
+		});
 	}
 }
