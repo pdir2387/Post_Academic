@@ -618,7 +618,6 @@ export default function Email()
 		.then((res)=>res.json())
 		.then((res)=>{
 			let type=res.type.split(";")[0];
-			console.log(res);
 			let file=dataURLtoFile(res.bytes,type,res.name);
 			saveFileToDisk(file,res.name);
 		});

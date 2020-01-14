@@ -28,8 +28,13 @@ export default function Location()
 
         if(roomId)
         {
-            let coords=getInitialCoordinates(roomId);
-            changeMarkerLocation(coords.lat,coords.long);
+            fetch('http://localhost:3000/api/all/cladire/'+roomId)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                document.getElementById(location.buildingName).innerText=res.nume;
+                changeMarkerLocation(res.lat,res.long);
+            });
         }
     }, []);
 
@@ -50,16 +55,21 @@ export default function Location()
                     </table>
                 </div>
 
-                <div id={location.map}>
-                </div>
+                <h2 id={location.buildingName}></h2>
+
+                <div id={location.map}></div>
             </div>
         </div>
     );
 
     function getLocations()
     {
-        locations=JSON.parse('{"locations":[{"name":"FSEGA","lat":46.773077,"long":23.620982},{"name":"Cladirea centrala","lat":46.767536,"long":23.591345},{"name":"Parcul sportiv","lat":46.763206,"long":23.560394},{"name":"Facultatea de drept","lat":46.766426,"long":23.589613}]}').locations;
-        fillLocationsTable();
+        fetch('http://localhost:3000/api/all/cladiri')
+        .then(res => res.json())
+        .then(res => {
+            locations=res;
+            fillLocationsTable();
+        });        
     }
 
     function fillLocationsTable()
@@ -68,16 +78,20 @@ export default function Location()
 
         for(let i=0;i<locations.length;i++)
         {
+            let aux=locations[i];
             let trTable=document.createElement("tr");
             let tdLocation=document.createElement("td");
 
-            tdLocation.innerText=locations[i].name;
+            tdLocation.innerText=locations[i].nume;
             trTable.appendChild(tdLocation);
 
             let lat=locations[i].lat;
             let long=locations[i].long;
 
-            trTable.addEventListener('click',function(){changeMarkerLocation(lat,long)})
+            trTable.addEventListener('click',function(){
+                document.getElementById(location.buildingName).innerText=aux.nume;
+                changeMarkerLocation(lat,long);
+            });
             tbodyTable.appendChild(trTable);
         }
     }
@@ -104,12 +118,6 @@ export default function Location()
             id: 'mapbox/streets-v11',
             accessToken: 'pk.eyJ1IjoicGMyMDIwIiwiYSI6ImNrNTJ5cnMwMjAyZWEzZXBneTkwOHEyMTgifQ.wE3UaPU8-YHnyn4xvMIBtQ'
         }).addTo(mapToShow);
-    }
-
-    function getInitialCoordinates(roomid)
-    {
-        let coords={"lat":"46.773077","long":"23.620982"};
-        return coords;
     }
 
     function changeMarkerLocation(latitude,longitude)
