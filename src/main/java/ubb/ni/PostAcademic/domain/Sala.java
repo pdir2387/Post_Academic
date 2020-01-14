@@ -11,14 +11,15 @@ public class Sala {
     private Long id;
     @Column
     private String nume;
-    @Column
-    private String locatie;
+    @ManyToOne
+    @JoinColumn
+    private Cladire locatie;
 
-    public Sala(){
+    public Sala() {
 
     }
 
-    public Sala(String nume, String locatie) {
+    public Sala(String nume, Cladire locatie) {
         this.nume = nume;
         this.locatie = locatie;
     }
@@ -39,11 +40,11 @@ public class Sala {
         this.nume = nume;
     }
 
-    public String getLocatie() {
+    public Cladire getLocatie() {
         return locatie;
     }
 
-    public void setLocatie(String locatie) {
+    public void setLocatie(Cladire locatie) {
         this.locatie = locatie;
     }
 }

@@ -36,6 +36,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ubb.ni.PostAcademic.domain.*;
+import ubb.ni.PostAcademic.repo.CladireRepo;
+import ubb.ni.PostAcademic.repo.SalaRepo;
 import ubb.ni.PostAcademic.service.*;
 
 import javax.mail.Message;
@@ -61,6 +63,10 @@ public class MainController {
 	GrupaService grupaService;
 	@Autowired
 	EmailService emailService;
+	@Autowired
+	CladireRepo cladireRepo;
+	@Autowired
+	SalaRepo salaRepo;
 
 	@GetMapping(value = "/api/authority")
 	@ResponseBody
@@ -234,8 +240,63 @@ public class MainController {
 		return emailService.down(json.get("mailId").toString() ,json.get("fileId").toString() , folder).toString();
 	}
 
+	@GetMapping(value = "/api/all/cladiri", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String getCladiri() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+		JSONArray wrapper = new JSONArray();
+
+		for (Cladire cladire : cladireRepo.findAll()) {
+			JSONObject cladire_object = new JSONObject();
+			cladire_object.put("nume", cladire.getNume());
+			cladire_object.put("lat", cladire.getLatitudine());
+			cladire_object.put("long", cladire.getLongitudine());
+
+
+			wrapper.put(cladire_object);
+		}
+
+		return wrapper.toString();
+	}
+
+	@GetMapping(value = "/api/all/cladire/{sala}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String getCladiri(@PathVariable Long sala) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+
+		JSONObject cladire_object = new JSONObject();
+		for (Sala s : salaRepo.findAll()) {
+			if(s.getId() == sala){
+
+				cladire_object.put("nume", s.getLocatie().getNume());
+				cladire_object.put("lat", s.getLocatie().getLatitudine());
+				cladire_object.put("long", s.getLocatie().getLongitudine());
+			}
+
+		}
+
+		return cladire_object.toString();
+	}
+
 
 	//ADMIN
+	@GetMapping(value = "/api/student/contract", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String getContract() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+		JSONObject obj = new JSONObject();
+
+		obj.put("bytes", disciplinaService.getContract(user));
+
+		return obj.toString();
+	}
+
 	@PostMapping("/api/admin/addStudent")
 	public String addStudent(@RequestParam String username, @RequestParam String nume, @RequestParam String cnp, @RequestParam String telefon, @RequestParam String cod_student, @RequestParam String grupa, @RequestParam Integer semestru, @RequestParam String email, @RequestParam Integer anulInscrierii, @RequestParam String password) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

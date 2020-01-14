@@ -430,6 +430,7 @@ public class EmailService {
 
         JSONObject attach = new JSONObject();
 
+
         try {
             Session emailSession = Session.getDefaultInstance(properties);
 
@@ -456,10 +457,7 @@ public class EmailService {
                     MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(i);
                     if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
                         if(contor == Integer.parseInt(file_id)){
-                            System.out.println(part.getContent().toString());
                             byte[] byteArray = IOUtils.toByteArray(part.getInputStream());
-                            System.out.println(byteArray);
-                            System.out.println(new String(Base64.getEncoder().encode(byteArray)));
                             String bytes = new String(Base64.getEncoder().encode(byteArray));
                             attach.put("bytes", bytes);
                             attach.put("type", part.getContentType());
