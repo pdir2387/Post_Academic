@@ -39,7 +39,7 @@ export default function ContractsPage()
 
     function getAccountType()
     {
-        return "profesor";
+        return "student";
     }
 
     function getPeriod()
