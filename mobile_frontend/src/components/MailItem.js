@@ -6,6 +6,12 @@ export default class MailItem extends Component
   constructor(props)
   {
     super(props);
+    this.state={
+        read:props.read
+    }
+
+    this.sendRead = this.sendRead.bind(this);
+    this.subjectStyle = this.subjectStyle.bind(this);
   }
 
   componentDidMount()
@@ -17,7 +23,7 @@ export default class MailItem extends Component
   {    
     return (
         <View style={styles.itemContainer}>
-            <TouchableOpacity style={styles.container} onPress={()=>this.props.viewMail(this.props.mailData,this.props.type)}>
+            <TouchableOpacity style={styles.container} onPress={()=>{this.sendRead();this.props.viewMail(this.props.mailData,this.props.type)}}>
                 <View style={styles.toFromDateContainer}>
                     <View style={styles.toFromContainer}>
                         <Text style={styles.text}>{this.props.toFromText}</Text>
@@ -29,11 +35,59 @@ export default class MailItem extends Component
                 </View>
 
                 <View style={styles.subjectContainer}>
-                    <Text style={this.props.read==true ? styles.text : styles.bold}>{this.props.subject}</Text>
+                    <Text style={this.subjectStyle()}>{this.props.subject}</Text>
                 </View>
             </TouchableOpacity>
         </View>
     );
+  }
+
+  subjectStyle()
+  {
+    if(this.state.read===true)
+    {
+        return styles.text;
+    }
+
+    return styles.bold;
+  }
+
+  sendRead()
+  {
+    this.setState({read:true});
+
+    let location="";
+    let id=this.props.mailData.id;
+    let source=this.props.mailType;
+
+    if(source==="inbox")
+    {
+        location="Inbox"
+    }
+    else
+    {
+        if(source==="drafts")
+        {
+            location="Drafts";
+        }
+        else
+        {
+            if(source==="sent")
+            {
+                location="Sent";
+            }
+        }
+    }
+
+    // fetch('http://localhost:3000/api/all/emails/read/'+location, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //         },
+    //     body:JSON.stringify({
+    //         id:id
+    //     })
+    // });
   }
 }
 

@@ -65,7 +65,7 @@ export default class MailAttachmentItem extends Component
   {
       if(this.props.downloadFile!==undefined && this.props.fileId!==undefined)
       {
-          this.props.downloadFile(this.props.fileId);
+          this.props.downloadFile(this.props.mailId,this.props.fileId,this.props.mailType);
       }
   }
 

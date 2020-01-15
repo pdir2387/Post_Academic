@@ -89,7 +89,11 @@ export default class AttendancesScreen extends Component
 
   getDisciplines()
   {
-    this.setState({disciplines:["FP","OOP"]},()=>this.setDropDownItems());
+    // fetch('http://localhost:3000/api/student/materii/')
+    // .then(res => res.json())
+    // .then(res => {
+    //     this.setState({disciplines:res},()=>this.setDropDownItems());
+    // });
   }
 
   setDropDownItems()
@@ -128,57 +132,57 @@ export default class AttendancesScreen extends Component
   {
     if(discipline!=="")
     {
-      let c=[true,false,false,true,true,true,false,true,true,true,true,false,false,true];
-      let s=[false,true,false,true,true,true,false,true,true,true,true,false,false,true];
-      let l=[false,false,true,true,true,true,false,true,true,true,true,false,false,true];
+      // fetch('http://localhost:3000/api/student/prezente/'+discipline)
+      // .then(res => res.json())
+      // .then(res => {
+      //   let counter=0;
+      //   let attendancesCourse=res.curs.map(el=>{
+      //     if(el===true)
+      //     {
+      //         counter+=1;
+      //         return "x";
+      //     }
+      //     else
+      //     {
+      //         return "";
+      //     }
+      //   });
 
-      let counter=0;
-      let attendancesCourse=c.map(el=>{
-        if(el===true)
-        {
-            counter+=1;
-            return "x";
-        }
-        else
-        {
-            return "";
-        }
-      });
+      //   this.setState({courseAttendances:attendancesCourse});
+      //   this.setState({courseAttendancesCount:counter})
+      //   counter=0;
 
-      this.setState({courseAttendances:attendancesCourse});
-      this.setState({courseAttendancesCount:counter})
-      counter=0;
+      //   let attendancesSeminar=res.seminar.map(el=>{
+      //       if(el===true)
+      //       {
+      //           counter+=1;
+      //           return "x";
+      //       }
+      //       else
+      //       {
+      //           return "";
+      //       }
+      //   });
 
-      let attendancesSeminar=s.map(el=>{
-          if(el===true)
-          {
-              counter+=1;
-              return "x";
-          }
-          else
-          {
-              return "";
-          }
-      });
+      //   this.setState({seminarAttendances:attendancesSeminar});
+      //   this.setState({seminarAttendancesCount:counter})
+      //   counter=0;
+        
+      //   let attendancesLab=res.laborator.map(el=>{
+      //       if(el===true)
+      //       {
+      //           counter+=1;
+      //           return "x";
+      //       }
+      //       else
+      //       {
+      //           return "";
+      //       }
+      //   });
 
-      this.setState({seminarAttendances:attendancesSeminar});
-      this.setState({seminarAttendancesCount:counter})
-      counter=0;
-      
-      let attendancesLab=l.map(el=>{
-          if(el===true)
-          {
-              counter+=1;
-              return "x";
-          }
-          else
-          {
-              return "";
-          }
-      });
-
-      this.setState({labAttendances:attendancesLab});
-      this.setState({labAttendancesCount:counter});
+      //   this.setState({labAttendances:attendancesLab});
+      //   this.setState({labAttendancesCount:counter});
+      // });
     }
   }
 }
