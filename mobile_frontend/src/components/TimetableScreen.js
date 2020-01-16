@@ -23,7 +23,7 @@ function TabbedTimeTable() {
     function fetchOrar() {
         if (orar.length === 0)
             fetch('http://192.168.1.144:8080/api/orar')
-            //fetch('http://localhost:3000/api/student/ore')
+            //fetch('http://192.168.0.181:8080/api/student/ore')
             .then(res => res.json())
             .then(data => {
                 setOrar(data);

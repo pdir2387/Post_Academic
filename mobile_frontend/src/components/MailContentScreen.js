@@ -4,7 +4,7 @@ import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import MailFooter from './MailFooter';
 import MailAttachmentItem from './MailAttachmentItem';
-import RNFetchBlob from "react-native-fetch-blob";
+import * as FileSystem from 'expo-file-system';
 
 export default class MailContentScreen extends Component
 {
@@ -220,20 +220,22 @@ export default class MailContentScreen extends Component
             }
         }
 
-        // fetch('http://localhost:3000/api/all/emails/down/'+location, {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 		},
-		// 	body:JSON.stringify({
-		// 		mailId:mailId,
-		// 		fileId:fileId
-		// 	})
-		// })
-		// .then((res)=>res.json())
-		// .then((res)=>{
-        //     RNFetchBlob.fs.writeFile(res.name, res.bytes, 'base64')
-		// });
+        fetch('http://192.168.0.181:8080/api/all/emails/down/'+location, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body:JSON.stringify({
+				mailId:mailId,
+				fileId:fileId
+			})
+		})
+		.then((res)=>res.json())
+		.then((res)=>{
+            let path=FileSystem.documentDirectory+res.name;
+            console.log(path);
+            FileSystem.writeAsStringAsync(path, res.bytes, {encoding:FileSystem.EncodingType.Base64});
+		});
     }
 }
 

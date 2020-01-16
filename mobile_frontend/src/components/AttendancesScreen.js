@@ -64,7 +64,6 @@ export default class AttendancesScreen extends Component
                     <Col data={this.state.courseAttendances} textStyle={styles.text}/>
                     <Col data={this.state.seminarAttendances} textStyle={styles.text}/>
                     <Col data={this.state.labAttendances} textStyle={styles.text}/>
-                    {/* <Rows data={this.state.tableData} /> */}
                   </TableWrapper>
                 </TableWrapper>
               </Table>
@@ -89,11 +88,11 @@ export default class AttendancesScreen extends Component
 
   getDisciplines()
   {
-    // fetch('http://localhost:3000/api/student/materii/')
-    // .then(res => res.json())
-    // .then(res => {
-    //     this.setState({disciplines:res},()=>this.setDropDownItems());
-    // });
+    fetch('http://192.168.0.181:8080/api/student/materii/')
+    .then(res => res.json())
+    .then(res => {
+        this.setState({disciplines:res},()=>this.setDropDownItems());
+    });
   }
 
   setDropDownItems()
@@ -104,7 +103,7 @@ export default class AttendancesScreen extends Component
 
     for(let i=0;i<this.state.disciplines.length;i++)
     {
-      let item=<Picker.Item key={i+1} value={this.state.disciplines[i]} label={this.state.disciplines[i]}/>;
+      let item=<Picker.Item key={i+1} value={this.state.disciplines[i].code} label={this.state.disciplines[i].name}/>;
       newItems.push(item);
     }
 
@@ -132,57 +131,57 @@ export default class AttendancesScreen extends Component
   {
     if(discipline!=="")
     {
-      // fetch('http://localhost:3000/api/student/prezente/'+discipline)
-      // .then(res => res.json())
-      // .then(res => {
-      //   let counter=0;
-      //   let attendancesCourse=res.curs.map(el=>{
-      //     if(el===true)
-      //     {
-      //         counter+=1;
-      //         return "x";
-      //     }
-      //     else
-      //     {
-      //         return "";
-      //     }
-      //   });
+      fetch('http://192.168.0.181:8080/api/student/prezente/'+discipline)
+      .then(res => res.json())
+      .then(res => {
+        let counter=0;
+        let attendancesCourse=res.curs.map(el=>{
+          if(el===true)
+          {
+              counter+=1;
+              return "x";
+          }
+          else
+          {
+              return "";
+          }
+        });
 
-      //   this.setState({courseAttendances:attendancesCourse});
-      //   this.setState({courseAttendancesCount:counter})
-      //   counter=0;
+        this.setState({courseAttendances:attendancesCourse});
+        this.setState({courseAttendancesCount:counter})
+        counter=0;
 
-      //   let attendancesSeminar=res.seminar.map(el=>{
-      //       if(el===true)
-      //       {
-      //           counter+=1;
-      //           return "x";
-      //       }
-      //       else
-      //       {
-      //           return "";
-      //       }
-      //   });
+        let attendancesSeminar=res.seminar.map(el=>{
+            if(el===true)
+            {
+                counter+=1;
+                return "x";
+            }
+            else
+            {
+                return "";
+            }
+        });
 
-      //   this.setState({seminarAttendances:attendancesSeminar});
-      //   this.setState({seminarAttendancesCount:counter})
-      //   counter=0;
+        this.setState({seminarAttendances:attendancesSeminar});
+        this.setState({seminarAttendancesCount:counter})
+        counter=0;
         
-      //   let attendancesLab=res.laborator.map(el=>{
-      //       if(el===true)
-      //       {
-      //           counter+=1;
-      //           return "x";
-      //       }
-      //       else
-      //       {
-      //           return "";
-      //       }
-      //   });
+        let attendancesLab=res.laborator.map(el=>{
+            if(el===true)
+            {
+                counter+=1;
+                return "x";
+            }
+            else
+            {
+                return "";
+            }
+        });
 
-      //   this.setState({labAttendances:attendancesLab});
-      //   this.setState({labAttendancesCount:counter});
-      // });
+        this.setState({labAttendances:attendancesLab});
+        this.setState({labAttendancesCount:counter});
+      });
     }
   }
 }

@@ -30,13 +30,30 @@ export default class LocationsScreen extends Component
 
     if(this.state.roomId!==-1)
     {
-      // fetch('http://localhost:3000/api/all/cladire/'+this.state.roomId)
-      // .then(res => res.json())
-      // .then(res => {
-      //     this.setMarker(res.lat+","+res.long+","+res.nume);
-      // });
+      fetch('http://192.168.0.181:8080/api/all/cladire/'+this.state.roomId)
+      .then(res => res.json())
+      .then(res => {
+          this.setMarker(res.lat+","+res.long+","+res.nume);
+      });
     }
   }
+
+  willFocus = this.props.navigation.addListener('willFocus',(payload) => {
+    if(payload.action.params)
+    {
+        let newRoomId=payload.action.params.sala_id;
+        this.setState({roomId:newRoomId});
+
+        if(newRoomId!==-1)
+        {
+          fetch('http://192.168.0.181:8080/api/all/cladire/'+newRoomId)
+          .then(res => res.json())
+          .then(res => {
+              this.setMarker(res.lat+","+res.long+","+res.nume);
+          });
+        }
+    }
+  });
 
   render()
   {    
@@ -63,11 +80,11 @@ export default class LocationsScreen extends Component
 
   getLocations()
   {
-    // fetch('http://localhost:3000/api/all/cladiri')
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({locations:res},()=>this.setDropDownItems());
-    // });        
+    fetch('http://192.168.0.181:8080/api/all/cladiri')
+    .then(res => res.json())
+    .then(res => {
+      this.setState({locations:res},()=>this.setDropDownItems());
+    });        
   }
 
   setDropDownItems()

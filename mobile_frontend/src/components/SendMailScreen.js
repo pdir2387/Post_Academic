@@ -8,7 +8,7 @@ import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import MailAttachmentItem from './MailAttachmentItem';
 import * as DocumentPicker from 'expo-document-picker';
 import * as mime from 'react-native-mime-types';
-import RNFetchBlob from "react-native-fetch-blob";
+import * as FileSystem from 'expo-file-system';
 
 export default class SendMailScreen extends Component
 {
@@ -118,22 +118,22 @@ export default class SendMailScreen extends Component
     {
         if(this.state.to !== "")
 		{
-            // fetch('http://localhost:3000/api/all/emails/send', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body:JSON.stringify({
-            //         to:this.state.to,
-            //         subject:this.state.subject,
-            //         message:this.state.message,
-            //         attachments:this.state.attachmentFiles
-            //     })
-            // })
-            
-            this.setState({checkmarkMessage:"Trimis",showMessage:true},()=>{setInterval(() => {
-                this.setState({showMessage:false});
-            }, 2000)});
+            fetch('http://192.168.0.181:8080/api/all/emails/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({
+                    to:this.state.to,
+                    subject:this.state.subject,
+                    message:this.state.message,
+                    attachments:this.state.attachmentFiles
+                })
+            }).then(()=>{
+                this.setState({checkmarkMessage:"Trimis",showMessage:true},()=>{setInterval(() => {
+                    this.setState({showMessage:false});
+                }, 2000)});
+            })
 		}
 		else
 		{
@@ -150,36 +150,36 @@ export default class SendMailScreen extends Component
     {
         if(this.state.to!=="" || this.state.subject!== "" || this.state.message!=="")
     	{
-            // fetch('http://localhost:3000/api/all/emails/draft', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body:JSON.stringify({
-            //         to:this.state.to,
-            //         subject:this.state.subject,
-            //         message:this.state.message,
-            //         attachments:this.state.attachmentFiles
-            //     })
-            // }).then(()=>{
-            //     this.setState({checkmarkMessage:"Salvat",showMessage:true},()=>{setInterval(() => {
-            //     this.setState({showMessage:false});
-            //     }, 2000)});
-            // });
+            fetch('http://192.168.0.181:8080/api/all/emails/draft', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({
+                    to:this.state.to,
+                    subject:this.state.subject,
+                    message:this.state.message,
+                    attachments:this.state.attachmentFiles
+                })
+            }).then(()=>{
+                this.setState({checkmarkMessage:"Salvat",showMessage:true},()=>{setInterval(() => {
+                this.setState({showMessage:false});
+                }, 2000)});
+            });
     	}
     }
 
     async chooseFile()
     {
         let file = await DocumentPicker.getDocumentAsync({});
-
+        
         if(file.type==="success")
         {
             this.attachFile(file)
         }
     }
 
-    attachFile(file)
+    async attachFile(file)
     {
         let fileName=file.name;
         let newItems=this.state.attachmentItems;
@@ -191,17 +191,16 @@ export default class SendMailScreen extends Component
 
         let mimeType=mime.lookup(file.uri);
 
-        RNFetchBlob.fs.readFile(file.uri, 'base64')
-        .then((data) => {
-            const newFile={
-                uri: file.uri,
-                type: mimeType,
-                name: file.name,
-                bytes: data
-            }
-    
-            this.state.attachmentFiles.push(newFile);
-        })
+        let bytes=await FileSystem.readAsStringAsync(file.uri, {encoding:FileSystem.EncodingType.Base64});
+
+        const newFile={
+            uri: file.uri,
+            type: mimeType,
+            name: file.name,
+            bytes: bytes
+        }
+
+        this.state.attachmentFiles.push(newFile);
     }
 
     removeAttachment(uri)
