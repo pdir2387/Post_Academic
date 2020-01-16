@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CheckBox } from 'native-base';
 
 export default class MailItem extends Component
 {
@@ -12,6 +13,7 @@ export default class MailItem extends Component
 
     this.sendRead = this.sendRead.bind(this);
     this.subjectStyle = this.subjectStyle.bind(this);
+    this.checkBoxClicked = this.checkBoxClicked.bind(this);
   }
 
   componentDidMount()
@@ -23,6 +25,7 @@ export default class MailItem extends Component
   {    
     return (
         <View style={styles.itemContainer}>
+            <CheckBox onValueChange={(value)=>this.checkBoxClicked(value)}/>
             <TouchableOpacity style={styles.container} onPress={()=>{this.sendRead();this.props.viewMail(this.props.mailData,this.props.type)}}>
                 <View style={styles.toFromDateContainer}>
                     <View style={styles.toFromContainer}>
@@ -40,6 +43,11 @@ export default class MailItem extends Component
             </TouchableOpacity>
         </View>
     );
+  }
+
+  checkBoxClicked(value)
+  {
+    this.props.manageSelectedMails(this.props.mailData,value);
   }
 
   subjectStyle()

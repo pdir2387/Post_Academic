@@ -5,6 +5,7 @@ import NavBarOpener from './NavBarOpener';
 import MailFooter from './MailFooter';
 import MailItem from './MailItem';
 import Icon from 'react-native-vector-icons/Octicons';
+import Icon2 from 'react-native-vector-icons/AntDesign';
 
 export default class ViewMailsScreen extends Component
 {
@@ -14,10 +15,12 @@ export default class ViewMailsScreen extends Component
         this.state={
             toOpen:props.navigation.getParam("category","inbox"),
             title:"Mesaje primite",
+            currentlySelectedCategory:props.navigation.getParam("category","inbox"),
             inbox:[],
             drafts:[],
             sent:[],
             shownItems:[],
+            selectedMails:[]
         }
 
         this.composeMail = this.composeMail.bind(this);
@@ -34,6 +37,9 @@ export default class ViewMailsScreen extends Component
         this.getAllFolders = this.getAllFolders.bind(this);
         this.setShownItems = this.setShownItems.bind(this);
         this.pickScreen = this.pickScreen.bind(this);
+        this.manageSelectedMails = this.manageSelectedMails.bind(this);
+        this.deleteSelectedMails = this.deleteSelectedMails.bind(this);
+        this.sendDeleteRequest = this.sendDeleteRequest.bind(this);
     }
 
     componentDidMount()
@@ -66,6 +72,10 @@ export default class ViewMailsScreen extends Component
                     <Text style={styles.title}>
                         {this.state.title}
                     </Text>
+
+                    <View style={styles.options}>
+                        <Icon2.Button style={styles.iconButton} iconStyle={styles.icon} backgroundColor="transparent" name='delete' size={30} onPress={()=>this.deleteSelectedMails()}/>
+                    </View>
 
                     <ScrollView style={styles.mailsList}>
                         {this.state.shownItems}
@@ -111,21 +121,98 @@ export default class ViewMailsScreen extends Component
         }
     }
 
+    manageSelectedMails(mail,value)
+    {
+        if(value)
+        {
+            this.state.selectedMails.push(mail);
+        }
+        else
+        {
+            this.state.selectedMails.splice(this.state.selectedMails.indexOf(mail),1);
+        }
+    }
+
+    deleteSelectedMails()
+    {
+        let newItems=[];
+        let idArray=[];
+
+        for(let i=0;i<this.state.shownItems.length;i++)
+        {
+            let found=false;
+
+            for(let j=0;j<this.state.selectedMails.length;j++)
+            {
+                if(this.state.shownItems[i].props.mailData.id===this.state.selectedMails[j].id)
+                {
+                    found=true;
+                    idArray.push(this.state.selectedMails[j].id);
+                    break;
+                }
+            }
+
+            if(!found)
+            {
+                newItems.push(this.state.shownItems[i]);
+            }
+        }
+
+        this.setState({shownItems:newItems});
+
+        sendDeleteRequest(idArray);
+    }
+
+    sendDeleteRequest(idArray)
+    {
+        let source=this.state.currentlySelectedCategory;
+		let location="";
+
+		if(source==="inbox")
+		{
+			location="Inbox"
+		}
+		else
+		{
+			if(source==="drafts")
+			{
+				location="Drafts";
+			}
+			else
+			{
+				if(source==="sent")
+				{
+					location="Sent";
+				}
+			}
+		}
+
+		// fetch('http://localhost:3000/api/all/emails/delete/'+location, {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 		},
+		// 	body:JSON.stringify({
+		// 		idArray:idArray
+		// 	})
+		// });
+    }
+
     viewInbox()
     {
-        this.setState({title:"Mesaje primite"});
+        this.setState({title:"Mesaje primite",currentlySelectedCategory:"inbox"});
         this.getEmails();
     }
 
     viewDrafts()
     {
-        this.setState({title:"Schițe"});
+        this.setState({title:"Schițe",currentlySelectedCategory:"drafts"});
         this.getDrafts();
     }
 
     viewSent()
     {
-        this.setState({title:"Mesaje trimise"});
+        this.setState({title:"Mesaje trimise",currentlySelectedCategory:"sent"});
         this.getSent();
     }
 
@@ -171,7 +258,7 @@ export default class ViewMailsScreen extends Component
                 read=true;
             }
 
-            let item=<MailItem type={mailType} toFrom={destination} toFromText={mailDestination} date={mail.date} subject={mail.subject} read={read} viewMail={this.viewMail} mailData={mail}/>;
+            let item=<MailItem type={mailType} toFrom={destination} toFromText={mailDestination} date={mail.date} subject={mail.subject} read={read} viewMail={this.viewMail} mailData={mail} manageSelectedMails={this.manageSelectedMails}/>;
             newItems.push(item);
         }
 
@@ -246,11 +333,19 @@ const styles = StyleSheet.create({
     },
     composeIcon:{
     },
+    options:{
+        height:"10%"
+    },
     mailsList:{
         width: "100%",
-        height: "80%",
+        height: "70%",
         borderStyle: "solid",
         borderTopWidth: 2,
         borderColor: "grey",
-    }
+    },
+    iconButton:{
+        textAlign: "center",
+        justifyContent: "center",
+        height: "100%"
+    },
 });

@@ -99,43 +99,44 @@ export default class Login extends Component
     }
 
     login=()=>{
-        /*fetch('http://192.168.0.199:8080/api/login',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json',
-            },
-            body:JSON.stringify({
-                username:this.state.username,
-                password:this.state.password,
-            })
-        })
-        .then((response)=>response.json())
-        .then((res)=>{
-            if(res.error===false){
-                saveUser(res.user).then(()=>{
-                    saveJwt(res.jwt).then(()=>{
-                        this.props.navigation.navigate('HomePg',{user:res.user,connected:true});
-                    });
-                });
-            }
-            else{
-                alert(res.message);
-            }
-        })
-        .catch((error)=>{
-            getUser().then((foundUser)=>{
-                if(foundUser.username===this.state.username && foundUser.password===this.state.password)
-                {
-                    this.props.navigation.navigate('HomePg',{user:foundUser,connected:false});
-                }
-                else
-                {
-                    alert("Wrong username or password");
-                }
-            });
-        })
-        .done();*/
+        // fetch('http://localhost:3000/api/login',{
+        //     method:'POST',
+        //     headers:{
+        //         'Accept':'application/json',
+        //         'Content-Type':'application/json',
+        //     },
+        //     body:JSON.stringify({
+        //         username:this.state.username,
+        //         password:this.state.password,
+        //     })
+        // })
+        // .then((response)=>response.json())
+        // .then((res)=>{
+        //     console.log(res);
+        //     // if(res.error===false){
+        //     //     saveUser(res.user).then(()=>{
+        //     //         saveJwt(res.jwt).then(()=>{
+        //     //             this.props.navigation.navigate('HomePg',{user:res.user,connected:true});
+        //     //         });
+        //     //     });
+        //     // }
+        //     // else{
+        //     //     alert(res.message);
+        //     // }
+        // })
+        // // .catch((error)=>{
+        // //     getUser().then((foundUser)=>{
+        // //         if(foundUser.username===this.state.username && foundUser.password===this.state.password)
+        // //         {
+        // //             this.props.navigation.navigate('HomePg',{user:foundUser,connected:false});
+        // //         }
+        // //         else
+        // //         {
+        // //             alert("Wrong username or password");
+        // //         }
+        // //     });
+        // // })
+        // .done();
 
         this.props.navigation.navigate('Locations');
     }
