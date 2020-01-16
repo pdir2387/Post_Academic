@@ -7,6 +7,10 @@ export default function AttendanceTableProfessor()
 {
 	let [nrWeeks,setNrWeeks]=useState(14);
 	let [students,setStudents]=useState([]);
+	let [disciplinesItems,setDisciplinesItems]=useState([<option disabled selected value="nothing"> --- alege materia --- </option>]);
+	let [categoryItems,setCategoryItems]=useState([<option disabled selected value="nothing"> --- alege categoria --- </option>]);
+	let [groupItems,setGroupItems]=useState([<option selected value="nothing"> --- alege grupa --- </option>]);
+	let [groups,setGroups]=useState([]);
 
 	useEffect(() => 
 	{
@@ -15,17 +19,18 @@ export default function AttendanceTableProfessor()
 
 	function disciplineDropDownOptionsChanged()
 	{
-		fillTable(true);
+		let discipline=document.getElementById("disciplineDropDown").value;
+		getInfo(discipline);
 	}
 
 	function categoryDropDownOptionsChanged()
 	{
-		fillTable(false);
+		fillTable();
 	}
 
 	function groupNumberDropDownOptionsChanged()
 	{
-		fillTable(false);
+		fillTable();
 	}
 
     return (
@@ -35,19 +40,19 @@ export default function AttendanceTableProfessor()
 			<div id={attendances.dropDownContainer}>
 	            <fieldset className={`${commons.fieldset} ${attendances.fieldset}`}>
 	                <select id="disciplineDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={disciplineDropDownOptionsChanged}>
-	                    {getSelectOptionsDiscipline()}
+	                    {disciplinesItems}
 	                </select>
 	            </fieldset>
 
 	            <fieldset className={`${commons.fieldset} ${attendances.fieldset}`}>
 	                <select id="categoryDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={categoryDropDownOptionsChanged}>
-	                    {getSelectOptionsCategory()}
+	                    {categoryItems}
 	                </select>
 	            </fieldset>
 
 	            <fieldset className={`${commons.fieldset} ${attendances.fieldset}`}>
 	                <select id="groupNumberDropDown" className={`${commons.dropDown} ${attendances.dropDown}`} onChange={groupNumberDropDownOptionsChanged}>
-	                    {getSelectOptionsGroupNumber()}
+	                    {groupItems}
 	                </select>
 	            </fieldset>
             </div>
@@ -68,7 +73,7 @@ export default function AttendanceTableProfessor()
         </div>
     );
 
-    function fillTable(request)
+    function fillTable()
     {
     	let discipline=document.getElementById("disciplineDropDown").value;
     	let category=document.getElementById("categoryDropDown").value;
@@ -76,35 +81,29 @@ export default function AttendanceTableProfessor()
     	
     	if(discipline!=="nothing" && category!=="nothing")
     	{
-			fillRows(discipline,category,groupNumber,request);
+			fillRows(category,groupNumber);
 		}
     }
 
-    async function fillRows(discipline,groupNumber,request)
+    async function fillRows(category,groupNumber)
 	{
-		if(request)
-		{
-			students=await getStudents(discipline);
-			fillRowsWithStudentsOfGroup(groupNumber);
-		}
-		else
-		{
-			fillRowsWithStudentsOfGroup(groupNumber);
-		}
+		fillRowsWithStudentsOfGroup(category,groupNumber);
 	}
 
-	function fillRowsWithStudentsOfGroup(groupNumber)
+	function fillRowsWithStudentsOfGroup(category,groupNumber)
 	{
 		let tableBody=document.getElementById("tbody");
 		tableBody.innerHTML="";
 
+		console.log(students.length);
+
 		for(let i=0;i<students.length;i++)
 		{
-			if(groupNumber==="nothing" || students[i].groupNumber===groupNumber)
+			if(groupNumber==="nothing" || students[i].grupa===groupNumber)
 			{
 				let trStudent=document.createElement("tr");
 				let thNameStudent=document.createElement("th");
-				thNameStudent.innerHTML=students[i].name;
+				thNameStudent.innerHTML=students[i].nume;
 				thNameStudent.classList.add(attendances.stickyColumn);
 				trStudent.appendChild(thNameStudent);
 
@@ -112,8 +111,27 @@ export default function AttendanceTableProfessor()
 				{
 					let tdAttendance=document.createElement("td");
 					tdAttendance.classList.add(attendances.tdAttendance);
-					tdAttendance.innerHTML=students[i].attendances[j];
-					tdAttendance.addEventListener("click", function(){markAttendance(tdAttendance)});
+
+					if(category==="curs")
+					{
+						tdAttendance.innerHTML=students[i].prezente.curs[j]===true? "x" : "";
+					}
+					else
+					{
+						if(category==="seminar")
+						{
+							tdAttendance.innerHTML=students[i].prezente.seminar[j]===true? "x" : "";
+						}
+						else
+						{
+							if(category==="laborator")
+							{
+								tdAttendance.innerHTML=students[i].prezente.laborator[j]===true? "x" : "";
+							}
+						}
+					}
+					
+					tdAttendance.addEventListener("click", function(){markAttendance(tdAttendance,students[i].cod)});
 					trStudent.appendChild(tdAttendance);
 				}
 
@@ -122,35 +140,70 @@ export default function AttendanceTableProfessor()
 		}
 	}
 
-	function markAttendance(e)
+	function markAttendance(e,studentCode)
 	{
 		let discipline=document.getElementById("disciplineDropDown").value;
     	let category=document.getElementById("categoryDropDown").value;
-    	let studentName=e.parentElement.firstChild.innerText;
-    	let attendance=false;
+		let attendance=false;
+		let arr=e.parentNode.children;
+		let week=-1;
 
-		if(e.innerText==="x")
+		for(let i=0;i<arr.length;i++)
 		{
-			e.innerText="";
-		}
-		else
-		{
-			e.innerHTML="x";
-			attendance=true;
+			if(arr[i]===e)
+			{
+				week=i;
+				break;
+			}
 		}
 
-		sendAttendanceData(discipline,category,studentName,attendance);
+		if(week!==-1)
+		{
+			if(e.innerText==="x")
+			{
+				e.innerText="";
+			}
+			else
+			{
+				e.innerText="x";
+				attendance=true;
+			}
+
+			sendAttendanceData(discipline,category,studentCode,attendance,week);
+		}
 	}
 
-	function sendAttendanceData(discipline,category,studentName,attendance)
+	function sendAttendanceData(discipline,category,studentCode,attendance,week)
 	{
-		
+		fetch('http://localhost:3000/api/profesor/prezente/add', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body:JSON.stringify({
+				cod_disciplina:discipline,
+				categorie:category,
+				cod_student:studentCode,
+				prezent:attendance,
+				saptamana:week
+			})
+		});
 	}
 
-    function getStudents(discipline)
-    {
-		// return fetch('http://localhost:3000/api/student/materii/').then((res)=>res.json());
-    	students=JSON.parse('{"students":[ {"name":"Celeste Gale","groupNumber":"211","attendances":["x","x","x","x","x","x","x","x","x","x","x","x","x","x"]},{"name":"Nisha Deacon","groupNumber":"211","attendances":["x","x","","","x","x","x","x","","x","x","x","x","x"]},{"name":"Malcolm Horn","groupNumber":"212","attendances":["","","","","x","x","x","x","x","x","x","x","x","x"]},{"name":"Maurice Nielsen","groupNumber":"213","attendances":["x","","x","","x","","x","","x","","x","x","x","x"]}]}').students;
+    function getInfo(discipline)
+	{
+		fetch('http://localhost:3000/api/profesor/tipuriOra/'+discipline)
+		.then((res)=>res.json())
+		.then((res)=>{
+			setSelectOptionsCategory(res);
+
+			fetch('http://localhost:3000/api/profesor/studenti/'+discipline)
+			.then((response)=>response.json())
+			.then((response)=>{
+				setSelectOptionsGroupNumber(response);
+				setStudents(response);
+			});
+		})
     }
 
     function getSelectOptionsDiscipline()
@@ -159,43 +212,40 @@ export default function AttendanceTableProfessor()
      
 	     options.push(
 	        <option disabled selected value="nothing"> --- alege materia --- </option>
-	     )
+		 )
+		 
+		 fetch('http://localhost:3000/api/profesor/materii')
+		 .then(res => res.json())
+		 .then(res => {
+			 for(let i=0;i<res.length;i++)
+			 {
+				 let item=res[i];
+				 let itemDropDown=<option value={item.cod}>{item.nume}</option>;
+				 options.push(itemDropDown);
+			 }
 
-	     options.push(
-	        <option value="FP">FP</option>
-	     )
-
-	     options.push(
-	        <option value="OOP">OOP</option>
-	     )
-
-	     return options;
+			 setDisciplinesItems(options)
+		 });
 	}
 
-	function getSelectOptionsCategory()
+	function setSelectOptionsCategory(array)
 	{
 		let options=[];
      
-	     options.push(
-	        <option disabled selected value="nothing"> --- alege categoria --- </option>
-	     )
+	    options.push(
+	       <option disabled selected value="nothing"> --- alege categoria --- </option>
+	    )
+		
+		for(let i=0;i<array.length;i++)
+		{
+			let item=<option value={array[i]}>{array[i]}</option>
+			options.push(item);
+		}
 
-	     options.push(
-	        <option value="Curs">Curs</option>
-	     )
-
-	     options.push(
-	        <option value="Seminar">Seminar</option>
-	     )
-
-	     options.push(
-	        <option value="Laborator">Laborator</option>
-	     )
-
-	     return options;
+	    setCategoryItems(options);
 	}
 
-	function getSelectOptionsGroupNumber()
+	function setSelectOptionsGroupNumber(array)
 	{
 		let options=[];
      
@@ -203,35 +253,31 @@ export default function AttendanceTableProfessor()
 	        <option selected value="nothing"> --- alege grupa --- </option>
 	     )
 
-	     options.push(
-	        <option value="211">211</option>
-	     )
+		 for(let i=0;i<array.length;i++)
+		 {
+			 let groupNr=array[i].grupa;
 
-	     options.push(
-	        <option value="212">212</option>
-	     )
+			 if(!groups.includes(groupNr))
+			 {
+				groups.push(groupNr);
+				options.push(<option value={groupNr}>{groupNr}</option>)
+			 }
+		 }
 
-	     options.push(
-	        <option value="213">213</option>
-	     )
+		 for(let i=1;i<options.length-1;i++)
+		 {
+			 for(let j=i+1;j<options.length;j++)
+			 {
+				 if(options[i].value>options[j].value)
+				 {
+					let aux=options[i];
+					options[i]=options[j];
+					options[j]=aux;
+				 }
+			 }
+		 }
 
-	     options.push(
-	        <option value="214">214</option>
-	     )
-
-	     options.push(
-	        <option value="215">215</option>
-	     )
-
-	     options.push(
-	        <option value="216">216</option>
-	     )
-
-	     options.push(
-	        <option value="217">217</option>
-	     )
-
-	     return options;
+		 setGroupItems(options);
 	}
 
 	function getHeader()
