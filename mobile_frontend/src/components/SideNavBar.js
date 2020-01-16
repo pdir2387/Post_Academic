@@ -11,6 +11,7 @@ import StudentInfoScrenn from './StudentInfoScreen';
 import ViewMailsScreen from './ViewMailsScreen';
 import SendMailScreen from './SendMailScreen';
 import MailContentScreen from './MailContentScreen';
+import TimetableScreen from './TimetableScreen';
 
 class SideNavBar extends Component
 {
@@ -41,6 +42,12 @@ class Hidden extends Component
 }
 
 const navBar=createDrawerNavigator({
+    Timetable: {
+        screen: TimetableScreen,
+        navigationOptions: {
+            title: 'Orar'
+        }
+    },
     Attendances: {
         screen: AttendancesScreen,
         navigationOptions:{

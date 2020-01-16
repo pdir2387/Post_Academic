@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { StyleSheet, Text, View,TextInput,KeyboardAvoidingView,TouchableOpacity,AsyncStorage, Image} from 'react-native';
+import { StyleSheet, Text, View,TextInput,KeyboardAvoidingView,TouchableOpacity, ToastAndroid, Image} from 'react-native';
 import { CheckBox } from  'react-native-elements';
 import mainLogo from '../../assets/logo_facultate.png';
 import userPng from '../../assets/username.png';
@@ -57,6 +57,7 @@ export default class Login extends Component
                                 style={styles.textInput} placeholder='Username'
                                 onChangeText={(username)=>this.setState({username})}
                                 underlineColorAndroid='transparent'
+                                autoCapitalize="none"
                             />
                         </View>
 
@@ -71,6 +72,7 @@ export default class Login extends Component
                                 style={styles.textInput} placeholder='Password'
                                 onChangeText={(password)=>this.setState({password})}
                                 underlineColorAndroid='transparent'
+                                autoCapitalize="none"
                             />
                         </View>
 
@@ -98,46 +100,59 @@ export default class Login extends Component
     );
     }
 
-    login=()=>{
-        /*fetch('http://192.168.0.199:8080/api/login',{
+    login=() => {
+        console.log("Doing login btw");
+    
+        fetch('http://192.168.1.144:8080/api/login', {
             method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json',
+            headers: {
+                'Content-Type' : 'application/x-www-form-urlencoded',
             },
-            body:JSON.stringify({
-                username:this.state.username,
-                password:this.state.password,
-            })
+            body: 'username=' + this.state.username + '&password=' + this.state.password
         })
-        .then((response)=>response.json())
-        .then((res)=>{
-            if(res.error===false){
-                saveUser(res.user).then(()=>{
-                    saveJwt(res.jwt).then(()=>{
-                        this.props.navigation.navigate('HomePg',{user:res.user,connected:true});
-                    });
+        .then((response)=> {
+            return response.json();
+        })
+        .then(response => {
+            //console.log(response);
+
+            if (response.path === '/home') {
+                //login was successful, navigating to main screen(timetable)
+                this.props.navigation.navigate('Timetable', {
+                    user: this.state.username
                 });
             }
-            else{
-                alert(res.message);
+            else {
+                ToastAndroid.show('Date invalide! Incercati din nou', ToastAndroid.LONG);
+                this.setState({password: ''});
             }
         })
-        .catch((error)=>{
-            getUser().then((foundUser)=>{
-                if(foundUser.username===this.state.username && foundUser.password===this.state.password)
-                {
-                    this.props.navigation.navigate('HomePg',{user:foundUser,connected:false});
-                }
-                else
-                {
-                    alert("Wrong username or password");
-                }
-            });
-        })
-        .done();*/
 
-        this.props.navigation.navigate('Locations');
+        //.then((res)=>{
+        //     if(res.error===false){
+        //         saveUser(res.user).then(()=>{
+        //             saveJwt(res.jwt).then(()=>{
+        //                 this.props.navigation.navigate('HomePg',{user:res.user,connected:true});
+        //             });
+        //         });
+        //     }
+        //     else{
+        //         alert(res.message);
+        //     }
+        // })
+        // .catch((error)=>{
+        //     getUser().then((foundUser)=>{
+        //         if(foundUser.username===this.state.username && foundUser.password===this.state.password)
+        //         {
+        //             this.props.navigation.navigate('HomePg',{user:foundUser,connected:false});
+        //         }
+        //         else
+        //         {
+        //             alert("Wrong username or password");
+        //         }
+        //     });
+        // })
+
     }
 
 
@@ -180,7 +195,7 @@ const styles=StyleSheet.create({
         paddingBottom: 40,
     },
     logo:{
-        top: 0,
+        top: 40,
     },
     loginBoxContainer:{
         flex: 1,
