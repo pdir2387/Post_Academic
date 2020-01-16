@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 
 import commons from '../css/commons.module.css'
 import attendances from '../css/attendances.module.css'
@@ -8,6 +8,11 @@ export default function AttendanceTableProfessor()
 	let [nrWeeks,setNrWeeks]=useState(14);
 	let [students,setStudents]=useState([]);
 
+	useEffect(() => 
+	{
+		getSelectOptionsDiscipline();
+    }, []); 
+
 	function disciplineDropDownOptionsChanged()
 	{
 		fillTable(true);
@@ -15,7 +20,7 @@ export default function AttendanceTableProfessor()
 
 	function categoryDropDownOptionsChanged()
 	{
-		fillTable(true);
+		fillTable(false);
 	}
 
 	function groupNumberDropDownOptionsChanged()
@@ -75,13 +80,21 @@ export default function AttendanceTableProfessor()
 		}
     }
 
-    function fillRows(discipline,category,groupNumber,request)
+    async function fillRows(discipline,groupNumber,request)
 	{
 		if(request)
 		{
-			getStudents();
+			students=await getStudents(discipline);
+			fillRowsWithStudentsOfGroup(groupNumber);
 		}
+		else
+		{
+			fillRowsWithStudentsOfGroup(groupNumber);
+		}
+	}
 
+	function fillRowsWithStudentsOfGroup(groupNumber)
+	{
 		let tableBody=document.getElementById("tbody");
 		tableBody.innerHTML="";
 
@@ -134,8 +147,9 @@ export default function AttendanceTableProfessor()
 		
 	}
 
-    function getStudents(discipline,category,groupNumber)
+    function getStudents(discipline)
     {
+		// return fetch('http://localhost:3000/api/student/materii/').then((res)=>res.json());
     	students=JSON.parse('{"students":[ {"name":"Celeste Gale","groupNumber":"211","attendances":["x","x","x","x","x","x","x","x","x","x","x","x","x","x"]},{"name":"Nisha Deacon","groupNumber":"211","attendances":["x","x","","","x","x","x","x","","x","x","x","x","x"]},{"name":"Malcolm Horn","groupNumber":"212","attendances":["","","","","x","x","x","x","x","x","x","x","x","x"]},{"name":"Maurice Nielsen","groupNumber":"213","attendances":["x","","x","","x","","x","","x","","x","x","x","x"]}]}').students;
     }
 

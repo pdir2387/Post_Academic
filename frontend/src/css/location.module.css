@@ -42,3 +42,7 @@
     flex: 4;
     display: none;
 }
+
+#buildingName{
+    margin: 10px;
+}

@@ -191,6 +191,7 @@ export default function Email()
 			let tdFrom=document.createElement("td");
 			let tdDate=document.createElement("td");
 			let tdMessage=document.createElement("td");
+			let tdMailId=document.createElement("td");
 
 			let checkboxRow = document.createElement("input");
 			checkboxRow.type="checkbox";
@@ -200,6 +201,7 @@ export default function Email()
 			tdFrom.innerText=toFill[i].from;
 			tdDate.innerText=toFill[i].date;
 			tdMessage.innerText=toFill[i].message.replace("\n","\\n");
+			tdMailId.innerText=toFill[i].id;
 			
 			if(toFill[i].read==="false")
 			{
@@ -209,12 +211,14 @@ export default function Email()
 			}
 
 			tdMessage.style.display="none";
+			tdMailId.style.display="none";
 			
 			trEmail.appendChild(tdCheck);
 			trEmail.appendChild(tdSubject);
 			trEmail.appendChild(tdFrom);
 			trEmail.appendChild(tdDate);
 			trEmail.appendChild(tdMessage);
+			trEmail.appendChild(tdMailId);
 
 			tbodyEmail.appendChild(trEmail)
 
@@ -275,11 +279,11 @@ export default function Email()
 					}
 
 					aux.read="true";
-					sendReadEmail(aux.id);
+					sendReadEmail(aux.id,"inbox");
 				}
 
 				fillMessageBox(this,"email");
-				showAttachments(aux.id,aux.attachments);
+				showAttachments(aux.id,aux.attachments,"inbox");
 				currentlySelectedMail=this;
 			});
 		}
@@ -323,7 +327,14 @@ export default function Email()
 			tdTo.innerText=toFill[i].to;
 			tdDate.innerText=toFill[i].date;
 			tdMessage.innerText=toFill[i].message.replace("\n","\\n");
-			tdMailId.innertext=toFill[i].id;
+			tdMailId.innerText=toFill[i].id;
+
+			if(toFill[i].read==="false")
+			{
+				tdSubject.style.fontWeight="bold";
+				tdTo.style.fontWeight="bold";
+				tdDate.style.fontWeight="bold";
+			}
 
 			tdMessage.style.display="none";
 			tdMailId.style.display="none";
@@ -355,12 +366,7 @@ export default function Email()
 				}
 			});
 			
-			let aux=null;
-
-			if(source==="sent")
-			{
-				aux=toFill[i];
-			}
+			let aux=toFill[i];
 
 			trEmail.addEventListener("click",function()
 			{
@@ -378,12 +384,22 @@ export default function Email()
 				this.style.backgroundColor="#e30707";
 				this.style.color="white";
 
+				let emailTd=this.children;
+
+				if(aux.read==="false")
+				{
+					for(let j=0;j<emailTd.length;j++)
+					{
+						emailTd[j].style.fontWeight="normal";
+					}
+
+					aux.read="true";
+					sendReadEmail(aux.id,source);
+				}
+
 				fillMessageBox(this,source);
 
-				if(source==="sent")
-				{
-					showAttachments(aux.id,aux.attachments);
-				}
+				showAttachments(aux.id,aux.attachments,source);
 
 				currentlySelectedMail=this;
 			});
@@ -504,7 +520,7 @@ export default function Email()
 		messageContainer.appendChild(message);
 	}
 
-	function showAttachments(mailId,attachments)
+	function showAttachments(mailId,attachments,source)
 	{
 		let attachmentsArea=document.getElementById(emailCss.attachmentsArea);
 
@@ -525,15 +541,86 @@ export default function Email()
 
 			attachmentElement.appendChild(attachmentElmentExtension);
 			attachmentElement.appendChild(attachmentElementFileName);
-			attachmentElement.addEventListener('click',function(){downloadFile(mailId,id)});
+			attachmentElement.addEventListener('click',function(){downloadFile(mailId,id,source)});
 
 			attachmentsArea.appendChild(attachmentElement);
 		}
 	}
 
-	function downloadFile(id)
+	function saveFileToDisk(file,fileName)
 	{
-		
+		if (window.navigator.msSaveOrOpenBlob)
+		{ // IE10+
+			window.navigator.msSaveOrOpenBlob(file, fileName);
+		}
+		else 
+		{ // Others
+			var a = document.createElement("a"),
+					url = URL.createObjectURL(file);
+			a.href = url;
+			a.download = fileName;
+			document.body.appendChild(a);
+			a.click();
+			setTimeout(function() {
+				document.body.removeChild(a);
+				window.URL.revokeObjectURL(url);  
+			}, 0); 
+		}
+	}
+
+	function dataURLtoFile(bytes, type, fileName) 
+	{
+		let bstr = atob(bytes);
+		let n = bstr.length;
+		let u8arr = new Uint8Array(n);
+            
+		while(n--)
+		{
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        
+        return new File([u8arr], fileName, {type:type});
+    }
+
+	function downloadFile(mailId,fileId,source)
+	{
+		let location="";
+
+		if(source==="inbox")
+		{
+			location="Inbox"
+		}
+		else
+		{
+			if(source==="draft")
+			{
+				location="Drafts";
+			}
+			else
+			{
+				if(source==="sent")
+				{
+					location="Sent";
+				}
+			}
+		}
+
+		fetch('http://localhost:3000/api/all/emails/down/'+location, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body:JSON.stringify({
+				mailId:mailId,
+				fileId:fileId
+			})
+		})
+		.then((res)=>res.json())
+		.then((res)=>{
+			let type=res.type.split(";")[0];
+			let file=dataURLtoFile(res.bytes,type,res.name);
+			saveFileToDisk(file,res.name);
+		});
 	}
 
 	function getBlockQuoteHTML(lines)
@@ -657,7 +744,7 @@ export default function Email()
 
 			for(let i=0;i<selectedEmails.length;i++)
 			{
-				toDeleteMailsIds.push(selectedEmails[i].children[5].innerText);
+				toDeleteMailsIds.push(parseInt(selectedEmails[i].children[5].innerText));
 
 				if(currentlySelectedCategory==="inbox")
 				{
@@ -821,19 +908,70 @@ export default function Email()
 
 	function sendDeleteRequest(idArray)
 	{
-		// fetch('http://localhost:3000/api/all/emails/send', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 		},
-		// 	body:JSON.stringify({
-		// 		idArray:idArray
-		// 	})
-		// });
+		let source=currentlySelectedCategory;
+		let location="";
+
+		if(source==="inbox")
+		{
+			location="Inbox"
+		}
+		else
+		{
+			if(source==="draft")
+			{
+				location="Drafts";
+			}
+			else
+			{
+				if(source==="sent")
+				{
+					location="Sent";
+				}
+			}
+		}
+
+		fetch('http://localhost:3000/api/all/emails/delete/'+location, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body:JSON.stringify({
+				idArray:idArray
+			})
+		});
 	}
 
-	function sendReadEmail(id)
+	function sendReadEmail(id,source)
 	{
+		let location="";
 
+		if(source==="inbox")
+		{
+			location="Inbox"
+		}
+		else
+		{
+			if(source==="draft")
+			{
+				location="Drafts";
+			}
+			else
+			{
+				if(source==="sent")
+				{
+					location="Sent";
+				}
+			}
+		}
+
+		fetch('http://localhost:3000/api/all/emails/read/'+location, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body:JSON.stringify({
+				id:id
+			})
+		});
 	}
 }

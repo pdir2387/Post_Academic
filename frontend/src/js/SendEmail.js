@@ -58,7 +58,7 @@ export default function SendEmail()
 
     function startDraftSaver()
     {
-		draftSaver=setInterval(function(){ saveDraft(); }, 30000);
+		draftSaver=setInterval(function(){ saveDraft(); }, 60000);
 	}
 	
 	function getBytesOfFile(file)
@@ -107,18 +107,18 @@ export default function SendEmail()
 		if(to !== "")
 		{
 			getFilesInfo(filesToSend).then((files)=>{
-				// fetch('http://localhost:3000/api/all/emails/send', {
-				// 	method: 'POST',
-				// 	headers: {
-				// 		'Content-Type': 'application/json'
-				// 	},
-				// 	body:JSON.stringify({
-				// 		to:to,
-				// 		subject:subject,
-				// 		message:message,
-				// 		attachments:files
-				// 	})
-				// })
+				fetch('http://localhost:3000/api/all/emails/send', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body:JSON.stringify({
+						to:to,
+						subject:subject,
+						message:message,
+						attachments:files
+					})
+				})
 			})
 			
 
@@ -239,17 +239,20 @@ export default function SendEmail()
 
     	if(to!=="" || subject!== "" || message!=="")
     	{
-			// fetch('http://localhost:3000/api/all/emails/send', {
-			// 	method: 'POST',
-			// 	headers: {
-			// 		'Content-Type': 'application/json'
-			// 	  },
-			// 	body:JSON.stringify({
-			// 		to:to,
-			// 		subject:subject,
-			// 		message:message,
-			// 	})
-			// }).then(()=>showConfirmation("Schiță salvată"));
+			getFilesInfo(filesToSend).then((files)=>{
+				fetch('http://localhost:3000/api/all/emails/draft', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body:JSON.stringify({
+						to:to,
+						subject:subject,
+						message:message,
+						attachments:files
+					})
+				}).then(()=>showConfirmation("Schiță salvată"));
+			})
     	}
     }
 }

@@ -232,10 +232,14 @@
 #deleteButtonMail,#saveDraftButton{
     margin-left: 20px;
     background-color: white;
+    border: 0;
+    outline: 0;
 }
 
 #searchButtonEmail{
     background-color: white;
+    border: 0;
+    outline: 0;
 }
 
 #attachmentsTable{

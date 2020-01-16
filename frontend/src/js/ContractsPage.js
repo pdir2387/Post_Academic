@@ -39,12 +39,12 @@ export default function ContractsPage()
 
     function getAccountType()
     {
-        return "profesor";
+        return "student";
     }
 
     function getPeriod()
     {
-        return JSON.parse('{"period":"1"}').period;
+        return JSON.parse('{"period":"0"}').period;
     }
 
     function ContractsPageContent(props)

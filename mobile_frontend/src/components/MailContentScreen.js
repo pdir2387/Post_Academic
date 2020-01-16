@@ -4,6 +4,7 @@ import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import MailFooter from './MailFooter';
 import MailAttachmentItem from './MailAttachmentItem';
+import RNFetchBlob from "react-native-fetch-blob";
 
 export default class MailContentScreen extends Component
 {
@@ -43,8 +44,7 @@ export default class MailContentScreen extends Component
             let newType=payload.action.params.type;
             this.setState({mail:newMail,type:newType,attachmentItems:[]},()=>{this.setupInfo()});
         }
-    }
-);
+    });
 
     render()
     {    
@@ -122,23 +122,20 @@ export default class MailContentScreen extends Component
     {
         let mail=this.state.mail;
 
-        this.setState({subject:mail.subject});
-        this.setState({message:mail.message});
+        this.setState({subject:mail.subject,message:mail.message});
 
         if(mail.to===null || mail.to===undefined)
         {
             if(mail.from!==null && mail.from!==undefined)
             {
                 let aux=this.state.mail.from;
-                this.setState({toFrom:aux});
-                this.setState({destination:"Expeditor: "});
+                this.setState({toFrom:aux,destination:"Expeditor: "});
             }
         }
         else
         {
             let aux=this.state.mail.to;
-            this.setState({toFrom:aux});
-            this.setState({destination:"Destinatar: "});
+            this.setState({toFrom:aux,destination:"Destinatar: "});
         }
 
         this.setAttachmentFiles();
@@ -187,25 +184,56 @@ export default class MailContentScreen extends Component
     {
         let type=this.state.type;
 
-        if(type==="inbox" || type==="sent")
+        let files=this.state.mail.attachments;
+        let newItems=[];
+
+        for(let i=0;i<files.length;i++)
         {
-            let files=this.state.mail.attachments;
-            let newItems=[];
-
-            for(let i=0;i<files.length;i++)
-            {
-                let file=files[i];
-                let item=<MailAttachmentItem key={file.id} fileId={file.id} extension={file.name.split(".")[1]} fileName={file.name} downloadFile={this.downloadFile}/>
-                newItems.push(item);
-            }
-
-            this.setState({attachmentItems:newItems});
+            let file=files[i];
+            let item=<MailAttachmentItem key={file.id} mailType={type} mailId={this.state.mail.id} fileId={file.id} extension={file.name.split(".")[1]} fileName={file.name} downloadFile={this.downloadFile}/>
+            newItems.push(item);
         }
+
+        this.setState({attachmentItems:newItems});
     }
 
-    downloadFile(id)
+    downloadFile(mailId,fileId,source)
     {
+        let location="";
 
+        if(source==="inbox")
+        {
+            location="Inbox"
+        }
+        else
+        {
+            if(source==="drafts")
+            {
+                location="Drafts";
+            }
+            else
+            {
+                if(source==="sent")
+                {
+                    location="Sent";
+                }
+            }
+        }
+
+        // fetch('http://localhost:3000/api/all/emails/down/'+location, {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 		},
+		// 	body:JSON.stringify({
+		// 		mailId:mailId,
+		// 		fileId:fileId
+		// 	})
+		// })
+		// .then((res)=>res.json())
+		// .then((res)=>{
+        //     RNFetchBlob.fs.writeFile(res.name, res.bytes, 'base64')
+		// });
     }
 }
 
