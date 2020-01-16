@@ -84,7 +84,7 @@ public class UserService {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
             if(error.isEmpty()){
-                User user_nou = new User(username, passwordEncoder.encode(password), AccountType.student);
+                User user_nou = new User(username, passwordEncoder.encode(password), AccountType.profesor);
                 userRepo.save(user_nou);
 
 
@@ -150,7 +150,7 @@ public class UserService {
         if(user.getAccountType().equals(AccountType.admin)){
 
             if(error.isEmpty()){
-                userRepo.delete(getByUsername(username));
+                profesorRepo.delete(getProfesorByUsername(username));
             }
         }
         return error;
