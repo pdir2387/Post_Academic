@@ -102,6 +102,10 @@ export default class Login extends Component
     }
 
     login=() => {
+        this.props.navigation.navigate('Timetable', {
+            user: this.state.username
+        });
+        
         fetch(backend_base_url + 'api/login', {
             method:'POST',
             headers: {
