@@ -12,6 +12,7 @@ export default function TeacherNavBar(){
             <NavBarItem buttonText="ORAR" url="/home"/>
             <NavBarItem buttonText="PREZENTA" url="/prezenta"/>
             <NavBarItem buttonText="NOTE" url="/note"/>
+            <NavBarItem buttonText="MEDII" url="/medii"/>
             <NavBarItem buttonText="E-MAIL" url="/email"/>
         </div>
     )
