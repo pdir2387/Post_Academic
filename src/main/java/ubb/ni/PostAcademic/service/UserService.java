@@ -55,6 +55,15 @@ public class UserService {
         return null;
     }
 
+    public Student getStudentByCod(String cod){
+        for(Student s : studentRepo.findAll()){
+            if(s.getCod_student().equals(cod)){
+                return s;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Student> getStudentiByMaterie(User user, String disciplina){
         ArrayList<Student> students = new ArrayList<>();
         if(user.getAccountType().equals(AccountType.profesor)) {

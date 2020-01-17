@@ -35,6 +35,42 @@ public class OraService {
         return ore;
     }
 
+    public ArrayList<TipOra> getTipuriOraProf(User user, String disciplina){
+        ArrayList<TipOra> tipuri = new ArrayList<>();
+
+        if(user.getAccountType().equals(AccountType.profesor)) {
+            Profesor prof = userService.getProfesorByUsername(user.getUsername());
+
+            boolean foundCurs = false;
+            boolean foundSeminar = false;
+            boolean foundLab = false;
+            for (Ora ora : oraRepo.findAll()) {
+                if (foundCurs && foundSeminar && foundLab) {
+                    break;
+                }
+
+                if (ora.getProfesor().equals(prof) && ora.getDisciplina().getCodDisciplina().equals(disciplina)) {
+                    if (!foundCurs && ora.getTipOra().equals(TipOra.curs)) {
+                        tipuri.add(TipOra.curs);
+                        foundCurs = true;
+                        continue;
+                    }
+                    if (!foundSeminar && ora.getTipOra().equals(TipOra.seminar)) {
+                        tipuri.add(TipOra.seminar);
+                        foundSeminar = true;
+                        continue;
+                    }
+                    if (!foundLab && ora.getTipOra().equals(TipOra.laborator)) {
+                        tipuri.add(TipOra.laborator);
+                        foundLab = true;
+                    }
+                }
+            }
+        }
+        return tipuri;
+
+    }
+
     public ArrayList<Ora> getOreByMaterie(User user, String disciplina){
         if(user.getAccountType().equals(AccountType.student)){
             Student student = userService.getStudentByUsername(user.getUsername());

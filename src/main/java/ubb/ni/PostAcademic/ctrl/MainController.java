@@ -373,9 +373,12 @@ public class MainController {
 
 		JSONArray wrapper = new JSONArray();
 
+		if(notaService.getNoteByMaterie(user, disciplina) == null){
+			return wrapper.toString();
+		}
 		for (Nota nota : notaService.getNoteByMaterie(user, disciplina)) {
 			JSONObject nota_object = new JSONObject();
-			nota_object.put("materie", nota.getOra().getDisciplina());
+			nota_object.put("materie", nota.getOra().getDisciplina().getNume());
 			nota_object.put("saptamana", nota.getSaptamana().toString());
 			nota_object.put("nota", nota.getNota());
 			nota_object.put("tip", nota.getOra().getTipOra().toString());
@@ -855,33 +858,33 @@ public class MainController {
         return wrapper.toString();
     }
 
-    @GetMapping(value = "/api/profesor/prezente/{disciplina}/{tip}" , produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String getPrezenteByMaterieAndTip(@PathVariable("disciplina") String disciplina, @PathVariable("tip") String tip) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByUsername(auth.getName());
-
-        JSONObject wrapper = new JSONObject();
-
-        ArrayList<ArrayList<Boolean>> prezenteByMaterie = prezentaService.getPrezenteByMaterie(user, disciplina);
-
-        for (int i = 0; i < 3; i++) {
-            ArrayList<Boolean> lista_prezente = prezenteByMaterie.get(i);
-            ArrayList<String> prezente = new ArrayList<>();
-            for (Boolean p : lista_prezente) {
-                if (p) {
-                    prezente.add("x");
-                } else {
-                    prezente.add("");
-                }
-            }
-
-
-            wrapper.put(TipOra.values()[i].toString(), prezente);
-        }
-
-        return wrapper.toString();
-    }
+//    @GetMapping(value = "/api/profesor/prezente/{disciplina}/{tip}" , produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public String getPrezenteByMaterieAndTip(@PathVariable("disciplina") String disciplina, @PathVariable("tip") String tip) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        User user = userService.getByUsername(auth.getName());
+//
+//        JSONObject wrapper = new JSONObject();
+//
+//        ArrayList<ArrayList<Boolean>> prezenteByMaterie = prezentaService.getPrezenteByMaterie(user, disciplina);
+//
+//        for (int i = 0; i < 3; i++) {
+//            ArrayList<Boolean> lista_prezente = prezenteByMaterie.get(i);
+//            ArrayList<String> prezente = new ArrayList<>();
+//            for (Boolean p : lista_prezente) {
+//                if (p) {
+//                    prezente.add("x");
+//                } else {
+//                    prezente.add("");
+//                }
+//            }
+//
+//
+//            wrapper.put(TipOra.values()[i].toString(), prezente);
+//        }
+//
+//        return wrapper.toString();
+//    }
 
     @GetMapping(value = "/api/profesor/note/disciplina/{disciplina}/{tip}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -942,11 +945,45 @@ public class MainController {
             JSONObject nota_object = new JSONObject();
             nota_object.put("nume", student.getNume());
             nota_object.put("grupa", student.getGrupa().getNume());
+
+            ArrayList<ArrayList<Boolean>> prezenteByMaterie = prezentaService.getPrezenteByMaterie(student.getUser(), disciplina);
+
+            JSONObject prezente = new JSONObject();
+            for (int i = 0; i < 3; i++) {
+                ArrayList<Boolean> lista_prezente = prezenteByMaterie.get(i);
+
+
+
+                prezente.put(TipOra.values()[i].toString(), lista_prezente);
+            }
+
+            nota_object.put("cod", student.getCod_student());
+            nota_object.put("prezente", prezente);
+
             wrapper.put(nota_object);
         }
 
         return wrapper.toString();
     }
+
+    @GetMapping(value = "/api/profesor/tipuriOra/{disciplina}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getTipuriOraProf(@PathVariable("disciplina") String disciplina) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        JSONArray wrapper = new JSONArray();
+
+        for (TipOra tip : oraService.getTipuriOraProf(user, disciplina)) {
+            wrapper.put(tip.toString());
+        }
+
+        return wrapper.toString();
+    }
+
+
+
+
 
     @GetMapping(value = "/api/profesor/studenti/{disciplina}/{grupa}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -996,5 +1033,15 @@ public class MainController {
 
 		return notaService.addNota(user, disciplina, student_ob, json.getString("saptamana"), json.getString("nota"), json.getString("tip"), json.getString("observatii"));
 	}
+
+    @PostMapping(value = "/api/profesor/prezente/add", consumes = "application/json")
+    public String addPrezenta(@RequestBody String body){
+        JSONObject json = new JSONObject(body);
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+        return prezentaService.addPrezenta(user, json.get("cod_disciplina").toString(), json.get("cod_student").toString(), json.getString("categorie"), json.get("saptamana").toString(), json.get("prezent").toString());
+    }
 
 }
