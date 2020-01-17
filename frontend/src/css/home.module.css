@@ -89,5 +89,5 @@
 .logoutButton:active {
     background-color: #212a3a;
     box-shadow: 0 3px #666;
-    transform: translateY(4px);
+    transform: translateY(3px);
 }

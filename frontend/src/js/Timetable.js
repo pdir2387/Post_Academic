@@ -99,7 +99,7 @@ function Timetable() {
                 else if (column.tip === 'laborator')
                     style['backgroundColor'] = 'lightgreen';
                 else 
-                    style['backgroundColor'] = 'orange';
+                    style['backgroundColor'] = '#e59bff';
 
                 rowArray.push(
                     <div className={tableCss.cell} style={style}>
@@ -111,9 +111,14 @@ function Timetable() {
                 )
             }
             else {
-                rowArray.push(
-                    <div className={tableCss.cell}>{column}</div>
-                )
+                // if(column.nume == 'luni') {
+                //     rowArray.push(
+                //         <div className={tableCss.headerCell}>{column}</div>
+                //     )
+                // }
+                    rowArray.push(
+                        <div className={tableCss.cell}>{column}</div>
+                    )
             }
         }
     
