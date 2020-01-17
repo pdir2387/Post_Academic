@@ -43,7 +43,7 @@ export default function StudentGrades() {
 
             <table className={commons.table}>
                 <tr>
-                    <th>DATA</th>
+                    <th>SĂPTĂMÂNĂ</th>
                     <th>NOTA</th>
                     <th>C/S/L</th>
                     <th>NOTIȚE</th>
@@ -102,7 +102,7 @@ function getThsTitle(){
     let THList = [];
 
     THList.push(
-        <td>DATA</td>
+        <td>SĂPTĂMÂNĂ</td>
     );
     THList.push(
         <td>NOTA</td>
