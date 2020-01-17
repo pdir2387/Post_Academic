@@ -6,4 +6,6 @@ import ubb.ni.PostAcademic.domain.Disciplina;
 import ubb.ni.PostAcademic.domain.Ora;
 
 public interface ContractRepo extends CrudRepository<ContractStudii, Long> {
+    ContractStudii findContractStudiiByAnStart(Integer anStart);
+    ContractStudii findFirstByAnStart(Integer anStart);
 }

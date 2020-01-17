@@ -5,7 +5,8 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import NavBarOpener from './NavBarOpener';
 import {backend_base_url} from '../misc/constants';
 import { State } from 'react-native-gesture-handler';
-
+import rosita_logo from '../../assets/logo_rosita.png';
+import LoadingDots from "react-native-loading-dots";
   
 class RositaTextView extends React.Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class RositaTextView extends React.Component {
             index : 0,
             _interval : -1,
             colors : ['red', 'blue', 'green', 'black'],
-            phrases : ['tidor', 'rosita', 'hardcoded phrase'],
+            phrases : ['Try saying: Who is teaching software security?','Try saying: Search something about artificial intelligence on wikipedia.','Try saying: What\'s the time?','Try saying: What\'s the next big holiday?','Try saying: Where\'s Bucharest?','Try saying: What\'s my schedule for tomorrow?','Try saying: I like databases, what can you recommend?','Try saying: Open youtube.'],
         }
     }
     
@@ -24,7 +25,7 @@ class RositaTextView extends React.Component {
             let newIndex = this.state.index + 1;
 
             this.setState({index : newIndex});
-        }, 1000);
+        }, 2500);
 
         this.setState({_interval : intervalReference});
     }
@@ -37,9 +38,12 @@ class RositaTextView extends React.Component {
     render() {
         return (
             <View style={{display: 'flex', flexDirection: "row", padding: 10}}>
-                <Text style={{color: this.state.colors[this.state.index % this.state.colors.length], fontSize: 18}}>(Rosita)</Text>
-                
-                <Text>{this.state.phrases[this.state.index % this.state.phrases.length]}</Text>    
+                <Image source={rosita_logo} style={{width: 25, height: 25, marginTop: 5}}/>
+                <View style={{marginTop: 5, elevation: -1}}>
+                    <LoadingDots dots={3} />
+                </View>
+    
+                <Text style={{maxWidth: "80%", fontSize: 16}}>{this.state.phrases[this.state.index % this.state.phrases.length]}</Text>    
             </View>
         )
     }
@@ -66,20 +70,21 @@ export default function TimetableScreen(props) {
 
     function fetchOrar() {
         if (orar.length === 0)
-            fetch(backend_base_url + 'api/orar')
-            //fetch(backend_base_url + 'api/student/ore')
+            //fetch(backend_base_url + 'api/orar')
+            fetch(backend_base_url + 'api/student/ore')
             .then(res => res.json())
             .then(data => {
                 setOrar(data);
-                //console.log(data);
             });
     }
 
     const getTodaysClasses = (day) => {
         let classes = [];
 
+        let toCheckDay=day.toLowerCase();
+
         for (let course of orar) {
-            if (course.zi == day)
+            if (course.zi.toLowerCase() == toCheckDay)
                 classes.push(course);
         }
 
@@ -110,7 +115,10 @@ export default function TimetableScreen(props) {
 
                             <Button
                                 title="Vezi pe harta"
-                                onPress={() => props.navigation.navigate('Locations', {sala_id : course.sala_id})}
+                                onPress={() => {
+                                    setModalVisibility(false);
+                                    props.navigation.navigate('Locations', {sala_id : course.sala_id});
+                                }}
                                 style={{backgroundColor: 'lightblue'}}
                             />
                         </View>

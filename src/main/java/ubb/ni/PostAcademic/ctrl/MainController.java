@@ -26,6 +26,7 @@ import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.python.util.PythonInterpreter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.http.MediaType;
@@ -67,6 +68,7 @@ public class MainController {
 	CladireRepo cladireRepo;
 	@Autowired
 	SalaRepo salaRepo;
+
 
 	@GetMapping(value = "/api/authority")
 	@ResponseBody
@@ -431,7 +433,6 @@ public class MainController {
 			medie_json.put("name", m.getDisciplina().getNume());
 			medie_json.put("grade", m.getNota());
 			medie_json.put("credits", m.getDisciplina().getCredite());
-			medie_json.put("date", format.format(m.getData_promovarii()));
 
 			wrapper.put(medie_json);
 		}
@@ -582,7 +583,6 @@ public class MainController {
 			medie_json.put("name", m.getDisciplina().getNume());
 			medie_json.put("grade", m.getNota());
 			medie_json.put("credits", m.getDisciplina().getCredite());
-			medie_json.put("date", m.getData_promovarii());
 
 			wrapper.put(medie_json);
 		}
@@ -794,13 +794,11 @@ public class MainController {
         for (Medie m: notaService.getMediiByMaterie(user, materie)) {
             JSONObject medie_json = new JSONObject();
 
-            medie_json.put("year", m.getAn_universitar() + "/" + ((m.getAn_universitar() + 1)));
-            medie_json.put("semester", m.getSmestru());
-            medie_json.put("code", m.getDisciplina().getCodDisciplina());
-            medie_json.put("name", m.getDisciplina().getNume());
-            medie_json.put("grade", m.getNota());
-            medie_json.put("credits", m.getDisciplina().getCredite());
-            medie_json.put("date", m.getData_promovarii());
+			medie_json.put("materie", materie);
+			medie_json.put("nume", m.getStudent().getNume());
+			medie_json.put("nota", m.getNota());
+			medie_json.put("grupa", m.getStudent().getGrupa().getNume());
+			medie_json.put("cod", m.getStudent().getCod_student());
 
             wrapper.put(medie_json);
         }
@@ -811,23 +809,20 @@ public class MainController {
 
     @GetMapping(value = "/api/profesor/medii/{materie}/{grupa}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getMediiByMaterieAndGrupa(@PathVariable("materie") String materie, @PathVariable("materie") String grupa) {
+    public String getMediiByMaterieAndGrupa(@PathVariable("materie") String materie, @PathVariable("grupa") String grupa) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getByUsername(auth.getName());
 
         JSONArray wrapper = new JSONArray();
 
-
         for (Medie m: notaService.getMediiByMaterieAndGrupa(user, materie, grupa)) {
             JSONObject medie_json = new JSONObject();
 
-            medie_json.put("year", m.getAn_universitar() + "/" + ((m.getAn_universitar() + 1)));
-            medie_json.put("semester", m.getSmestru());
-            medie_json.put("code", m.getDisciplina().getCodDisciplina());
-            medie_json.put("name", m.getDisciplina().getNume());
-            medie_json.put("grade", m.getNota());
-            medie_json.put("credits", m.getDisciplina().getCredite());
-            medie_json.put("date", m.getData_promovarii());
+            medie_json.put("materie", materie);
+            medie_json.put("nume", m.getStudent().getNume());
+            medie_json.put("nota", m.getNota());
+            medie_json.put("grupa", grupa);
+            medie_json.put("cod", m.getStudent().getCod_student());
 
             wrapper.put(medie_json);
         }
@@ -945,6 +940,7 @@ public class MainController {
             JSONObject nota_object = new JSONObject();
             nota_object.put("nume", student.getNume());
             nota_object.put("grupa", student.getGrupa().getNume());
+            nota_object.put("cod", student.getCod_student());
 
             ArrayList<ArrayList<Boolean>> prezenteByMaterie = prezentaService.getPrezenteByMaterie(student.getUser(), disciplina);
 
@@ -997,6 +993,7 @@ public class MainController {
             JSONObject nota_object = new JSONObject();
             nota_object.put("nume", student.getNume());
             nota_object.put("grupa", student.getGrupa().getNume());
+            nota_object.put("cod", student.getCod_student());
             wrapper.put(nota_object);
         }
 
@@ -1034,6 +1031,8 @@ public class MainController {
 		return notaService.addNota(user, disciplina, student_ob, json.getString("saptamana"), json.getString("nota"), json.getString("tip"), json.getString("observatii"));
 	}
 
+
+
     @PostMapping(value = "/api/profesor/prezente/add", consumes = "application/json")
     public String addPrezenta(@RequestBody String body){
         JSONObject json = new JSONObject(body);
@@ -1043,5 +1042,73 @@ public class MainController {
 
         return prezentaService.addPrezenta(user, json.get("cod_disciplina").toString(), json.get("cod_student").toString(), json.getString("categorie"), json.get("saptamana").toString(), json.get("prezent").toString());
     }
+
+	@PostMapping(value = "/api/profesor/medii/add", consumes = "application/json")
+	public String addMedie(@RequestBody String body){
+		JSONObject json = new JSONObject(body);
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+		return notaService.addMedie(user, json.get("materie").toString(), json.get("cod").toString(), json.getString("nota"), json.get("grupa").toString());
+	}
+
+	@PostMapping(value = "/api/student/recomandareText", consumes = "application/json")
+	public String ai_text(@RequestBody String body){
+		JSONObject json = new JSONObject(body);
+
+		JSONArray wrapper = new JSONArray();
+
+		try(PythonInterpreter pyInterp = new PythonInterpreter()) {
+			pyInterp.set("text", json.get("text").toString());
+			pyInterp.execfile("src\\main\\java\\hello.py");
+
+			String[] materii = pyInterp.get("s_courses").toString().split(";");
+			String[] facultati = pyInterp.get("s_faculties").toString().split(";");
+
+			for(int i=0; i< materii.length; i++){
+				JSONObject nota_object = new JSONObject();
+
+				nota_object.put("nume", materii[i]);
+				nota_object.put("facultate", facultati[i]);
+				wrapper.put(nota_object);
+			}
+
+
+		}
+
+		return wrapper.toString();
+	}
+
+	@PostMapping(value = "/api/student/recomandareFields", consumes = "application/json")
+	public String ai_fields(@RequestBody String body){
+		JSONObject json = new JSONObject(body);
+
+		JSONArray wrapper = new JSONArray();
+
+		try(PythonInterpreter pyInterp = new PythonInterpreter()) {
+			pyInterp.set("label1", json.get("label1").toString());
+			pyInterp.set("label2", json.get("label2").toString());
+			pyInterp.set("label3", json.get("label3").toString());
+
+			pyInterp.execfile("src\\main\\java\\hello.py");
+
+			String[] materii = pyInterp.get("s_courses").toString().split(";");
+			String[] facultati = pyInterp.get("s_faculties").toString().split(";");
+
+			for(int i=0; i< materii.length; i++){
+				JSONObject nota_object = new JSONObject();
+
+				nota_object.put("nume", materii[i]);
+				nota_object.put("facultate", facultati[i]);
+				wrapper.put(nota_object);
+			}
+
+
+		}
+
+		return wrapper.toString();
+
+	}
 
 }
