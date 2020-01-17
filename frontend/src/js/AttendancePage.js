@@ -1,9 +1,9 @@
 import LogoutButton from "./LogoutButton.js"
 import React, {useState} from 'react'
 import StudentNavBar from "./StudentNavBar.js"
-import ProfessorNavBar from "./ProfessorNavBar.js"
+import TeacherNavBar from "./TeacherNavBar.js"
 import AttendanceTable from "./AttendanceTable"
-import AttendanceTableProfessor from "./AttendanceTableProfessor"
+import TeacherAttendanceTable from "./TeacherAttendanceTable"
 import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
@@ -48,7 +48,7 @@ export default function AttendancePage()
         {
             if(accountType==="profesor")
             {
-                return <ProfessorNavBar />;
+                return <TeacherNavBar />;
             }
         }
     }
@@ -63,7 +63,7 @@ export default function AttendancePage()
         {
             if(accountType==="profesor")
             {
-                return <AttendanceTableProfessor />;
+                return <TeacherAttendanceTable />;
             }
         }
     }

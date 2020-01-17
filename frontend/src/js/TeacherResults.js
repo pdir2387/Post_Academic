@@ -4,9 +4,9 @@ import Popup from "reactjs-popup";
 import commons from '../css/commons.module.css'
 import gradesCss from '../css/teacher_grades.module.css'
 
-export default function ResultsProfesor() {
+export default function TeacherResults() {
     let [materii, setMaterii] = useState([]);
-    let [grades, setGrades]  = useState([{materie:"Romana", nume:"Andrei",saptamana:"7",nota:"7",observatii:"-", grupa:221},{materie:"Romana", nume:"Alex",saptamana:"5",nota:"5",observatii:"prost", grupa:222}]);
+    let [grades, setGrades]  = useState([{materie:"Romana", nume:"Andrei",saptamana:"7",nota:"7", grupa:221},{materie:"Romana", nume:"Alex",saptamana:"5",nota:"5",grupa:222}]);
     let [groups, setGroups] = useState([]);
     let [students, setStudents] = useState([]);
 
@@ -20,8 +20,8 @@ export default function ResultsProfesor() {
     }
 
     function getStudentsByCourse(){
-        if(selectedCourse != '')
-        if(selectedGroup != ''){
+        if(selectedCourse !== '')
+        if(selectedGroup !== ''){
             fetch('http://localhost:3000/api/profesor/studenti/'+selectedCourse)
             .then(res => res.json())
             .then(res => setStudents(res));
@@ -31,18 +31,18 @@ export default function ResultsProfesor() {
     }
 
     function getGradesByStuff(){
-        if(selectedCourse != '' && selectedGroup != '')
-            fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod+'/'+selectedGroup)
+        if(selectedCourse !== '' && selectedGroup !== '')
+            fetch('http://localhost:3000/api/profesor/medii/'+selectedCourse.cod+'/'+selectedGroup)
                 .then(res => res.json())
                 .then(res => setGrades(res));
-        else if(selectedCourse != '')
-            fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod)
+        else if(selectedCourse !== '')
+            fetch('http://localhost:3000/api/profesor/medii/'+selectedCourse.cod)
                 .then(res => res.json())
                 .then(res => setGrades(res));
     }
 
     function getStudentsByCourseAndGroup(){
-        if(selectedCourse != '')
+        if(selectedCourse !== '')
             fetch('http://localhost:3000/api/profesor/studenti/'+selectedCourse.cod + '/'+selectedGroup)
             .then(res => res.json())
             .then(res => setStudents(res))
@@ -50,7 +50,7 @@ export default function ResultsProfesor() {
     }
 
     function getGroupsByCourse(){
-        if(selectedCourse != '')
+        if(selectedCourse !== '')
             fetch('http://localhost:3000/api/profesor/grupe/'+selectedCourse.cod)
             .then(res => res.json())
             .then(res => setGroups(res));
@@ -71,18 +71,18 @@ export default function ResultsProfesor() {
         refillTable(grades);
     }
 
-    function addGrade(nume, nota, observatii, grupa){
-        setGrades([...grades, {materie:selectedCourse.nume, nume:nume,nota:nota,observatii:observatii, grupa:grupa}]);
+    function addGrade(nume, nota, grupa, cod){
+        setGrades([...grades, {materie:selectedCourse.cod, nume:nume,nota:nota, grupa:grupa, cod:cod}]);
 
         (async () => {
-            const rawResponse = await fetch('http://localhost:3000/api/profesor/addGrade/', {
+            const rawResponse = await fetch('http://localhost:3000/api/profesor/medii/add/', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                materie:selectedCourse.nume, nume:nume,nota:nota,observatii:observatii, grupa:grupa
+                materie:selectedCourse.cod, nota:nota, grupa:grupa, cod:cod
               })
             }).then(() => getGradesByStuff());
           })();
@@ -105,7 +105,7 @@ export default function ResultsProfesor() {
 
     return(
         <div className={commons.container}>
-            <h1>Note</h1>
+            <h1>Medii</h1>
 
             <div id={gradesCss.selectContainer}>
                 <select id="course-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectCourse}>
@@ -121,10 +121,9 @@ export default function ResultsProfesor() {
                 <tr>
                     <th>STUDENT</th>
                     <th>NOTA</th>
-                    <th>OBSERVATII</th>
                     <th>BUTTONS</th>
                 </tr>
-                {getTrs(grades, selectedCourse.nume)}
+                {getTrs(grades, selectedCourse.cod)}
             </table>
 
             <table id="students-table">
@@ -139,7 +138,7 @@ export default function ResultsProfesor() {
 }
 
 function getTrsStudentsTable(students, selectedGroup, addGrade){
-    console.log(students);
+    ////////////////console.log(students);
     let TRList = [];
     for(let student of students){
        if(selectedGroup === '')
@@ -172,17 +171,14 @@ function getThsStudentsTable(student, addGrade){
                     <form>
                         <label>Nota:</label>
                         <input id = "nota-add-value" type="text"></input>
-
-                        <label>Observatii:</label>
-                        <input id = "obs-add-value" type="text"></input>
                     </form>
                     <button onClick={() => {
                         let nume = student.nume;
                         let nota = document.getElementById("nota-add-value").value;
-                        let observatii = document.getElementById("obs-add-value").value;
                         let grupa = student.grupa;
+                        let cod = student.cod;
 
-                        addGrade(nume, nota, observatii, grupa);
+                        addGrade(nume, nota, grupa,cod);
                     }}>Add</button>
                 </div>
             </Popup>
@@ -193,7 +189,7 @@ function getThsStudentsTable(student, addGrade){
 }
 
 function getOptions(options){
-    console.log(options);
+    ////////////////console.log(options);
     let optionList = [];
 
     optionList.push(
@@ -203,22 +199,6 @@ function getOptions(options){
     for(let option of options){
         optionList.push(
             <option>{option.nume}</option>
-        );
-    }
-
-    return optionList;
-}
-
-function getOptionsTypes(types){
-    let optionList = [];
-
-    optionList.push(
-        <option disabled selected="selected">--alege tipul--</option>
-    );
-
-    for(let option of types){
-        optionList.push(
-            <option>{option}</option>
         );
     }
 
@@ -242,8 +222,7 @@ function getOptionsGroups(groups){
 }
 
 function getTrs(grades, materie){
-    console.log("V");
-    console.log(grades);
+    ////////////////console.log(grades);
     let TRList = [];
     for(let grade of grades){
        if(grade.materie === materie)
@@ -256,16 +235,14 @@ function getTrs(grades, materie){
 }
 
 function getThs(grade){
+    //////////////console.log(grade);
     let THList = [];
 
     THList.push(
-        <td>{grade.student}</td>
+        <td>{grade.nume}</td>
     );
     THList.push(
         <td>{grade.nota}</td>
-    );
-    THList.push(
-        <td>{grade.observatii}</td>
     );
     THList.push(
         <td></td>
@@ -282,9 +259,6 @@ function getThsTitle(){
     );
     THList.push(
         <td>NOTA</td>
-    );
-    THList.push(
-        <td>OBSERVATII</td>
     );
 
     return THList;

@@ -6,7 +6,7 @@ function LogoutButton(){
     return(
         <div>
             <a href="/api/logout">
-                <button className={home.NavBarItem}>Logout</button>
+                <button className={home.logoutButton}>Logout</button>
             </a>
         </div>
     )

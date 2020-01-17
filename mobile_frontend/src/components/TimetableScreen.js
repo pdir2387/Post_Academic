@@ -4,12 +4,53 @@ import mainLogo from '../../assets/logo_facultate.png';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import NavBarOpener from './NavBarOpener';
 import {backend_base_url} from '../misc/constants';
+import { State } from 'react-native-gesture-handler';
 
   
+class RositaTextView extends React.Component {
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+            index : 0,
+            _interval : -1,
+            colors : ['red', 'blue', 'green', 'black'],
+            phrases : ['Try saying: Who is teaching software security?','Try saying: Search something about artificial intelligence on wikipedia.','Try saying: What\'s the time?','Try saying: What\'s the next big holiday?','Try saying: Where\'s Bucharest?','Try saying: What\'s my schedule for tomorrow?','Try saying: I like databases, what can you recommend?','Try saying: Open youtube.'],
+        }
+    }
+    
+    componentDidMount() {
+        let intervalReference = setInterval(() => {
+            let newIndex = this.state.index + 1;
+
+            this.setState({index : newIndex});
+        }, 2500);
+
+        this.setState({_interval : intervalReference});
+    }
+
+    componentWillUnmount() {
+        if (this.state._interval !== -1)
+            clearInterval(this.state._interval);
+    }
+
+    render() {
+        return (
+            <View style={{display: 'flex', flexDirection: "row", padding: 10}}>
+                <Text style={{color: this.state.colors[this.state.index % this.state.colors.length], fontSize: 18}}>(Rosita)</Text>
+                
+                <Text style={{maxWidth: "80%", fontSize: 16}}>{this.state.phrases[this.state.index % this.state.phrases.length]}</Text>    
+            </View>
+        )
+    }
+        
+}
+
 export default function TimetableScreen(props) {
     const [orar, setOrar] = React.useState([]);
     const [clickedClass, setClickedClass] = React.useState(null);
     const [modalVisibility, setModalVisibility] = React.useState(false);
+    const [rositaIsEnabled, setRosita] = React.useState(true);
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'luni', title: 'Luni' },
@@ -25,20 +66,21 @@ export default function TimetableScreen(props) {
 
     function fetchOrar() {
         if (orar.length === 0)
-            fetch(backend_base_url + 'api/orar')
-            //fetch(backend_base_url + 'api/student/ore')
+            //fetch(backend_base_url + 'api/orar')
+            fetch(backend_base_url + 'api/student/ore')
             .then(res => res.json())
             .then(data => {
                 setOrar(data);
-                //console.log(data);
             });
     }
 
     const getTodaysClasses = (day) => {
         let classes = [];
 
+        let toCheckDay=day.toLowerCase();
+
         for (let course of orar) {
-            if (course.zi == day)
+            if (course.zi.toLowerCase() == toCheckDay)
                 classes.push(course);
         }
 
@@ -69,7 +111,10 @@ export default function TimetableScreen(props) {
 
                             <Button
                                 title="Vezi pe harta"
-                                onPress={() => props.navigation.navigate('Locations', {sala_id : course.sala_id})}
+                                onPress={() => {
+                                    setModalVisibility(false);
+                                    props.navigation.navigate('Locations', {sala_id : course.sala_id});
+                                }}
                                 style={{backgroundColor: 'lightblue'}}
                             />
                         </View>
@@ -132,7 +177,7 @@ export default function TimetableScreen(props) {
         if (classes.length === 0) {
             return (
                 <View style={styles.scene}>
-                    <Text>Felicitari, astazi esti complet liber</Text>
+                    <Text style={styles.congratsText}>Felicitări, astăzi ești complet liber!</Text>
                 </View>
             )
         }
@@ -182,11 +227,12 @@ export default function TimetableScreen(props) {
     const renderScene = ({ route }) => {
         return TabScene(route.key);
     }
-    
+
     return (
         <View style={styles.container}>
             { clickedClass !== null ? _renderModal(clickedClass) : null }
-            <NavBarOpener navigation={props.navigation}/>
+            <NavBarOpener navigation={props.navigation} setRosita={setRosita} />
+            {rositaIsEnabled ? <RositaTextView /> : null}
             <TabView
                 renderTabBar={renderTabBar}
                 navigationState={{ index, routes }}
@@ -246,4 +292,9 @@ const styles=StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)',
         
     },
+    congratsText:{
+        textAlign: 'center',
+        fontSize: 20,
+        top: 40
+    }
 });

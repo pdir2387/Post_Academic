@@ -12,13 +12,13 @@
 
 .navBarButton{
     color: white;
-    font-weight: 900;
+    font-weight: 800;
     background-color: #1f4976;
     border: none;
     opacity: 0.9;
     font-size: 17px;
     margin: 10px;
-    text-align: start;
+    text-align: center;
     padding: 10px;
     text-transform: uppercase;
     width: 250px;
@@ -63,4 +63,31 @@
 
 #studentNavBar img{
     margin-top: 2vh;
+}
+
+
+
+.logoutButton{
+    color: white;
+    font-weight: 600;
+    background-color: #505b6b;
+    border: none;
+    opacity: 0.9;
+    font-size: 13px;
+    margin: 10px;
+    text-align: center;
+    padding: 10px;
+    text-transform: uppercase;
+    width: 100px;
+    height: 35px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+.logoutButton:hover {
+    background-color: #212a3a
+}
+.logoutButton:active {
+    background-color: #212a3a;
+    box-shadow: 0 3px #666;
+    transform: translateY(4px);
 }

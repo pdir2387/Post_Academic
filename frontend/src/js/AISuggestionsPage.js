@@ -4,7 +4,7 @@ import commons from '../css/commons.module.css'
 import ai from '../css/ai.module.css'
 import AI from './AI';
 
-export default function TidorPage() {
+export default function AISuggestionsPage() {
     let [username, setUsername] = useState("Tidor Pricope");
     let [about, setAbout] = useState("Machine learning, Databases, Mathematics");
     let [profilePic, setProfilePic] = useState(require("../img/tidor.jpg"));

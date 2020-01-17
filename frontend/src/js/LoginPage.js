@@ -25,10 +25,10 @@ function LoginPage() {
 						</div>
 
 						<div className={main.inputContainer}>
-						<label className={`${main.checkboxContainer} ${main.uppercase} ${main.semiBold}`} id="text_temp">Remember Me
+						{/* <label className={`${main.checkboxContainer} ${main.uppercase} ${main.semiBold}`} id="text_temp">Remember Me
 							<input type="checkbox" value="remember"/>
 							<span className={main.checkmark}/>
-						</label>
+						</label> */}
 						</div>
 						
 						<button type="submit" className={`${main.loginButton} ${main.uppercase} ${main.bold}`}>Login</button>
