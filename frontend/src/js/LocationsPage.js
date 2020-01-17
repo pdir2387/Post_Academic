@@ -10,6 +10,7 @@ import commons from '../css/commons.module.css'
 export default function LocationPage() 
 {
     let [accountType,setAccountType]=useState(()=>getAccountType());
+    getAccountType();
 
     return <Page />;
 
@@ -51,8 +52,11 @@ export default function LocationPage()
         }
     }
 
-    function getAccountType()
+    async function getAccountType()
     {
-        return "student";
+        await fetch('http://localhost:3000/api/authority')
+        .then(response => response.text())
+        .then(auth => setAccountType(auth))
+        .catch( e => alert(e));
     }
 }

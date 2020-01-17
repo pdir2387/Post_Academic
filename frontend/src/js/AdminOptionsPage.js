@@ -8,7 +8,8 @@ import commons from '../css/commons.module.css'
 
 export default function AdminOptionsPage() 
 {
-    let [accountType,setAccountType]=useState(()=>getAccountType());
+    let [accountType,setAccountType]=useState("");
+    getAccountType();
 
     return <Page />
 
@@ -35,8 +36,11 @@ export default function AdminOptionsPage()
         }
     }
 
-    function getAccountType()
+    async function getAccountType()
     {
-        return "admin";
+        await fetch('http://localhost:3000/api/authority')
+        .then(response => response.text())
+        .then(auth => setAccountType(auth))
+        .catch( e => alert(e));
     }
 }

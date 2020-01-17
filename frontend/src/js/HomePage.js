@@ -9,8 +9,8 @@ import PermissionDeniedPage from "./PermissionDeniedPage"
 import home from '../css/home.module.css'
 
 export default function HomePage() {
-    let [accountType,setAccountType]=useState(()=>getAccountType());
-    fetchCall();
+    let [accountType,setAccountType]=useState("");
+    getAccountType();
 
     return <Page />;
 
@@ -58,9 +58,12 @@ export default function HomePage() {
         }
     }
 
-    function getAccountType()
+    async function getAccountType()
     {
-        return "student";
+        await fetch('http://localhost:3000/api/authority')
+        .then(response => response.text())
+        .then(auth => setAccountType(auth))
+        .catch( e => alert(e));
     }
 }
 

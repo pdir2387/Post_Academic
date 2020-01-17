@@ -10,7 +10,8 @@ import commons from '../css/commons.module.css'
 
 export default function AttendancePage() 
 {
-    let [accountType,setAccountType]=useState(()=>getAccountType());
+    let [accountType,setAccountType]=useState("");
+    getAccountType();
 
     return <Page />;
 
@@ -67,8 +68,11 @@ export default function AttendancePage()
         }
     }
 
-    function getAccountType()
+    async function getAccountType()
     {
-        return "profesor";
+        await fetch('http://localhost:3000/api/authority')
+        .then(response => response.text())
+        .then(auth => setAccountType(auth))
+        .catch( e => alert(e));
     }
 }
