@@ -55,7 +55,7 @@ function getTrs(grades, filter, selectedCourse){
     let TRList = [];
 
     for(let grade of grades){
-       if(filter.indexOf(grade[3]) != -1 && grade[0] === selectedCourse)
+       if(filter.indexOf(grade[3]) !== -1 && grade[0] === selectedCourse)
             TRList.push(
                 <tr>{getThs(grade)}</tr>
             );
