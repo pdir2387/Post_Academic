@@ -26,6 +26,7 @@ import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.python.util.PythonInterpreter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.http.MediaType;
@@ -1050,6 +1051,64 @@ public class MainController {
 		User user = userService.getByUsername(auth.getName());
 
 		return notaService.addMedie(user, json.get("materie").toString(), json.get("cod").toString(), json.getString("nota"), json.get("grupa").toString());
+	}
+
+	@PostMapping(value = "/api/student/recomandareText", consumes = "application/json")
+	public String ai_text(@RequestBody String body){
+		JSONObject json = new JSONObject(body);
+
+		JSONArray wrapper = new JSONArray();
+
+		try(PythonInterpreter pyInterp = new PythonInterpreter()) {
+			pyInterp.set("text", json.get("text").toString());
+			pyInterp.execfile("src\\main\\java\\hello.py");
+
+			String[] materii = pyInterp.get("s_courses").toString().split(";");
+			String[] facultati = pyInterp.get("s_faculties").toString().split(";");
+
+			for(int i=0; i< materii.length; i++){
+				JSONObject nota_object = new JSONObject();
+
+				nota_object.put("nume", materii[i]);
+				nota_object.put("facultate", facultati[i]);
+				wrapper.put(nota_object);
+			}
+
+
+		}
+
+		return wrapper.toString();
+	}
+
+	@PostMapping(value = "/api/student/recomandareFields", consumes = "application/json")
+	public String ai_fields(@RequestBody String body){
+		JSONObject json = new JSONObject(body);
+
+		JSONArray wrapper = new JSONArray();
+
+		try(PythonInterpreter pyInterp = new PythonInterpreter()) {
+			pyInterp.set("label1", json.get("label1").toString());
+			pyInterp.set("label2", json.get("label2").toString());
+			pyInterp.set("label3", json.get("label3").toString());
+
+			pyInterp.execfile("src\\main\\java\\hello.py");
+
+			String[] materii = pyInterp.get("s_courses").toString().split(";");
+			String[] facultati = pyInterp.get("s_faculties").toString().split(";");
+
+			for(int i=0; i< materii.length; i++){
+				JSONObject nota_object = new JSONObject();
+
+				nota_object.put("nume", materii[i]);
+				nota_object.put("facultate", facultati[i]);
+				wrapper.put(nota_object);
+			}
+
+
+		}
+
+		return wrapper.toString();
+
 	}
 
 }
