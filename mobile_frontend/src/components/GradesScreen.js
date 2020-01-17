@@ -185,7 +185,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#547598' 
     },
     text: { 
-      textAlign: 'center' 
+      textAlign: 'center',
+      color: 'white'
     },
     pickerStyle:{  
       height: 50,  

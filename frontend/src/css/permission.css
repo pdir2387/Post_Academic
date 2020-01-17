@@ -1,0 +1,11 @@
+#permission-denied-container{
+  text-align: center;
+    display: flex;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.permission-denied-wrapper{
+    flex:1
+}

@@ -1,10 +1,10 @@
 import LogoutButton from "./LogoutButton.js"
 import React, {useState} from 'react'
-import ProfessorNavBar from "./ProfessorNavBar.js"
+import TeacherNavBar from "./TeacherNavBar.js"
 import StudentNavBar from "./StudentNavBar.js"
 import Results from "./Results"
 import PermissionDeniedPage from "./PermissionDeniedPage"
-import ResultsProfesor from "./ResultsProfesor"
+import TeacherResults from "./TeacherResults"
 
 import commons from '../css/commons.module.css'
 
@@ -48,7 +48,7 @@ export default function ResultsPage()
         {
             if(accountType==="profesor")
             {
-                return <ProfessorNavBar />;
+                return <TeacherNavBar />;
             }
         }
     }
@@ -63,7 +63,7 @@ export default function ResultsPage()
         {
             if(accountType==="profesor")
             {
-                return <ResultsProfesor />;
+                return <TeacherResults />;
             }
         }
     }

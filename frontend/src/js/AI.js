@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import StudentNavBar from './StudentNavBar'
-import TidorPage from './TidorPage'
+import AISuggestionsPage from './AISuggestionsPage'
 import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import commons from '../css/commons.module.css'
@@ -22,7 +22,7 @@ export default function AI() {
                     </div>
                     
                     <div id={commons.right}>
-                        <TidorPage />
+                        <AISuggestionsPage />
                     </div>
                 </div>
             )

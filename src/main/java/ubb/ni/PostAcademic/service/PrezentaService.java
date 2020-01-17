@@ -3,6 +3,7 @@ package ubb.ni.PostAcademic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ubb.ni.PostAcademic.domain.*;
+import ubb.ni.PostAcademic.repo.OraRepo;
 import ubb.ni.PostAcademic.repo.PrezentaRepo;
 import ubb.ni.PostAcademic.repo.UserRepo;
 
@@ -17,6 +18,10 @@ public class PrezentaService {
     PrezentaRepo prezentaRepo;
     @Autowired
     UserService userService;
+    @Autowired
+    OraRepo oraRepo;
+    @Autowired
+    DisciplinaService disciplinaService;
 
     public ArrayList<ArrayList<Boolean>> getPrezenteByMaterie(User user, String disciplina){
         ArrayList<ArrayList<Boolean>> prezente = new ArrayList<>();
@@ -30,12 +35,12 @@ public class PrezentaService {
         if(user.getAccountType().equals(AccountType.student)){
             for(int i=0; i<14;i++){
                 for(Prezenta prezenta: prezentaRepo.findAll()) {
-                    if (prezenta.getStudent().equals(student) && prezenta.getOra().getDisciplina().getCodDisciplina().equals(disciplina) && prezenta.getSaptamana() == i+1) {
-                        if (prezenta.getOra().getTipOra().equals(TipOra.curs)) {
+                    if (prezenta.getStudent().equals(student) && prezenta.getDisciplina().getCodDisciplina().equals(disciplina) && prezenta.getSaptamana() == i+1) {
+                        if (prezenta.getTipOra().equals(TipOra.curs)) {
                             prezente_curs.set(i, prezenta.getPrezent());
-                        } else if (prezenta.getOra().getTipOra().equals(TipOra.seminar)) {
+                        } else if (prezenta.getTipOra().equals(TipOra.seminar)) {
                             prezente_seminar.set(i, prezenta.getPrezent());
-                        } else if (prezenta.getOra().getTipOra().equals(TipOra.laborator)) {
+                        } else if (prezenta.getTipOra().equals(TipOra.laborator)) {
                             prezente_lab.set(i, prezenta.getPrezent());
                         }
                     }
@@ -50,5 +55,29 @@ public class PrezentaService {
         }
 
         return prezente;
+    }
+
+    public String addPrezenta(User user, String disciplina, String student, String tipOra, String saptamana, String prezent){
+        String error = "";
+        if(user.getAccountType().equals(AccountType.profesor)) {
+            Student s = userService.getStudentByCod(student);
+
+            boolean gasit = false;
+            for (Prezenta prezenta : prezentaRepo.findAll()) {
+                if (prezenta.getDisciplina().getCodDisciplina().equals(disciplina) && prezenta.getTipOra().toString().equals(tipOra) && prezenta.getSaptamana().toString().equals(saptamana)) {
+                    prezenta.setPrezent(Boolean.parseBoolean(prezent));
+                    gasit = true;
+                    if (gasit) {
+                        break;
+                    }
+                }
+            }
+
+            if (!gasit) {
+                prezentaRepo.save(new Prezenta(Integer.parseInt(saptamana), Boolean.parseBoolean(prezent), disciplinaService.findDisciplina(disciplina), TipOra.valueOf(tipOra), s));
+            }
+        }
+
+        return error;
     }
 }

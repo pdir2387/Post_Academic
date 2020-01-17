@@ -49,7 +49,7 @@ export default function ContractsPage()
 
     function getPeriod()
     {
-        return JSON.parse('{"period":"0"}').period;
+        return JSON.parse('{"period":"1"}').period;
     }
 
     function ContractsPageContent(props)

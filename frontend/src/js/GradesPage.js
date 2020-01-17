@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
-import ProfessorNavBar from "./ProfessorNavBar.js"
+import TeacherNavBar from "./TeacherNavBar.js"
 import StudentGrades from "./StudentGrades.js"
 import TeacherGrades from "./TeacherGrades.js"
 import PermissionDeniedPage from "./PermissionDeniedPage"
@@ -51,7 +51,7 @@ export default function GradesPage()
         {
             if(accountType==="profesor")
             {
-                return <ProfessorNavBar />;
+                return <TeacherNavBar />;
             }
         }
     }

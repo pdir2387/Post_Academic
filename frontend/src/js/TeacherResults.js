@@ -4,7 +4,7 @@ import Popup from "reactjs-popup";
 import commons from '../css/commons.module.css'
 import gradesCss from '../css/teacher_grades.module.css'
 
-export default function ResultsProfesor() {
+export default function TeacherResults() {
     let [materii, setMaterii] = useState([]);
     let [grades, setGrades]  = useState([{materie:"Romana", nume:"Andrei",saptamana:"7",nota:"7",observatii:"-", grupa:221},{materie:"Romana", nume:"Alex",saptamana:"5",nota:"5",observatii:"prost", grupa:222}]);
     let [groups, setGroups] = useState([]);
@@ -20,8 +20,8 @@ export default function ResultsProfesor() {
     }
 
     function getStudentsByCourse(){
-        if(selectedCourse != '')
-        if(selectedGroup != ''){
+        if(selectedCourse !== '')
+        if(selectedGroup !== ''){
             fetch('http://localhost:3000/api/profesor/studenti/'+selectedCourse)
             .then(res => res.json())
             .then(res => setStudents(res));
@@ -31,18 +31,18 @@ export default function ResultsProfesor() {
     }
 
     function getGradesByStuff(){
-        if(selectedCourse != '' && selectedGroup != '')
+        if(selectedCourse !== '' && selectedGroup !== '')
             fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod+'/'+selectedGroup)
                 .then(res => res.json())
                 .then(res => setGrades(res));
-        else if(selectedCourse != '')
+        else if(selectedCourse !== '')
             fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod)
                 .then(res => res.json())
                 .then(res => setGrades(res));
     }
 
     function getStudentsByCourseAndGroup(){
-        if(selectedCourse != '')
+        if(selectedCourse !== '')
             fetch('http://localhost:3000/api/profesor/studenti/'+selectedCourse.cod + '/'+selectedGroup)
             .then(res => res.json())
             .then(res => setStudents(res))
@@ -50,7 +50,7 @@ export default function ResultsProfesor() {
     }
 
     function getGroupsByCourse(){
-        if(selectedCourse != '')
+        if(selectedCourse !== '')
             fetch('http://localhost:3000/api/profesor/grupe/'+selectedCourse.cod)
             .then(res => res.json())
             .then(res => setGroups(res));
@@ -105,7 +105,7 @@ export default function ResultsProfesor() {
 
     return(
         <div className={commons.container}>
-            <h1>Note</h1>
+            <h1>Medii</h1>
 
             <div id={gradesCss.selectContainer}>
                 <select id="course-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectCourse}>
