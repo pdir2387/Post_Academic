@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Dimensions  } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import MailFooter from './MailFooter';
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     },
     messageViewContainer:{
         borderBottomWidth: 1,
-        height: Math.round(Dimensions.get('window').height)-300,
+        height: Math.round(Dimensions.get('window').height)-320,
         padding: 10,
     },
     attachmentContainer:{
