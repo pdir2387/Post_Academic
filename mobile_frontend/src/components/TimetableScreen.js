@@ -5,7 +5,8 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import NavBarOpener from './NavBarOpener';
 import {backend_base_url} from '../misc/constants';
 import { State } from 'react-native-gesture-handler';
-
+import rosita_logo from '../../assets/logo_rosita.png';
+import LoadingDots from "react-native-loading-dots";
   
 class RositaTextView extends React.Component {
     constructor(props) {
@@ -37,8 +38,11 @@ class RositaTextView extends React.Component {
     render() {
         return (
             <View style={{display: 'flex', flexDirection: "row", padding: 10}}>
-                <Text style={{color: this.state.colors[this.state.index % this.state.colors.length], fontSize: 18}}>(Rosita)</Text>
-                
+                <Image source={rosita_logo} style={{width: 25, height: 25, marginTop: 5}}/>
+                <View style={{marginTop: 5, elevation: -1}}>
+                    <LoadingDots dots={3} />
+                </View>
+    
                 <Text style={{maxWidth: "80%", fontSize: 16}}>{this.state.phrases[this.state.index % this.state.phrases.length]}</Text>    
             </View>
         )
