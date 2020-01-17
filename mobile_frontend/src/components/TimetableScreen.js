@@ -173,7 +173,7 @@ export default function TimetableScreen(props) {
         if (classes.length === 0) {
             return (
                 <View style={styles.scene}>
-                    <Text>Felicitari, astazi esti complet liber</Text>
+                    <Text style={styles.congratsText}>Felicitări, astăzi ești complet liber!</Text>
                 </View>
             )
         }
@@ -288,4 +288,9 @@ const styles=StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)',
         
     },
+    congratsText:{
+        textAlign: 'center',
+        fontSize: 20,
+        top: 40
+    }
 });
