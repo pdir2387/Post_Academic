@@ -10,7 +10,6 @@ export default class NavBarOpener extends Component
         return(
             <Header style={styles.header}>
                 <Left style={styles.left}>
-                    
                     <TouchableOpacity style={styles.touchable} onPress={()=>this.openNavBar(this.props)}>
                         <Icon name="ios-menu"/>
                         <Text style={styles.text}>Meniu</Text>
@@ -31,16 +30,20 @@ const styles = StyleSheet.create({
     header:{
         height: 70,
         paddingTop: 30,
+        paddingLeft: 0,
     },
     left:{
         display: "flex",
         flexDirection: "row",
+        textAlign:"center", 
+        flex:1,
+        paddingLeft: 15
     },
     text:{
         fontSize: 20,
-        paddingLeft: 10
+        paddingLeft: 10,
     },
     touchable:{
-        flexDirection:"row"
+        flexDirection:"row",
     }
 });

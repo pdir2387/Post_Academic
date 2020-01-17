@@ -220,7 +220,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#547598' 
     },
     text: { 
-      textAlign: 'center' 
+      textAlign: 'center',
+      color: 'white'
     },
     attendanceInfoContainer: {
       flex: 2,
