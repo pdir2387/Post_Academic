@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CheckBox } from 'native-base';
+import {backend_base_url} from '../misc/constants';
 
 export default class MailItem extends Component
 {
@@ -90,7 +91,7 @@ export default class MailItem extends Component
         }
     }
 
-    fetch('http://192.168.0.181:8080/api/all/emails/read/'+location, {
+    fetch(backend_base_url + 'api/all/emails/read/'+location, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -7,6 +7,7 @@ import MailItem from './MailItem';
 import Icon from 'react-native-vector-icons/Octicons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
+import {backend_base_url} from '../misc/constants';
 
 export default class ViewMailsScreen extends Component
 {
@@ -205,7 +206,7 @@ export default class ViewMailsScreen extends Component
 			}
 		}
         
-		fetch('http://192.168.0.181:8080/api/all/emails/delete/'+location, {
+		fetch(backend_base_url + 'api/all/emails/delete/'+location, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -333,7 +334,7 @@ export default class ViewMailsScreen extends Component
 
     async getEmailsFromServer()
     {
-        let res= await fetch('http://192.168.0.181:8080/api/all/emails/getAll').then(res => res.json());
+        let res= await fetch(backend_base_url + 'api/all/emails/getAll').then(res => res.json());
 		return res;
     }
 
@@ -344,7 +345,7 @@ export default class ViewMailsScreen extends Component
 
     async getDraftsFromServer()
     {
-        let res= await fetch('http://192.168.0.181:8080/api/all/emails/getDrafts').then(res => res.json());
+        let res= await fetch(backend_base_url + 'api/all/emails/getDrafts').then(res => res.json());
         return res;
     }
     
@@ -355,7 +356,7 @@ export default class ViewMailsScreen extends Component
 
     async getSentFromServer()
     {
-        let res= await fetch('http://192.168.0.181:8080/api/all/emails/getSent').then(res => res.json());
+        let res= await fetch(backend_base_url + 'api/all/emails/getSent').then(res => res.json());
 		return res;
     }
 

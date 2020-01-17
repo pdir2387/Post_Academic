@@ -3,6 +3,7 @@ import { StyleSheet, View, Dimensions, FlatList, StatusBar, Text} from 'react-na
 import mainLogo from '../../assets/logo_facultate.png';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import NavBarOpener from './NavBarOpener';
+import {backend_base_url} from '../misc/constants';
 
 
 function TabbedTimeTable() {
@@ -22,8 +23,8 @@ function TabbedTimeTable() {
 
     function fetchOrar() {
         if (orar.length === 0)
-            fetch('http://192.168.1.144:8080/api/orar')
-            //fetch('http://192.168.0.181:8080/api/student/ore')
+            fetch(backend_base_url + 'api/orar')
+            //fetch(backend_base_url + 'api/student/ore')
             .then(res => res.json())
             .then(data => {
                 setOrar(data);

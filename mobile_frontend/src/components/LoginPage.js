@@ -4,6 +4,7 @@ import { CheckBox } from  'react-native-elements';
 import mainLogo from '../../assets/logo_facultate.png';
 import userPng from '../../assets/username.png';
 import passPng from '../../assets/password.png';
+import {backend_base_url} from '../misc/constants';
 
 export default class Login extends Component
 {
@@ -101,9 +102,7 @@ export default class Login extends Component
     }
 
     login=() => {
-        console.log("Doing login btw");
-    
-        fetch('http://192.168.0.181:8080/api/login', {
+        fetch(backend_base_url + 'api/login', {
             method:'POST',
             headers: {
                 'Content-Type' : 'application/x-www-form-urlencoded',

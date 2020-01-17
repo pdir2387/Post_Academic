@@ -9,6 +9,7 @@ import MailAttachmentItem from './MailAttachmentItem';
 import * as DocumentPicker from 'expo-document-picker';
 import * as mime from 'react-native-mime-types';
 import * as FileSystem from 'expo-file-system';
+import {backend_base_url} from '../misc/constants';
 
 export default class SendMailScreen extends Component
 {
@@ -118,7 +119,7 @@ export default class SendMailScreen extends Component
     {
         if(this.state.to !== "")
 		{
-            fetch('http://192.168.0.181:8080/api/all/emails/send', {
+            fetch(backend_base_url + 'api/all/emails/send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -150,7 +151,7 @@ export default class SendMailScreen extends Component
     {
         if(this.state.to!=="" || this.state.subject!== "" || this.state.message!=="")
     	{
-            fetch('http://192.168.0.181:8080/api/all/emails/draft', {
+            fetch(backend_base_url + 'api/all/emails/draft', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Picker } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener'
 import {Table,Row,Rows,Col,TableWrapper} from 'react-native-table-component';
+import {backend_base_url} from '../misc/constants';
 
 export default class AttendancesScreen extends Component
 {
@@ -88,7 +89,7 @@ export default class AttendancesScreen extends Component
 
   getDisciplines()
   {
-    fetch('http://192.168.0.181:8080/api/student/materii/')
+    fetch(backend_base_url  + 'api/student/materii/')
     .then(res => res.json())
     .then(res => {
         this.setState({disciplines:res},()=>this.setDropDownItems());
@@ -131,7 +132,7 @@ export default class AttendancesScreen extends Component
   {
     if(discipline!=="")
     {
-      fetch('http://192.168.0.181:8080/api/student/prezente/'+discipline)
+      fetch(backend_base_url + 'api/student/prezente/'+discipline)
       .then(res => res.json())
       .then(res => {
         let counter=0;

@@ -5,6 +5,7 @@ import NavBarOpener from './NavBarOpener';
 import MailFooter from './MailFooter';
 import MailAttachmentItem from './MailAttachmentItem';
 import * as FileSystem from 'expo-file-system';
+import {backend_base_url} from '../misc/constants';
 
 export default class MailContentScreen extends Component
 {
@@ -220,7 +221,7 @@ export default class MailContentScreen extends Component
             }
         }
 
-        fetch('http://192.168.0.181:8080/api/all/emails/down/'+location, {
+        fetch(backend_base_url + 'api/all/emails/down/'+location, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

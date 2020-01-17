@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import { StyleSheet, Text, View, Picker } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
+import {backend_base_url} from '../misc/constants';
 
 export default class StudentInfoScreen extends Component
 {
@@ -73,7 +74,7 @@ export default class StudentInfoScreen extends Component
 
   getStudentInfo()
   {
-    fetch('http://192.168.0.181:8080/api/student/informatii_personale')
+    fetch(backend_base_url + 'api/student/informatii_personale')
       .then(info => info.json())
       .then(info => {
         console.log(info);

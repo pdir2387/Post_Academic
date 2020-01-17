@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Picker } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import MapView, { Marker } from 'react-native-maps';
+import {backend_base_url} from '../misc/constants';
 
 export default class LocationsScreen extends Component
 {
@@ -30,7 +31,7 @@ export default class LocationsScreen extends Component
 
     if(this.state.roomId!==-1)
     {
-      fetch('http://192.168.0.181:8080/api/all/cladire/'+this.state.roomId)
+      fetch(backend_base_url + 'api/all/cladire/'+this.state.roomId)
       .then(res => res.json())
       .then(res => {
           this.setMarker(res.lat+","+res.long+","+res.nume);
@@ -46,7 +47,7 @@ export default class LocationsScreen extends Component
 
         if(newRoomId!==-1)
         {
-          fetch('http://192.168.0.181:8080/api/all/cladire/'+newRoomId)
+          fetch(backend_base_url + 'api/all/cladire/'+newRoomId)
           .then(res => res.json())
           .then(res => {
               this.setMarker(res.lat+","+res.long+","+res.nume);
@@ -80,7 +81,7 @@ export default class LocationsScreen extends Component
 
   getLocations()
   {
-    fetch('http://192.168.0.181:8080/api/all/cladiri')
+    fetch(backend_base_url + 'api/all/cladiri')
     .then(res => res.json())
     .then(res => {
       this.setState({locations:res},()=>this.setDropDownItems());
