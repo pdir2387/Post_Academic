@@ -66,20 +66,21 @@ export default function TimetableScreen(props) {
 
     function fetchOrar() {
         if (orar.length === 0)
-            fetch(backend_base_url + 'api/orar')
-            //fetch(backend_base_url + 'api/student/ore')
+            //fetch(backend_base_url + 'api/orar')
+            fetch(backend_base_url + 'api/student/ore')
             .then(res => res.json())
             .then(data => {
                 setOrar(data);
-                //console.log(data);
             });
     }
 
     const getTodaysClasses = (day) => {
         let classes = [];
 
+        let toCheckDay=day.toLowerCase();
+
         for (let course of orar) {
-            if (course.zi === day)
+            if (course.zi.toLowerCase() == toCheckDay)
                 classes.push(course);
         }
 
