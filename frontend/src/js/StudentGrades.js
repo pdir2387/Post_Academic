@@ -7,16 +7,25 @@ import gradesCss from '../css/grades.module.css'
 
 export default function StudentGrades() {
     let [options, setOptions] = useState([]);
-    let grades = [["Mate", "1/1/1","10","Curs", "-"],["Romana", "1/1/2","5","Laborator", "-"]];
-    let filter = ["curs", "laborator", "seminar"];
+    let [grades, setGrades] = useState([]);
+    //let filter = ["curs", "laborator", "seminar"];
     
     let [selectedCourse, setSelectedCourse] = useState('');
+    //let [selectedFilter, setSelectedFilter] = useState('');
 
 
     function handleSelectChange(e) {
-        setSelectedCourse(e.target.value);
+        setSelectedCourse(options.find((el) => el.name === e.target.value));
 
-        refillTable(grades, filter);
+        refillTable(grades);
+    }
+
+    function getGradesByCourse() {
+        console.log(selectedCourse);
+        if(selectedCourse !== '')
+            fetch('http://localhost:3000/api/student/note/'+selectedCourse.code)
+                .then(res => res.json())
+                .then(res => setGrades(res));
     }
 
     function getMaterii(){
@@ -24,10 +33,13 @@ export default function StudentGrades() {
             .then(res => res.json())
             .then(res => {
                     setOptions(res);
-                    console.log(res)
             })
             .catch(() => setOptions([]));
     }
+
+    useEffect(() => {
+        getGradesByCourse();
+    }, [selectedCourse])
 
     useEffect(() => {
         getMaterii();
@@ -48,7 +60,7 @@ export default function StudentGrades() {
                     <th>C/S/L</th>
                     <th>NOTIȚE</th>
                 </tr>
-                {getTrs(grades, filter, selectedCourse)}
+                {getTrs(grades, selectedCourse.name)}
             </table>
         </div>
     );
@@ -56,6 +68,10 @@ export default function StudentGrades() {
 
 function getOptions(options){
     let optionList = [];
+
+    optionList.push(
+        <option disabled selected="selected">--alege materia--</option>
+    );
 
     for(let option of options){
         optionList.push(
@@ -66,11 +82,11 @@ function getOptions(options){
     return optionList;
 }
 
-function getTrs(grades, filter, selectedCourse){
+function getTrs(grades, selectedCourse){
     let TRList = [];
 
     for(let grade of grades){
-       if(filter.indexOf(grade[3]) !== -1 && grade[0] === selectedCourse)
+       if(grade.materie === selectedCourse)
             TRList.push(
                 <tr>{getThs(grade)}</tr>
             );
@@ -83,16 +99,16 @@ function getThs(grade){
     let THList = [];
 
     THList.push(
-        <td>{grade[1]}</td>
+        <td>{grade.saptamana}</td>
     );
     THList.push(
-        <td>{grade[2]}</td>
+        <td>{grade.nota}</td>
     );
     THList.push(
-        <td>{grade[3]}</td>
+        <td>{grade.tip}</td>
     );
     THList.push(
-        <td>{grade[4]}</td>
+        <td>{grade.observatii}</td>
     );
 
     return THList;
@@ -117,10 +133,10 @@ function getThsTitle(){
     return THList;
 }
 
-function refillTable(grades, filter){
+function refillTable(grades){
     let TRs = [];
     let table = document.getElementById("student-grades-table");
 
     TRs.push(<tr>{getThsTitle()}</tr>)
-    TRs.push(<tr>{getTrs(grades, filter)}</tr>);
+    TRs.push(<tr>{getTrs(grades)}</tr>);
 }
