@@ -3,7 +3,7 @@ import React,{useState, useEffect} from 'react'
 import commons from '../css/commons.module.css'
 import attendances from '../css/attendances.module.css'
 
-export default function AttendanceTableProfessor() 
+export default function TeacherAttendanceTable() 
 {
 	let [nrWeeks,setNrWeeks]=useState(14);
 	let [students,setStudents]=useState([]);

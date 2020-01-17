@@ -1,7 +1,7 @@
 import LogoutButton from "./LogoutButton.js"
 import React, {useState} from 'react'
 import StudentNavBar from "./StudentNavBar.js"
-import ProfessorNavBar from "./ProfessorNavBar.js"
+import TeacherNavBar from "./TeacherNavBar.js"
 import AdminNavBar from "./AdminNavBar.js"
 import SendEmail from "./SendEmail.js"
 import PermissionDeniedPage from "./PermissionDeniedPage"
@@ -48,7 +48,7 @@ export default function SendEmailPage()
         {
             if(accountType==="profesor")
             {
-                return <ProfessorNavBar />;
+                return <TeacherNavBar />;
             }
             else
             {

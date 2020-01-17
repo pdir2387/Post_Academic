@@ -2,9 +2,6 @@ package ubb.ni.PostAcademic.service;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
-import com.sun.mail.pop3.POP3Folder;
-import com.sun.mail.pop3.POP3Store;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;

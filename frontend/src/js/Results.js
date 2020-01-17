@@ -94,7 +94,7 @@ export default function Results()
 
     function filterAndSort()
     {
-    	if(filteringOptions.length==0 && sortingOptions.length==0)
+    	if(filteringOptions.length===0 && sortingOptions.length===0)
     	{
 			fillTable(results);
 			return;

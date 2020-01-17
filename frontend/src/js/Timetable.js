@@ -6,7 +6,7 @@ import NavBarItem from './NavBarItem';
 
 
 
-function Orar() {    
+function Timetable() {    
     const [orar, setOrar] = useState(0);
     const [modalIsOpen,setIsOpen] = React.useState(false);
     const [clickedClass, setClickedClass] = React.useState(null);
@@ -189,4 +189,4 @@ function Orar() {
     }
 }
 
-export default Orar
+export default Timetable

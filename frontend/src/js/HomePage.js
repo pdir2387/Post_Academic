@@ -1,9 +1,9 @@
 import LogoutButton from "./LogoutButton.js"
 import React, {useState} from 'react'
 import StudentNavBar from "./StudentNavBar.js"
-import ProfessorNavBar from "./ProfessorNavBar.js"
+import TeacherNavBar from "./TeacherNavBar.js"
 import AdminNavBar from "./AdminNavBar.js"
-import Orar from "./Orar.js"
+import Timetable from "./Timetable.js"
 import PermissionDeniedPage from "./PermissionDeniedPage"
 
 import home from '../css/home.module.css'
@@ -25,7 +25,7 @@ export default function HomePage() {
                         <LogoutButton />
                     </div>
                     <div id={home.homeRight}> 
-                        <Orar />
+                        <Timetable />
                     </div>
                 </div>
             );
@@ -46,7 +46,7 @@ export default function HomePage() {
         {
             if(accountType==="profesor")
             {
-                return <ProfessorNavBar />;
+                return <TeacherNavBar />;
             }
             else
             {

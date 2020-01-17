@@ -23,8 +23,8 @@ export default function TeacherGrades() {
     }
 
     function getStudentsByCourse(){
-        if(selectedCourse != '')
-        if(selectedGroup != ''){
+        if(selectedCourse !== '')
+        if(selectedGroup !== ''){
             fetch('http://localhost:3000/api/profesor/studenti/'+selectedCourse)
             .then(res => res.json())
             .then(res => setStudents(res));
@@ -34,18 +34,18 @@ export default function TeacherGrades() {
     }
 
     function getGradesByStuff(){
-        if(selectedTip != '' && selectedCourse != '' && selectedGroup != '')
+        if(selectedTip !== '' && selectedCourse !== '' && selectedGroup !== '')
             fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod+ '/'+selectedTip +'/'+selectedGroup)
                 .then(res => res.json())
                 .then(res => setGrades(res));
-        else if(selectedTip != '' && selectedCourse != '')
+        else if(selectedTip !== '' && selectedCourse !== '')
             fetch('http://localhost:3000/api/profesor/note/disciplina/'+selectedCourse.cod+ '/'+selectedTip)
                 .then(res => res.json())
                 .then(res => setGrades(res));
     }
 
     function getStudentsByCourseAndGroup(){
-        if(selectedCourse != '')
+        if(selectedCourse !== '')
             fetch('http://localhost:3000/api/profesor/studenti/'+selectedCourse.cod + '/'+selectedGroup)
             .then(res => res.json())
             .then(res => setStudents(res))
@@ -53,7 +53,7 @@ export default function TeacherGrades() {
     }
 
     function getGroupsByCourse(){
-        if(selectedCourse != '')
+        if(selectedCourse !== '')
             fetch('http://localhost:3000/api/profesor/grupe/'+selectedCourse.cod)
             .then(res => res.json())
             .then(res => setGroups(res));

@@ -4,7 +4,7 @@ import mainLogo from '../img/logo_facultate.png';
 
 import home from '../css/home.module.css'
 
-export default function ProfessorNavBar(){
+export default function TeacherNavBar(){
     return(
         <div id={home.studentNavBar}>
             <img src={mainLogo} alt="logo"></img>
