@@ -26,6 +26,5 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             } else {
                 response.sendRedirect("/home");
             }
-
         }
     }
