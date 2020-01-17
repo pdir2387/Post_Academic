@@ -37,7 +37,7 @@ export default function AI() {
     {
         await fetch('http://localhost:3000/api/authority')
         .then(response => response.text())
-        .then(auth => setAccountType(auth))
+        .then(auth => setAccountType('student'))
         .catch( e => alert(e));
     }
 }
