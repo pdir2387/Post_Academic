@@ -117,20 +117,36 @@ export default class GradesScreen extends Component
   {
     if(discipline!=="")
     {
-      fetch(backend_base_url + 'api/student/prezente/'+discipline)
+      fetch(backend_base_url + 'api/student/note/'+discipline)
       .then(res => res.json())
       .then(res => {
-        let gradesCourse=res.curs.map(el=>el.toString());
+        let c=["","","","","","","","","","","","","","",""];
+        let s=["","","","","","","","","","","","","","",""];
+        let l=["","","","","","","","","","","","","","",""];
 
-        this.setState({courseGrades:gradesCourse});
+        for(let i=0;i<res.length;i++)
+        {
+          if(res[i].tip==="curs")
+          {
+            c[parseInt(res[i].saptamana)]=res[i].nota;
+          }
+          else
+          {
+            if(res[i].tip==="seminar")
+            {
+              s[parseInt(res[i].saptamana)]=res[i].nota;
+            }
+            else
+            {
+              if(res[i].tip==="laborator")
+              {
+                l[parseInt(res[i].saptamana)]=res[i].nota;
+              }
+            }
+          }
+        }
 
-        let gradesSeminar=res.seminar.map(el=>el.toString());
-
-        this.setState({seminarGrades:gradesSeminar});
-        
-        let gradesLab=res.laborator.map(el=>el.toString());
-
-        this.setState({labGrades:gradesLab});
+        this.setState({courseGrades:c,seminarGrades:s,labGrades:l});
       });
     }
   }
