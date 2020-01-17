@@ -21,13 +21,16 @@ public class NotaService {
     UserService userService;
     @Autowired
     OraService oraService;
+    @Autowired
+    DisciplinaService disciplinaService;
 
 
     public ArrayList<Nota> getNoteByMaterie(User user, String disciplina){
+        System.out.println(user.getUsername());
         ArrayList<Nota> note = new ArrayList<>();
         if(user.getAccountType().equals(AccountType.student)){
             for(Nota nota: notaRepo.findAll()){
-                if(nota.getStudent().getId().equals(user.getId()) && nota.getOra().getDisciplina().getCodDisciplina().equals(disciplina)){
+                if(nota.getStudent().getUser().equals(user) && nota.getOra().getDisciplina().getCodDisciplina().equals(disciplina)){
                     note.add(nota);
                 }
             }
@@ -135,4 +138,22 @@ public class NotaService {
         }
         return error;
     }
+
+
+    public String addMedie(User user, String materie, String student, String nota, String grupa){
+        String error = "";
+        if(user.getAccountType().equals(AccountType.profesor)) {
+            Student s = userService.getStudentByCod(student);
+            System.out.println(materie + " " + student + " " + nota + " " + grupa);
+            for(Medie m: medieRepo.findAll()){
+                if(m.getStudent().equals(s) && m.getDisciplina().getCodDisciplina().equals(materie)){
+                    return "Medie deja existenta!";
+                }
+            }
+            medieRepo.save(new Medie(s.getAnulInscrierii()+(s.getSemestru()/2), s.getSemestru(), Integer.parseInt(nota), s, disciplinaService.findDisciplina(materie), Integer.parseInt(nota)>5));
+        }
+        return error;
+    }
+
+
 }

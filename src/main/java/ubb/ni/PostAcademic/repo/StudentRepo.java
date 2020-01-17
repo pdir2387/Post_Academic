@@ -4,4 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import ubb.ni.PostAcademic.domain.Student;
 
 public interface StudentRepo extends CrudRepository<Student, Long> {
+    Student findFirstByCnp(String cnp);
 }
