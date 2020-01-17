@@ -105,7 +105,7 @@ export default function ResultsProfesor() {
 
     return(
         <div className={commons.container}>
-            <h1>Note</h1>
+            <h1>Medii</h1>
 
             <div id={gradesCss.selectContainer}>
                 <select id="course-select" className={`${gradesCss.select} ${commons.dropDown}`} onChange={handleSelectCourse}>
