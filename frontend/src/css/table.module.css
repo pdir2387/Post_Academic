@@ -17,6 +17,12 @@
     background-color: lightblue;
 }
 
+#orar .headerCell {
+    border: 2px solid black;
+    height:60px;
+    text-align: center;
+    background-color: #6d8f9d;
+}
 
 #orar .button {
     background-color: transparent;
@@ -26,5 +32,12 @@
     height: 100%;
     width: 100%;
     font-size: 20px;
+}
+
+#orar .button:hover {background-color: #929292;}
+#orar .button:active {
+    background-color: #929292;
+    box-shadow: 0 3px #5c5c5c;
+    transform: translateY(1px);
 }
 
