@@ -6,6 +6,8 @@ import MailFooter from './MailFooter';
 import MailAttachmentItem from './MailAttachmentItem';
 import * as FileSystem from 'expo-file-system';
 import {backend_base_url} from '../misc/constants';
+import * as MediaLibrary from 'expo-media-library';
+import * as Permissions from 'expo-permissions';
 
 export default class MailContentScreen extends Component
 {
@@ -221,6 +223,14 @@ export default class MailContentScreen extends Component
             }
         }
 
+        saveFile = async (fileUri) => {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (status === "granted") {
+                const asset = await MediaLibrary.createAssetAsync(fileUri)
+                await MediaLibrary.createAlbumAsync("Download", asset, false)
+            }
+        }
+
         fetch(backend_base_url + 'api/all/emails/down/'+location, {
 			method: 'POST',
 			headers: {
@@ -233,9 +243,13 @@ export default class MailContentScreen extends Component
 		})
 		.then((res)=>res.json())
 		.then((res)=>{
-            let path=FileSystem.documentDirectory+res.name;
-            console.log(path);
-            FileSystem.writeAsStringAsync(path, res.bytes, {encoding:FileSystem.EncodingType.Base64});
+            FileSystem.makeDirectoryAsync(FileSystem.documentDirectory+"downloads",{intermediates:true}).then(()=>{
+                let path=FileSystem.documentDirectory+"downloads/"+res.name;
+                FileSystem.writeAsStringAsync(path, res.bytes, {encoding:FileSystem.EncodingType.Base64});
+
+                saveFile(path);
+            });
+            
 		});
     }
 }
