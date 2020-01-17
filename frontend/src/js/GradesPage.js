@@ -12,7 +12,8 @@ import grades from '../css/grades.module.css'
 
 export default function GradesPage() 
 {
-    let [accountType,setAccountType]=useState(()=>getAccountType());
+    let [accountType,setAccountType]=useState("");
+    getAccountType();
 
     return <Page />;
 
@@ -70,8 +71,11 @@ export default function GradesPage()
         }
     }
 
-    function getAccountType()
+    async function getAccountType()
     {
-        return "profesor";
+        await fetch('http://localhost:3000/api/authority')
+        .then(response => response.text())
+        .then(auth => setAccountType(auth))
+        .catch( e => alert(e));
     }
 }

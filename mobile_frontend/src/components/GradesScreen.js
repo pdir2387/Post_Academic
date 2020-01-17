@@ -5,7 +5,7 @@ import NavBarOpener from './NavBarOpener'
 import {Table,Row,Rows,Col,TableWrapper} from 'react-native-table-component';
 import {backend_base_url} from '../misc/constants';
 
-export default class AttendancesScreen extends Component
+export default class GradesScreen extends Component
 {
   constructor(props)
   {
@@ -15,15 +15,12 @@ export default class AttendancesScreen extends Component
       disciplines: [],
       tableWeeks: [],
       tableFirstRow: [],
-      courseAttendances: [],
-      seminarAttendances: [],
-      labAttendances: [],
+      courseGrades: [],
+      seminarGrades: [],
+      labGrades: [],
       dropDownItems:[],
       dropDownItemsPlaceholder: "---alege materia---",
       selectedItemDropdown: "",
-      courseAttendancesCount: 0,
-      seminarAttendancesCount: 0,
-      labAttendancesCount: 0
     }
 
     this.getDisciplines = this.getDisciplines.bind(this);
@@ -49,7 +46,7 @@ export default class AttendancesScreen extends Component
         <Content>
           <View style={styles.pageContainer}>
             <Text style={styles.title}>
-              Prezențe
+              Note
             </Text>
 
             <View style={styles.pickerContainer}>
@@ -62,24 +59,12 @@ export default class AttendancesScreen extends Component
                   <Row data={this.state.tableFirstRow} style={styles.firstRow} textStyle={styles.text}/>
                   <TableWrapper style={styles.wrapperCols} >
                     <Col data={this.state.tableWeeks} style={styles.weeks} textStyle={styles.text}/>
-                    <Col data={this.state.courseAttendances} textStyle={styles.text}/>
-                    <Col data={this.state.seminarAttendances} textStyle={styles.text}/>
-                    <Col data={this.state.labAttendances} textStyle={styles.text}/>
+                    <Col data={this.state.courseGrades} textStyle={styles.text}/>
+                    <Col data={this.state.seminarGrades} textStyle={styles.text}/>
+                    <Col data={this.state.labGrades} textStyle={styles.text}/>
                   </TableWrapper>
                 </TableWrapper>
               </Table>
-            </View>
-
-            <View style={styles.attendanceInfoContainer}>
-              <Text>
-                Prezente curs: {this.state.courseAttendancesCount}/{this.state.nrWeeks}
-              </Text>
-              <Text>
-                Prezente seminar: {this.state.seminarAttendancesCount}/{this.state.nrWeeks}
-              </Text>
-              <Text>
-                Prezente laborator: {this.state.labAttendancesCount}/{this.state.nrWeeks}
-              </Text>
             </View>
           </View>
         </Content>
@@ -89,7 +74,7 @@ export default class AttendancesScreen extends Component
 
   getDisciplines()
   {
-    fetch(backend_base_url  + 'api/student/materii/')
+    fetch(backend_base_url + 'api/student/materii/')
     .then(res => res.json())
     .then(res => {
         this.setState({disciplines:res},()=>this.setDropDownItems());
@@ -135,53 +120,17 @@ export default class AttendancesScreen extends Component
       fetch(backend_base_url + 'api/student/prezente/'+discipline)
       .then(res => res.json())
       .then(res => {
-        let counter=0;
-        let attendancesCourse=res.curs.map(el=>{
-          if(el===true)
-          {
-              counter+=1;
-              return "x";
-          }
-          else
-          {
-              return "";
-          }
-        });
+        let gradesCourse=res.curs.map(el=>el.toString());
 
-        this.setState({courseAttendances:attendancesCourse});
-        this.setState({courseAttendancesCount:counter})
-        counter=0;
+        this.setState({courseGrades:gradesCourse});
 
-        let attendancesSeminar=res.seminar.map(el=>{
-            if(el===true)
-            {
-                counter+=1;
-                return "x";
-            }
-            else
-            {
-                return "";
-            }
-        });
+        let gradesSeminar=res.seminar.map(el=>el.toString());
 
-        this.setState({seminarAttendances:attendancesSeminar});
-        this.setState({seminarAttendancesCount:counter})
-        counter=0;
+        this.setState({seminarGrades:gradesSeminar});
         
-        let attendancesLab=res.laborator.map(el=>{
-            if(el===true)
-            {
-                counter+=1;
-                return "x";
-            }
-            else
-            {
-                return "";
-            }
-        });
+        let gradesLab=res.laborator.map(el=>el.toString());
 
-        this.setState({labAttendances:attendancesLab});
-        this.setState({labAttendancesCount:counter});
+        this.setState({labGrades:gradesLab});
       });
     }
   }
@@ -221,11 +170,6 @@ const styles = StyleSheet.create({
     },
     text: { 
       textAlign: 'center' 
-    },
-    attendanceInfoContainer: {
-      flex: 2,
-      padding: 10,
-      alignSelf:"flex-start"
     },
     pickerStyle:{  
       height: 50,  

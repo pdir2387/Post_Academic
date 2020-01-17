@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Picker } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import MapView, { Marker } from 'react-native-maps';
+import {backend_base_url} from '../misc/constants';
 
 export default class LocationsScreen extends Component
 {
@@ -30,13 +31,30 @@ export default class LocationsScreen extends Component
 
     if(this.state.roomId!==-1)
     {
-      // fetch('http://localhost:3000/api/all/cladire/'+this.state.roomId)
-      // .then(res => res.json())
-      // .then(res => {
-      //     this.setMarker(res.lat+","+res.long+","+res.nume);
-      // });
+      fetch(backend_base_url + 'api/all/cladire/'+this.state.roomId)
+      .then(res => res.json())
+      .then(res => {
+          this.setMarker(res.lat+","+res.long+","+res.nume);
+      });
     }
   }
+
+  willFocus = this.props.navigation.addListener('willFocus',(payload) => {
+    if(payload.action.params)
+    {
+        let newRoomId=payload.action.params.sala_id;
+        this.setState({roomId:newRoomId});
+
+        if(newRoomId!==-1)
+        {
+          fetch(backend_base_url + 'api/all/cladire/'+newRoomId)
+          .then(res => res.json())
+          .then(res => {
+              this.setMarker(res.lat+","+res.long+","+res.nume);
+          });
+        }
+    }
+  });
 
   render()
   {    
@@ -63,11 +81,11 @@ export default class LocationsScreen extends Component
 
   getLocations()
   {
-    // fetch('http://localhost:3000/api/all/cladiri')
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({locations:res},()=>this.setDropDownItems());
-    // });        
+    fetch(backend_base_url + 'api/all/cladiri')
+    .then(res => res.json())
+    .then(res => {
+      this.setState({locations:res},()=>this.setDropDownItems());
+    });        
   }
 
   setDropDownItems()

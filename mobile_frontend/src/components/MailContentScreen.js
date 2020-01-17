@@ -1,10 +1,11 @@
 import React,{Component} from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Dimensions  } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import MailFooter from './MailFooter';
 import MailAttachmentItem from './MailAttachmentItem';
-import RNFetchBlob from "react-native-fetch-blob";
+import * as FileSystem from 'expo-file-system';
+import {backend_base_url} from '../misc/constants';
 
 export default class MailContentScreen extends Component
 {
@@ -220,20 +221,22 @@ export default class MailContentScreen extends Component
             }
         }
 
-        // fetch('http://localhost:3000/api/all/emails/down/'+location, {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 		},
-		// 	body:JSON.stringify({
-		// 		mailId:mailId,
-		// 		fileId:fileId
-		// 	})
-		// })
-		// .then((res)=>res.json())
-		// .then((res)=>{
-        //     RNFetchBlob.fs.writeFile(res.name, res.bytes, 'base64')
-		// });
+        fetch(backend_base_url + 'api/all/emails/down/'+location, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				},
+			body:JSON.stringify({
+				mailId:mailId,
+				fileId:fileId
+			})
+		})
+		.then((res)=>res.json())
+		.then((res)=>{
+            let path=FileSystem.documentDirectory+res.name;
+            console.log(path);
+            FileSystem.writeAsStringAsync(path, res.bytes, {encoding:FileSystem.EncodingType.Base64});
+		});
     }
 }
 
@@ -277,7 +280,7 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         borderRadius: 20,
         backgroundColor: "#a5a5a5",
-        fontSize: 18
+        fontSize: 18,
     },
     subjectContainer: {
         display: "flex",
@@ -295,7 +298,7 @@ const styles = StyleSheet.create({
     },
     messageViewContainer:{
         borderBottomWidth: 1,
-        height: "100%",
+        height: Math.round(Dimensions.get('window').height)-320,
         padding: 10,
     },
     attachmentContainer:{

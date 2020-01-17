@@ -1,12 +1,15 @@
 import React,{Component, useEffect} from 'react';
-import { StyleSheet, View, Dimensions, FlatList, StatusBar, Text} from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList, TouchableWithoutFeedback, Button, Text, Modal, Image, TouchableHighlight} from 'react-native';
 import mainLogo from '../../assets/logo_facultate.png';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import NavBarOpener from './NavBarOpener';
+import {backend_base_url} from '../misc/constants';
 
-
-function TabbedTimeTable() {
+  
+export default function TimetableScreen(props) {
     const [orar, setOrar] = React.useState([]);
+    const [clickedClass, setClickedClass] = React.useState(null);
+    const [modalVisibility, setModalVisibility] = React.useState(false);
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'luni', title: 'Luni' },
@@ -22,8 +25,8 @@ function TabbedTimeTable() {
 
     function fetchOrar() {
         if (orar.length === 0)
-            fetch('http://192.168.1.144:8080/api/orar')
-            //fetch('http://localhost:3000/api/student/ore')
+            fetch(backend_base_url + 'api/orar')
+            //fetch(backend_base_url + 'api/student/ore')
             .then(res => res.json())
             .then(data => {
                 setOrar(data);
@@ -42,24 +45,83 @@ function TabbedTimeTable() {
         return classes;
     }
     
-    const _renderClass = (course) => {
+    const _renderModal = (course) => {
+        return (
+            <Modal
+                visible={modalVisibility}
+                transparent={true}
+                onRequestClose={() => {setModalVisibility(false)}}
+                animationType='fade'
+                >
+
+                <TouchableWithoutFeedback onPress={() => {setModalVisibility(false)}}>
+                    <View style={styles.modalOverlay} />
+                </TouchableWithoutFeedback>
+
+                <View style={styles.modalContent}>
+                    <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 20}}>{course.nume}</Text>
+
+                    <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View style={{maxWidth: '50%', height: '80%', marginTop: 30, padding: 10}}>
+                            <Text style={{fontSize: 17}}>{course.tip.toUpperCase()}</Text>
+                            <Text style={{fontSize: 17}}>Cu {course.profesor}</Text>
+                            <Text style={{fontSize: 17}}>Sala {course.sala}</Text>
+
+                            <Button
+                                title="Vezi pe harta"
+                                onPress={() => props.navigation.navigate('Locations', {sala_id : course.sala_id})}
+                                style={{backgroundColor: 'lightblue'}}
+                            />
+                        </View>
+                        <View style={{maxWidth: '50%', marginTop: 30, paddingLeft: 5}}>
+                        <Image
+                            style={{width: 150, height: 150}}
+                            source={{uri: 'http://www.cs.ubbcluj.ro/wp-content/uploads/Suciu-Dan.jpg'}}
+                        />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+        )
+
+    }
+
+    const _renderFree = (props) => {
+        return null;
+        return (
+            <View style={styles.classContainer}>
+                <Text style={styles.classTime}>{props.time}:00</Text>
+            </View>
+        )
+    }
+    const _renderItem = (course) => {
         let currentClass = course.item;
         if (currentClass.nume === "fereastra")
             return (
-                <View style={styles.classContainer}>
-                    <Text style={styles.classTime}>{currentClass.start}:00</Text>
-                </View>
+                <_renderFree time={currentClass.start} />
             )
-        else {
-            
-            return (
-                <View style={styles.classContainer}>
-                    <Text style={styles.classTime}>{currentClass.start}:00</Text>
 
-                    <Text style={styles.class}>{currentClass.nume}{'\n'}{currentClass.tip}{'\n'}{currentClass.sala}</Text>
-                </View>
-            )
-        }
+        return (
+            <View 
+                style={styles.classContainer}
+                onStartShouldSetResponder={() => {
+
+                }}
+            >
+                <Text style={styles.classTime}>{currentClass.start}:00</Text>
+
+                <Text style={styles.class}>{currentClass.nume}{'\n'}{currentClass.tip}{'\n'}{currentClass.sala}</Text>
+                <TouchableHighlight
+                    onPress={() => {
+                        setClickedClass(currentClass);
+                        setModalVisibility(true);
+                    }}
+                    style={{backgroundColor: "lightblue",justifyContent:'center', height: 40, width: "50%", alignSelf: "center", marginBottom: 25}}
+                >
+                        <Text style={{textAlign: "center",  fontSize: 20}}>Mai multe informatii</Text>
+                </TouchableHighlight>
+            </View>
+        )
     }
 
     const TabScene = (day) => {
@@ -98,7 +160,7 @@ function TabbedTimeTable() {
             <FlatList
                 data={timeTableForToday}
                 keyExtractor = { (item, index) => index.toString() }
-                renderItem={(course) => _renderClass(course)}
+                renderItem={(course) => _renderItem(course)}
                 scrollEventThrottle={200}
                 style={styles.scene}
             />
@@ -109,35 +171,30 @@ function TabbedTimeTable() {
     
     const renderTabBar = props => (
         <TabBar
-          {...props}
-          indicatorStyle={{ backgroundColor: 'yellow', height: 2 }}
-          labelStyle={{ fontSize: 17 }}
-          scrollEnabled={true}
-          style={{ backgroundColor: '#245caa'}}
+            {...props}
+            indicatorStyle={{ backgroundColor: 'yellow', height: 2 }}
+            labelStyle={{ fontSize: 17 }}
+            scrollEnabled={true}
+            style={{ backgroundColor: '#245caa'}}
         />
     );
     
     const renderScene = ({ route }) => {
         return TabScene(route.key);
     }
-  
-    return (
-      <TabView
-        renderTabBar={renderTabBar}
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={initialLayout}
-        style={styles.tabViewContainer}
-      />
-    );
-}
-  
-export default function TimetableScreen(props) {
+    
     return (
         <View style={styles.container}>
+            { clickedClass !== null ? _renderModal(clickedClass) : null }
             <NavBarOpener navigation={props.navigation}/>
-            <TabbedTimeTable />
+            <TabView
+                renderTabBar={renderTabBar}
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={initialLayout}
+                style={styles.tabViewContainer}
+            />
         </View>
     )
 }
@@ -169,10 +226,24 @@ const styles=StyleSheet.create({
         fontWeight: 'bold'
     },
     class: {
-        backgroundColor: 'yellow',
         fontSize: 20,
         textAlign: 'center',
-        height: 100
-    }
-
+    },
+    modalContent: {
+        margin: '5%',
+        backgroundColor: 'white',
+        width: '90%',
+        height: 275,
+        marginTop: 180,
+        padding: 20,
+    },
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        
+    },
 });

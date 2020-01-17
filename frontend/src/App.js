@@ -14,14 +14,12 @@ import AdminOptionsPage from "./js/AdminOptionsPage"
 import LocationsPage from "./js/LocationsPage"
 import React from 'react'
 import AI from "./js/AI";
-import Trade from "./js/Trade"
-import MyTrade from "./js/MyTrade"
+import TradePage from "./js/TradePage";
 
 function App() {	
 	return (
 	    <Switch>
-			<Route path="/mytrade/" component={MyTrade} />
-			<Route path="/trade" component={Trade} />
+			<Route path="/trade" component={TradePage} />
 			<Route path="/location" component={LocationsPage} />
 			<Route path="/ai" component={AI} />
 	    	<Route path="/admin_options" component={AdminOptionsPage} />

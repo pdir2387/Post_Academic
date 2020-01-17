@@ -18,7 +18,9 @@ public class Prezenta {
     private Boolean prezent;
     @ManyToOne
     @JoinColumn
-    private Ora ora;
+    private Disciplina disciplina;
+    @Column
+    private TipOra tipOra;
     @ManyToOne
     @JoinColumn
     private Student student;
@@ -27,10 +29,11 @@ public class Prezenta {
 
     }
 
-    public Prezenta(Integer saptamana, Boolean prezent, Ora ora, Student student) {
+    public Prezenta(Integer saptamana, Boolean prezent, Disciplina disciplina, TipOra tipOra, Student student) {
         this.saptamana = saptamana;
         this.prezent = prezent;
-        this.ora = ora;
+        this.disciplina = disciplina;
+        this.tipOra = tipOra;
         this.student = student;
     }
 
@@ -58,12 +61,20 @@ public class Prezenta {
         this.prezent = prezent;
     }
 
-    public Ora getOra() {
-        return ora;
+    public Disciplina getDisciplina() {
+        return disciplina;
     }
 
-    public void setOra(Ora ora) {
-        this.ora = ora;
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
+    }
+
+    public TipOra getTipOra() {
+        return tipOra;
+    }
+
+    public void setTipOra(TipOra tipOra) {
+        this.tipOra = tipOra;
     }
 
     public Student getStudent() {

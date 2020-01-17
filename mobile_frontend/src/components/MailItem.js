@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CheckBox } from 'native-base';
+import {backend_base_url} from '../misc/constants';
 
 export default class MailItem extends Component
 {
@@ -8,7 +9,7 @@ export default class MailItem extends Component
   {
     super(props);
     this.state={
-        read:props.read
+        checked: false
     }
 
     this.sendRead = this.sendRead.bind(this);
@@ -25,7 +26,10 @@ export default class MailItem extends Component
   {    
     return (
         <View style={styles.itemContainer}>
-            <CheckBox onValueChange={(value)=>this.checkBoxClicked(value)}/>
+            <View style={styles.checkboxContainer}>
+                <CheckBox onPress={()=>this.setState({checked:!this.state.checked},()=>{this.checkBoxClicked()})} checked={this.state.checked}/>
+            </View>
+
             <TouchableOpacity style={styles.container} onPress={()=>{this.sendRead();this.props.viewMail(this.props.mailData,this.props.type)}}>
                 <View style={styles.toFromDateContainer}>
                     <View style={styles.toFromContainer}>
@@ -45,14 +49,14 @@ export default class MailItem extends Component
     );
   }
 
-  checkBoxClicked(value)
+  checkBoxClicked()
   {
-    this.props.manageSelectedMails(this.props.mailData,value);
+    this.props.manageSelectedMails(this.props.mailData,this.state.checked);
   }
 
   subjectStyle()
   {
-    if(this.state.read===true)
+    if(this.props.read===true)
     {
         return styles.text;
     }
@@ -66,7 +70,7 @@ export default class MailItem extends Component
 
     let location="";
     let id=this.props.mailData.id;
-    let source=this.props.mailType;
+    let source=this.props.type;
 
     if(source==="inbox")
     {
@@ -87,24 +91,30 @@ export default class MailItem extends Component
         }
     }
 
-    // fetch('http://localhost:3000/api/all/emails/read/'+location, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //         },
-    //     body:JSON.stringify({
-    //         id:id
-    //     })
-    // });
+    fetch(backend_base_url + 'api/all/emails/read/'+location, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+            },
+        body:JSON.stringify({
+            id:id
+        })
+    });
   }
 }
 
 const styles = StyleSheet.create({
     itemContainer:{
         height: 80,
-        width: "100%"
+        width: "100%",
+        flex:1,
+        flexDirection:"row",
+        borderStyle: "solid",
+        borderBottomWidth: 2,
+        borderColor: "grey",
     },
     container: {
+        flex: 6,
         display: "flex",
         backgroundColor: '#fff',
         alignItems: 'center',
@@ -112,9 +122,6 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         height: "100%",
         width: "100%",
-        borderStyle: "solid",
-        borderBottomWidth: 2,
-        borderColor: "grey",
     },
     toFromDateContainer:{
         display: "flex",
@@ -141,9 +148,13 @@ const styles = StyleSheet.create({
     },
     bold:{
         fontWeight: "bold",
-        fontSize: 20
+        fontSize: 10
     },
     text:{
-        fontSize: 20
+        fontSize: 10
+    },
+    checkboxContainer:{
+        flex: 1,
+        justifyContent: "center"
     }
 });

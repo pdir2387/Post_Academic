@@ -4,6 +4,7 @@ import { CheckBox } from  'react-native-elements';
 import mainLogo from '../../assets/logo_facultate.png';
 import userPng from '../../assets/username.png';
 import passPng from '../../assets/password.png';
+import {backend_base_url} from '../misc/constants';
 
 export default class Login extends Component
 {
@@ -101,9 +102,7 @@ export default class Login extends Component
     }
 
     login=() => {
-        console.log("Doing login btw");
-    
-        fetch('http://192.168.1.144:8080/api/login', {
+        fetch(backend_base_url + 'api/login', {
             method:'POST',
             headers: {
                 'Content-Type' : 'application/x-www-form-urlencoded',
@@ -114,8 +113,6 @@ export default class Login extends Component
             return response.json();
         })
         .then(response => {
-            //console.log(response);
-
             if (response.path === '/home') {
                 //login was successful, navigating to main screen(timetable)
                 this.props.navigation.navigate('Timetable', {
@@ -127,53 +124,10 @@ export default class Login extends Component
                 this.setState({password: ''});
             }
         })
-
-        //.then((res)=>{
-        //     if(res.error===false){
-        //         saveUser(res.user).then(()=>{
-        //             saveJwt(res.jwt).then(()=>{
-        //                 this.props.navigation.navigate('HomePg',{user:res.user,connected:true});
-        //             });
-        //         });
-        //     }
-        //     else{
-        //         alert(res.message);
-        //     }
-        // })
-        // .catch((error)=>{
-        //     getUser().then((foundUser)=>{
-        //         if(foundUser.username===this.state.username && foundUser.password===this.state.password)
-        //         {
-        //             this.props.navigation.navigate('HomePg',{user:foundUser,connected:false});
-        //         }
-        //         else
-        //         {
-        //             alert("Wrong username or password");
-        //         }
-        //     });
-        // })
-
     }
 
 
 }
-
-// async function saveUser(userToSave)
-// {
-//     let json=await AsyncStorage.setItem('user',JSON.stringify(userToSave));
-// }
-
-// async function saveJwt(jwt)
-// {
-//     await AsyncStorage.setItem('jwt',jwt);
-// }
-
-// async function getUser()
-// {
-//     const retrievedItem =  await AsyncStorage.getItem('user');
-//     const item = JSON.parse(retrievedItem);
-//     return item;
-// }
 
 const styles=StyleSheet.create({
     wrapper:{
