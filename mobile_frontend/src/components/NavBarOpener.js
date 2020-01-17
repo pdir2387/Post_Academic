@@ -1,12 +1,23 @@
-import {Left,Icon,Header} from 'native-base';
+import {Left,Icon,Header, Right, CheckBox} from 'native-base';
 import React,{Component} from 'react';
 import {StyleSheet,Text} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class NavBarOpener extends Component
 {
+    constructor(props) {
+        super(props);
+        
+        this.state = {rositaChecked : true};
+    }
+
+    componentDidMount() {
+        this.setState({rositaChecked: true});
+    }
+
     render()
     {
+
         return(
             <Header style={styles.header}>
                 <Left style={styles.left}>
@@ -16,6 +27,17 @@ export default class NavBarOpener extends Component
                     </TouchableOpacity>
                     
                 </Left>
+                <Right style={styles.right}>
+                    <CheckBox 
+                        checked={this.state.rositaChecked}
+                        style={{width: 28, height: 28, paddingLeft: 6, paddingTop: 4}}
+                        onPress={() => {
+                            this.props.setRosita(!this.state.rositaChecked);
+                            this.setState({rositaChecked : !this.state.rositaChecked})
+                        }}
+                    />
+                    <Text style={styles.text}>Rosita</Text>
+                </Right>
             </Header>
         );
     }
@@ -23,6 +45,11 @@ export default class NavBarOpener extends Component
     openNavBar(props)
     {
         props.navigation.openDrawer();
+    }
+
+    toggleRosita(props)
+    {
+
     }
 }
 
@@ -38,6 +65,10 @@ const styles = StyleSheet.create({
         textAlign:"center", 
         flex:1,
         paddingLeft: 15
+    },
+    right: {
+        display: "flex",
+        flexDirection: "row"
     },
     text:{
         fontSize: 20,
