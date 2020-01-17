@@ -26,7 +26,7 @@ export default function Results()
 						<input type="checkbox" id="semesterS" name="semesterS" value="0" onChange={(e) => manageSortingOptions("semester",e.target)}/> Semestru<br/>
 						<input type="checkbox" id="nameS" name="nameS" value="0" onChange={(e) => manageSortingOptions("name",e.target)}/> Denumire<br/>
 						<input type="checkbox" id="gradeS" name="gradeS" value="0" onChange={(e) => manageSortingOptions("grade",e.target)}/> Notă<br/>
-						<input type="checkbox" id="dateS" name="dateS" value="0" onChange={(e) => manageSortingOptions("date",e.target)}/> Dată<br/>
+						{/*<input type="checkbox" id="dateS" name="dateS" value="0" onChange={(e) => manageSortingOptions("date",e.target)}/> Dată<br/>*/}
 					</div>
 
 					<h2 id="filterH2">Vizualizează:</h2>
@@ -53,7 +53,6 @@ export default function Results()
 	            			<th>Disciplină</th>
 	            			<th>Notă</th>
 	            			<th>Număr credite</th>
-	            			<th>Data promovării</th>
 	            		</tr>
 		            </thead>
 
@@ -120,7 +119,7 @@ export default function Results()
 			let tdName=document.createElement("td");
 			let tdGrade=document.createElement("td");
 			let tdCredits=document.createElement("td");
-			let tdDate=document.createElement("td");
+			//let tdDate=document.createElement("td");
 
 			tdYear.innerText=elements[i].year;
 			tdSemester.innerText=elements[i].semester;
@@ -128,7 +127,7 @@ export default function Results()
 			tdName.innerText=elements[i].name;
 			tdGrade.innerText=elements[i].grade;
 			tdCredits.innerText=elements[i].credits;
-			tdDate.innerText=elements[i].date;
+			//tdDate.innerText=elements[i].date;
 
 			trResult.appendChild(tdYear);
 			trResult.appendChild(tdSemester);
@@ -136,7 +135,7 @@ export default function Results()
 			trResult.appendChild(tdName);
 			trResult.appendChild(tdGrade);
 			trResult.appendChild(tdCredits);
-			trResult.appendChild(tdDate);
+			//trResult.appendChild(tdDate);
 
 			resultsBody.appendChild(trResult);
 		}
