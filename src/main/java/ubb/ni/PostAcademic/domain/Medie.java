@@ -26,22 +26,18 @@ public class Medie {
     @JoinColumn
     private Disciplina disciplina;
     @Column
-    private LocalDate data_promovarii;
-    @Column
     private Boolean promovat;
 
     public Medie(){
 
     }
 
-
-    public Medie(Integer an_universitar, Integer smestru, Integer nota, Student student, Disciplina disciplina, LocalDate data_promovarii, Boolean promovat) {
+    public Medie(Integer an_universitar, Integer smestru, Integer nota, Student student, Disciplina disciplina, Boolean promovat) {
         this.an_universitar = an_universitar;
         this.smestru = smestru;
         this.nota = nota;
         this.student = student;
         this.disciplina = disciplina;
-        this.data_promovarii = data_promovarii;
         this.promovat = promovat;
     }
 
@@ -91,14 +87,6 @@ public class Medie {
 
     public void setDisciplina(Disciplina disciplina) {
         this.disciplina = disciplina;
-    }
-
-    public LocalDate getData_promovarii() {
-        return data_promovarii;
-    }
-
-    public void setData_promovarii(LocalDate data_promovarii) {
-        this.data_promovarii = data_promovarii;
     }
 
     public Boolean getPromovat() {
