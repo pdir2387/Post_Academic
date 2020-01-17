@@ -117,31 +117,6 @@ export default function AISuggestionsPage() {
     }
 
     return (
-<<<<<<< HEAD
-        <div id={ai.aiContent}>
-            <div id={ai.aiLeft}><br/><br/>
-                <p>Tough to choose an optional course for the final year? Let us recommend you something!</p>
-                <p>What do you like? Write up to three words below</p><br/>
-                <div id="first-form-container">
-                    <form id="first-form">
-                        <input className={ai.input} type="text" value={aiField1}  onChange={(e) => setAiField1(e.target.value)}/>
-                        <input className={ai.input} type="text" value={aiField2}  onChange={(e) => setAiField2(e.target.value)}/>
-                        <input className={ai.input} type="text" value={aiField3}  onChange={(e) => setAiField3(e.target.value)}/>
-                        <br/><br/>
-                        <button className={ai.button} type='button'>Submit</button>
-                    </form>
-                </div><br/><br/>
-
-                <p>Or... maybe it's easier to tell us what concepts you enjoy, past favourite courses or preferred programming languages in a few sentences:</p>
-                <div id="second-form-container">
-                    <form id="second-form">
-                        <textarea id="textarea-input" className={ai.textarea} value={aiTextArea}  onChange={(e) => setAITextArea(e.target.value)}></textarea><br/>
-                        <button className={ai.button} onClick={() => submitText()} type='button'>Submit</button>
-                    </form><br/><br/>
-
-                    <div id="second-form-hidden-content">
-                        <p>We identified the following keywords:</p>
-=======
         <div id={ai.mainContainer}>
             <div id={ai.rosita}>
                 <RositaTextView />
@@ -152,18 +127,19 @@ export default function AISuggestionsPage() {
                     <p>What do you like? Write up to three words below</p><br/>
                     <div id="first-form-container">
                         <form id="first-form">
-                            <input className={ai.input} type="text" />
-                            <input className={ai.input} type="text" />
-                            <input className={ai.input} type="text" /><br/><br/>
-                            <button className={ai.button}>Submit</button>
+                            <input className={ai.input} type="text" value={aiField1}  onChange={(e) => setAiField1(e.target.value)}/>
+                            <input className={ai.input} type="text" value={aiField2}  onChange={(e) => setAiField2(e.target.value)}/>
+                            <input className={ai.input} type="text" value={aiField3}  onChange={(e) => setAiField3(e.target.value)}/>
+                            <br/><br/>
+                            <button className={ai.button} type='button'>Submit</button>
                         </form>
                     </div><br/><br/>
 
                     <p>Or... maybe it's easier to tell us what concepts you enjoy, past favourite courses or preferred programming languages in a few sentences:</p>
                     <div id="second-form-container">
                         <form id="second-form">
-                            <textarea id="textarea-input" className={ai.textarea}>Write here...</textarea><br/>
-                            <button className={ai.button}>Submit</button>
+                            <textarea id="textarea-input" className={ai.textarea} value={aiTextArea}  onChange={(e) => setAITextArea(e.target.value)}></textarea><br/>
+                            <button className={ai.button} onClick={() => submitText()} type='button'>Submit</button>
                         </form><br/><br/>
 
                         <div id="second-form-hidden-content">
@@ -174,7 +150,6 @@ export default function AISuggestionsPage() {
                         <p>The recommended courses are filtered in the table.</p>
                         <span>If you like what you see let us add them to your profile!</span>
                         <button className={ai.button}>Add</button>
->>>>>>> 808266fbea0faf82db35e93a39c650306b5594f9
                     </div>
                 </div>
 
@@ -183,20 +158,11 @@ export default function AISuggestionsPage() {
                     <img src={profilePic} />
                     <p>{about}</p>
 
-<<<<<<< HEAD
-                <table className={ai.table}>
-                    <tbody>
-                        <tr>
-                            <th>Optionale Sugerate</th>
-                            <th>Facultatea</th>
-                        </tr>
-=======
                     <table className={ai.table}>
                         <tbody>
                             <tr>
                                 <th>Optionale Sugerate</th>
                             </tr>
->>>>>>> 808266fbea0faf82db35e93a39c650306b5594f9
 
                             {getFormattedOrar(optionale)}
                         </tbody>
@@ -209,6 +175,9 @@ export default function AISuggestionsPage() {
 
 function getFormattedOrar(optionale) {
     let TRList = [];
+    
+    if(!isIterable(optionale))
+     return TRList;
     
     for (let optional of optionale) {
             let TDList = [];
@@ -242,3 +211,11 @@ function createTableData(columnList, columnClassName) {
         
     return TDList;
 }
+
+function isIterable(obj) {
+    // checks for null and undefined
+    if (obj == null) {
+      return false;
+    }
+    return typeof obj[Symbol.iterator] === 'function';
+  }
