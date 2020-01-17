@@ -4,12 +4,53 @@ import mainLogo from '../../assets/logo_facultate.png';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import NavBarOpener from './NavBarOpener';
 import {backend_base_url} from '../misc/constants';
+import { State } from 'react-native-gesture-handler';
 
   
+class RositaTextView extends React.Component {
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+            index : 0,
+            _interval : -1,
+            colors : ['red', 'blue', 'green', 'black'],
+            phrases : ['tidor', 'rosita', 'hardcoded phrase'],
+        }
+    }
+    
+    componentDidMount() {
+        let intervalReference = setInterval(() => {
+            let newIndex = this.state.index + 1;
+
+            this.setState({index : newIndex});
+        }, 1000);
+
+        this.setState({_interval : intervalReference});
+    }
+
+    componentWillUnmount() {
+        if (this.state._interval !== -1)
+            clearInterval(this.state._interval);
+    }
+
+    render() {
+        return (
+            <View style={{display: 'flex', flexDirection: "row", padding: 10}}>
+                <Text style={{color: this.state.colors[this.state.index % this.state.colors.length], fontSize: 18}}>(Rosita)</Text>
+                
+                <Text>{this.state.phrases[this.state.index % this.state.phrases.length]}</Text>    
+            </View>
+        )
+    }
+        
+}
+
 export default function TimetableScreen(props) {
     const [orar, setOrar] = React.useState([]);
     const [clickedClass, setClickedClass] = React.useState(null);
     const [modalVisibility, setModalVisibility] = React.useState(false);
+    const [rositaIsEnabled, setRosita] = React.useState(true);
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'luni', title: 'Luni' },
@@ -182,11 +223,12 @@ export default function TimetableScreen(props) {
     const renderScene = ({ route }) => {
         return TabScene(route.key);
     }
-    
+
     return (
         <View style={styles.container}>
             { clickedClass !== null ? _renderModal(clickedClass) : null }
-            <NavBarOpener navigation={props.navigation}/>
+            <NavBarOpener navigation={props.navigation} setRosita={setRosita} />
+            {rositaIsEnabled ? <RositaTextView /> : null}
             <TabView
                 renderTabBar={renderTabBar}
                 navigationState={{ index, routes }}
