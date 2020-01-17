@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import commons from '../css/commons.module.css'
 import gradesCss from '../css/grades.module.css'
@@ -6,17 +6,32 @@ import gradesCss from '../css/grades.module.css'
 // /api/student/note
 
 export default function StudentGrades() {
-    let options = ["Mate", "Info", "Romana"];
+    let [options, setOptions] = useState([]);
     let grades = [["Mate", "1/1/1","10","Curs", "-"],["Romana", "1/1/2","5","Laborator", "-"]];
-    let filter = ["Curs", "Laborator", "Seminar"];
+    let filter = ["curs", "laborator", "seminar"];
     
-    let [selectedCourse, setSelectedCourse] = useState(options[0]);
+    let [selectedCourse, setSelectedCourse] = useState('');
+
 
     function handleSelectChange(e) {
         setSelectedCourse(e.target.value);
 
         refillTable(grades, filter);
     }
+
+    function getMaterii(){
+        fetch('http://localhost:3000/api/student/materii/')
+            .then(res => res.json())
+            .then(res => {
+                    setOptions(res);
+                    console.log(res)
+            })
+            .catch(() => setOptions([]));
+    }
+
+    useEffect(() => {
+        getMaterii();
+    },[]);
 
     return (
         <div className={commons.container}>
@@ -44,7 +59,7 @@ function getOptions(options){
 
     for(let option of options){
         optionList.push(
-            <option>{option}</option>
+            <option>{option.name}</option>
         );
     }
 
