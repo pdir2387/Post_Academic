@@ -1,6 +1,7 @@
 import {Left,Icon,Header} from 'native-base';
 import React,{Component} from 'react';
 import {StyleSheet,Text} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class NavBarOpener extends Component
 {
@@ -9,8 +10,12 @@ export default class NavBarOpener extends Component
         return(
             <Header style={styles.header}>
                 <Left style={styles.left}>
-                    <Icon name="ios-menu" onPress={()=>this.openNavBar(this.props)} />
-                    <Text style={styles.text}>Meniu</Text>
+                    
+                    <TouchableOpacity style={styles.touchable} onPress={()=>this.openNavBar(this.props)}>
+                        <Icon name="ios-menu"/>
+                        <Text style={styles.text}>Meniu</Text>
+                    </TouchableOpacity>
+                    
                 </Left>
             </Header>
         );
@@ -34,5 +39,8 @@ const styles = StyleSheet.create({
     text:{
         fontSize: 20,
         paddingLeft: 10
+    },
+    touchable:{
+        flexDirection:"row"
     }
 });

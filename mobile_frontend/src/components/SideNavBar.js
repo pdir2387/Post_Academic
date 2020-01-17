@@ -12,6 +12,7 @@ import ViewMailsScreen from './ViewMailsScreen';
 import SendMailScreen from './SendMailScreen';
 import MailContentScreen from './MailContentScreen';
 import TimetableScreen from './TimetableScreen';
+import GradesScreen from './GradesScreen';
 
 class SideNavBar extends Component
 {
@@ -52,6 +53,12 @@ const navBar=createDrawerNavigator({
         screen: AttendancesScreen,
         navigationOptions:{
             title: 'Prezențe'
+        }
+    },
+    Grades: {
+        screen: GradesScreen,
+        navigationOptions:{
+            title: 'Note'
         }
     },
     StudentInfo: {

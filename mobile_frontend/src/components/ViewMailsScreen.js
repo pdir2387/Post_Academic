@@ -1,11 +1,12 @@
 import React,{Component} from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import MailFooter from './MailFooter';
 import MailItem from './MailItem';
 import Icon from 'react-native-vector-icons/Octicons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon3 from 'react-native-vector-icons/FontAwesome';
 
 export default class ViewMailsScreen extends Component
 {
@@ -20,7 +21,8 @@ export default class ViewMailsScreen extends Component
             drafts:[],
             sent:[],
             shownItems:[],
-            selectedMails:[]
+            selectedMails:[],
+            searchWord:""
         }
 
         this.composeMail = this.composeMail.bind(this);
@@ -40,6 +42,7 @@ export default class ViewMailsScreen extends Component
         this.manageSelectedMails = this.manageSelectedMails.bind(this);
         this.deleteSelectedMails = this.deleteSelectedMails.bind(this);
         this.sendDeleteRequest = this.sendDeleteRequest.bind(this);
+        this.searchMails = this.searchMails.bind(this);
     }
 
     componentDidMount()
@@ -81,6 +84,15 @@ export default class ViewMailsScreen extends Component
 
                     <View style={styles.options}>
                         <Icon2.Button style={styles.iconButton} iconStyle={styles.icon} backgroundColor="#2670b5" name='delete' size={30} onPress={()=>this.deleteSelectedMails()}/>
+                        
+                        <View style={styles.searchContainer}>
+                            <TextInput placeholder="Caută..." 
+                                style={styles.searchInput} 
+                                underlineColorAndroid='transparent' 
+                                onChangeText={(word)=>this.setState({searchWord:word})}/>
+
+                            <Icon3.Button style={styles.iconButton} iconStyle={styles.icon} backgroundColor="#2670b5" name='search' size={30} onPress={()=>this.searchMails()}/>
+                        </View>
                     </View>
 
                     <ScrollView style={styles.mailsList}>
@@ -202,8 +214,54 @@ export default class ViewMailsScreen extends Component
 				idArray:idArray
 			})
         });
-        
+    }
 
+    searchMails()
+    {
+        let word=this.state.searchWord;
+        let category=this.state.currentlySelectedCategory;
+        let toSearch=[];
+        let destination="";
+
+        if(category==="inbox")
+        {
+            toSearch=this.state.inbox;
+            destination="from";
+        }
+        else
+        {
+            if(category==="drafts")
+            {
+                toSearch=this.state.drafts;
+                destination="to";
+            }
+            else
+            {
+                if(category==="sent")
+                {
+                    toSearch=this.state.sent;
+                    destination="to";
+                }
+            }
+        }
+
+        if(word==="")
+        {
+            this.setShownItems(toSearch,destination,category);
+            return;
+        }
+
+        let newItems=[];
+
+        for(let i=0;i<toSearch.length;i++)
+        {
+            if(toSearch[i].subject.includes(word) || (destination==="from" && toSearch[i].from.includes(word)) || (destination==="to" && toSearch[i].to.includes(word)) || toSearch[i].message.includes(word))
+            {
+                newItems.push(toSearch[i]);
+            }
+        }
+
+        this.setShownItems(newItems,destination,category);
     }
 
     viewInbox()
@@ -361,5 +419,16 @@ const styles = StyleSheet.create({
     },
     icon:{
         marginLeft:"10%"
+    },
+    searchInput:{
+        width:"100%",
+        borderWidth: 1,
+        padding: 5,
+        marginRight: 5
+    },
+    searchContainer:{
+        flexDirection:"row",
+        width:"50%",
+        marginLeft: 5
     }
 });
