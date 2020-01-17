@@ -15,7 +15,7 @@ class RositaTextView extends React.Component {
             index : 0,
             _interval : -1,
             colors : ['red', 'blue', 'green', 'black'],
-            phrases : ['tidor', 'rosita', 'hardcoded phrase'],
+            phrases : ['Try saying: Who is teaching software security?','Try saying: Search something about artificial intelligence on wikipedia.','Try saying: What\'s the time?','Try saying: What\'s the next big holiday?','Try saying: Where\'s Bucharest?','Try saying: What\'s my schedule for tomorrow?','Try saying: I like databases, what can you recommend?','Try saying: Open youtube.'],
         }
     }
     
@@ -24,7 +24,7 @@ class RositaTextView extends React.Component {
             let newIndex = this.state.index + 1;
 
             this.setState({index : newIndex});
-        }, 1000);
+        }, 2500);
 
         this.setState({_interval : intervalReference});
     }
@@ -39,7 +39,7 @@ class RositaTextView extends React.Component {
             <View style={{display: 'flex', flexDirection: "row", padding: 10}}>
                 <Text style={{color: this.state.colors[this.state.index % this.state.colors.length], fontSize: 18}}>(Rosita)</Text>
                 
-                <Text>{this.state.phrases[this.state.index % this.state.phrases.length]}</Text>    
+                <Text style={{maxWidth: "80%", fontSize: 16}}>{this.state.phrases[this.state.index % this.state.phrases.length]}</Text>    
             </View>
         )
     }
@@ -79,7 +79,7 @@ export default function TimetableScreen(props) {
         let classes = [];
 
         for (let course of orar) {
-            if (course.zi == day)
+            if (course.zi === day)
                 classes.push(course);
         }
 
@@ -110,7 +110,10 @@ export default function TimetableScreen(props) {
 
                             <Button
                                 title="Vezi pe harta"
-                                onPress={() => props.navigation.navigate('Locations', {sala_id : course.sala_id})}
+                                onPress={() => {
+                                    setModalVisibility(false);
+                                    props.navigation.navigate('Locations', {sala_id : course.sala_id});
+                                }}
                                 style={{backgroundColor: 'lightblue'}}
                             />
                         </View>
