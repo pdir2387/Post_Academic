@@ -8,6 +8,8 @@ import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import MailAttachmentItem from './MailAttachmentItem';
 import * as DocumentPicker from 'expo-document-picker';
 import * as mime from 'react-native-mime-types';
+import * as FileSystem from 'expo-file-system';
+import {backend_base_url} from '../misc/constants';
 
 export default class SendMailScreen extends Component
 {
@@ -115,9 +117,29 @@ export default class SendMailScreen extends Component
 
     sendMail()
     {
-        this.setState({checkmarkMessage:"Trimis",showMessage:true},()=>{setInterval(() => {
-            this.setState({showMessage:false});
-        }, 2000)});
+        if(this.state.to !== "")
+		{
+            fetch(backend_base_url + 'api/all/emails/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({
+                    to:this.state.to,
+                    subject:this.state.subject,
+                    message:this.state.message,
+                    attachments:this.state.attachmentFiles
+                })
+            }).then(()=>{
+                this.setState({checkmarkMessage:"Trimis",showMessage:true},()=>{setInterval(() => {
+                    this.setState({showMessage:false});
+                }, 2000)});
+            })
+		}
+		else
+		{
+			alert("Introdu destinatarul");
+        }
     }
 
     goToEmails()
@@ -127,53 +149,59 @@ export default class SendMailScreen extends Component
 
     saveDraft()
     {
-        this.setState({checkmarkMessage:"Salvat",showMessage:true},()=>{setInterval(() => {
-            this.setState({showMessage:false});
-        }, 2000)});
+        if(this.state.to!=="" || this.state.subject!== "" || this.state.message!=="")
+    	{
+            fetch(backend_base_url + 'api/all/emails/draft', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({
+                    to:this.state.to,
+                    subject:this.state.subject,
+                    message:this.state.message,
+                    attachments:this.state.attachmentFiles
+                })
+            }).then(()=>{
+                this.setState({checkmarkMessage:"Salvat",showMessage:true},()=>{setInterval(() => {
+                this.setState({showMessage:false});
+                }, 2000)});
+            });
+    	}
     }
 
     async chooseFile()
     {
         let file = await DocumentPicker.getDocumentAsync({});
-
+        
         if(file.type==="success")
         {
             this.attachFile(file)
         }
     }
 
-    attachFile(file)
+    async attachFile(file)
     {
         let fileName=file.name;
         let newItems=this.state.attachmentItems;
         let fileExtension=fileName.split(".")[1];
         let attachmentItem=<MailAttachmentItem key={file.uri} uri={file.uri} file={file} extension={fileExtension} fileName={fileName} removeAttachment={this.removeAttachment}/>;
-        let willAttach=true;
 
-        for(let i=0;i<newItems.length;i++)
-        {
-            if(newItems[i].props.uri===file.uri)
-            {
-                willAttach=false;
-                break;
-            }
+        newItems.push(attachmentItem);
+        this.setState({attachmentItems:newItems});
+
+        let mimeType=mime.lookup(file.uri);
+
+        let bytes=await FileSystem.readAsStringAsync(file.uri, {encoding:FileSystem.EncodingType.Base64});
+
+        const newFile={
+            uri: file.uri,
+            type: mimeType,
+            name: file.name,
+            bytes: bytes
         }
 
-        if(willAttach)
-        {
-            newItems.push(attachmentItem);
-            this.setState({attachmentItems:newItems});
-
-            let mimeType=mime.lookup(file.uri);
-
-            const newFile={
-                uri: file.uri,
-                type: mimeType,
-                name: file.name
-            }
-
-            this.state.attachmentFiles.push(newFile);
-        }
+        this.state.attachmentFiles.push(newFile);
     }
 
     removeAttachment(uri)

@@ -10,7 +10,8 @@ import commons from '../css/commons.module.css'
 
 export default function EmailPage() 
 {
-    let [accountType,setAccountType]=useState(()=>getAccountType());
+    let [accountType,setAccountType]=useState("");
+    getAccountType();
 
     return <Page />;
 
@@ -59,8 +60,11 @@ export default function EmailPage()
         }
     }
 
-    function getAccountType()
+    async function getAccountType()
     {
-        return "student";
+        await fetch('http://localhost:3000/api/authority')
+        .then(response => response.text())
+        .then(auth => setAccountType(auth))
+        .catch( e => alert(e));
     }
 }

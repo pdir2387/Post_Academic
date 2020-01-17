@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import { StyleSheet, Text, View, Picker } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
+import {backend_base_url} from '../misc/constants';
 
 export default class StudentInfoScreen extends Component
 {
@@ -73,14 +74,12 @@ export default class StudentInfoScreen extends Component
 
   getStudentInfo()
   {
-    let info=JSON.parse('{"name":"Carl Johnson","cnp":"1234567891123","code":"cjir2242","group":"211","year":"1","semester":"2"}');
-
-    this.setState({name:info.name});
-    this.setState({cnp:info.cnp});
-    this.setState({code:info.code});
-    this.setState({group:info.group});
-    this.setState({year:info.year});
-    this.setState({semester:info.semester});
+    fetch(backend_base_url + 'api/student/informatii_personale')
+      .then(info => info.json())
+      .then(info => {
+        console.log(info);
+        this.setState({name:info.name,cnp:info.cnp,code:info.cod,group:info.grupa,year:info.an,semester:info.semestru});     
+      });
   }
 }
 

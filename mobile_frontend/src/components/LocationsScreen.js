@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Picker } from 'react-native';
 import {Content,Container} from 'native-base';
 import NavBarOpener from './NavBarOpener';
 import MapView, { Marker } from 'react-native-maps';
+import {backend_base_url} from '../misc/constants';
 
 export default class LocationsScreen extends Component
 {
@@ -15,7 +16,9 @@ export default class LocationsScreen extends Component
       marker: null,
       dropDownItems:[],
       dropDownItemsPlaceholder: "---alege locatia---",
-      selectedItemDropdown: ""
+      selectedItemDropdown: "",
+      currentlySelectedBuildingName: "",
+      roomId:props.navigation.getParam("sala_id",-1)
     }
 
     this.getLocations = this.getLocations.bind(this);
@@ -25,7 +28,33 @@ export default class LocationsScreen extends Component
   componentDidMount()
   {
     this.getLocations();
+
+    if(this.state.roomId!==-1)
+    {
+      fetch(backend_base_url + 'api/all/cladire/'+this.state.roomId)
+      .then(res => res.json())
+      .then(res => {
+          this.setMarker(res.lat+","+res.long+","+res.nume);
+      });
+    }
   }
+
+  willFocus = this.props.navigation.addListener('willFocus',(payload) => {
+    if(payload.action.params)
+    {
+        let newRoomId=payload.action.params.sala_id;
+        this.setState({roomId:newRoomId});
+
+        if(newRoomId!==-1)
+        {
+          fetch(backend_base_url + 'api/all/cladire/'+newRoomId)
+          .then(res => res.json())
+          .then(res => {
+              this.setMarker(res.lat+","+res.long+","+res.nume);
+          });
+        }
+    }
+  });
 
   render()
   {    
@@ -42,6 +71,7 @@ export default class LocationsScreen extends Component
               <Picker style={styles.pickerStyle} selectedValue={this.state.selectedItemDropdown} onValueChange={(value) => {this.setState({selectedItemDropdown:value});if(value!==""){this.setMarker(value);}}}>{this.state.dropDownItems}</Picker>
             </View>
 
+            <Text>{this.state.currentlySelectedBuildingName}</Text>
             <MapView style={styles.map} region={this.state.region}>{this.state.marker}</MapView>
           </View>
         </Content>
@@ -51,8 +81,11 @@ export default class LocationsScreen extends Component
 
   getLocations()
   {
-    let l=JSON.parse('{"locations":[{"name":"FSEGA","lat":46.773077,"long":23.620982},{"name":"Cladirea centrala","lat":46.767536,"long":23.591345},{"name":"Parcul sportiv","lat":46.763206,"long":23.560394},{"name":"Facultatea de drept","lat":46.766426,"long":23.589613}]}').locations;
-    this.setState({locations:l},()=>this.setDropDownItems());
+    fetch(backend_base_url + 'api/all/cladiri')
+    .then(res => res.json())
+    .then(res => {
+      this.setState({locations:res},()=>this.setDropDownItems());
+    });        
   }
 
   setDropDownItems()
@@ -64,7 +97,7 @@ export default class LocationsScreen extends Component
     for(let i=0;i<this.state.locations.length;i++)
     {
       let currentlocation=this.state.locations[i];
-      let item=<Picker.Item key={i+1} value={currentlocation.lat+","+currentlocation.long} label={currentlocation.name}/>;
+      let item=<Picker.Item key={i+1} value={currentlocation.lat+","+currentlocation.long+","+currentlocation.nume} label={currentlocation.nume}/>;
       newItems.push(item);
     }
 
@@ -76,6 +109,7 @@ export default class LocationsScreen extends Component
     let coords=value.split(",");
     let latVal=parseFloat(coords[0]);
     let lngVal=parseFloat(coords[1]);
+    this.setState({currentlySelectedBuildingName:coords[2]});
 
     let markerItem=<Marker coordinate={{latitude:latVal,longitude:lngVal}}/>;
     let newRegion={latitude:latVal,longitude:lngVal,latitudeDelta: 0.0922,longitudeDelta: 0.0421,};

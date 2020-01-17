@@ -15,6 +15,7 @@ function StudentNavBar(){
             <NavBarItem buttonText="MEDII" url="/medii"/>
             <NavBarItem buttonText="CONTRACTE" url="/contracte"/>
             <NavBarItem buttonText="E-MAIL" url="/email"/>
+            <NavBarItem buttonText="SCHIMB LABORATOARE" url="/trade"/>
             <NavBarItem buttonText="INFORMAȚII GENERALE" url="/student"/>
         </div>
     )
