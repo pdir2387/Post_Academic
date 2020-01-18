@@ -164,38 +164,39 @@ export default function AISuggestionsPage() {
 
     return (
         <div id={ai.mainContainer}>
+            <h1 style={{textAlign:"center"}}>Sugestii opționale</h1>
             <div id={ai.rosita}>
                 <RositaTextView />
             </div>
             <div id={ai.aiContent}>
                 <div id={ai.aiLeft}><br/><br/>
-                    <p>Tough to choose an optional course for the final year? Let us recommend you something!</p>
-                    <p>What do you like? Write up to three words below</p><br/>
-                    <div id="first-form-container">
+                    <p>Iți este greu să alegi un curs opțional pentru ultimul tău an? Lasă-ne să-ți recomandăm ceva! </p>
+                    <p>Ce iți place? Scrie cel mult trei cuvinte mai jos.</p><br/>
+                    <div id="first-form-container" style={{borderBottom:"1px solid grey"}}>
                         <form id="first-form">
-                            <input className={ai.input} placeholder="Write here..." type="text" value={aiField1}  onChange={(e) => setAiField1(e.target.value)}/>
-                            <input className={ai.input} placeholder="Write here..." type="text" value={aiField2}  onChange={(e) => setAiField2(e.target.value)}/>
-                            <input className={ai.input} placeholder="Write here..." type="text" value={aiField3}  onChange={(e) => setAiField3(e.target.value)}/>
+                            <input className={ai.input} placeholder="Scrie aici..." type="text" value={aiField1}  onChange={(e) => setAiField1(e.target.value)}/>
+                            <input className={ai.input} placeholder="Scrie aici..." type="text" value={aiField2}  onChange={(e) => setAiField2(e.target.value)}/>
+                            <input className={ai.input} placeholder="Scrie aici..." type="text" value={aiField3}  onChange={(e) => setAiField3(e.target.value)}/>
                             <br/><br/>
-                            <button className={ai.button} type='button' onClick={()=>submitFields()}>Submit</button>
+                            <button className={ai.button} type='button' onClick={()=>submitFields()}>Trimite</button>
                         </form>
                     </div><br/><br/>
 
-                    <p>Or... maybe it's easier to tell us what concepts you enjoy, past favourite courses or preferred programming languages in a few sentences:</p>
-                    <div id="second-form-container">
+                    <p>Sau... poate iți este mai ușor sa ne spui ce concepte iți plac, cursurile tale favorite sau limbajele de programare pe care le preferi în câteva propoziții. </p>
+                    <div id="second-form-container" style={{borderBottom:"1px solid grey"}}>
                         <form id="second-form">
-                            <textarea id="textarea-input" placeholder="Write here..." className={ai.textarea} value={aiTextArea}  onChange={(e) => setAITextArea(e.target.value)}></textarea><br/>
-                            <button className={ai.button} onClick={() => submitText()} type='button'>Submit</button>
+                            <textarea id="textarea-input" placeholder="Scrie aici..." className={ai.textarea} value={aiTextArea}  onChange={(e) => setAITextArea(e.target.value)}></textarea><br/>
+                            <button className={ai.button} onClick={() => submitText()} type='button'>Trimite</button>
                         </form><br/><br/>
 
-                        <div id="second-form-hidden-content">
-                            <p>We identified the following keywords:</p>
+                        <div id="second-form-hidden-content" style={{textAlign:"left"}}>
+                            <p>Am identificat următoarele cuvinte cheie:</p>
                         </div>
                     </div><br/><br/>
-                    <div id="any-form-hidden-content">
-                        <p>The recommended courses are filtered in the table.</p>
-                        <span>If you like what you see let us add them to your profile!</span>
-                        <button className={ai.button}>Add</button>
+                    <div id="any-form-hidden-content" style={{textAlign:"left"}}>
+                        <p>Cursurile recomandate sunt filtrate în tabel.</p>
+                        <span>Dacă iți place ce vezi, lasă-ne să ți le adăugăm la profil!</span>
+                        <button className={ai.button}>Adauga</button>
                     </div>
                 </div>
 

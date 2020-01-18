@@ -10,7 +10,7 @@ export default function TeacherNavBar(){
             <img src={mainLogo} alt="logo"></img>
             <div id={home.navBarSeparator}></div>
             <NavBarItem buttonText="ORAR" url="/home"/>
-            <NavBarItem buttonText="PREZENTA" url="/prezenta"/>
+            <NavBarItem buttonText="PREZENȚE" url="/prezenta"/>
             <NavBarItem buttonText="NOTE" url="/note"/>
             <NavBarItem buttonText="MEDII" url="/medii"/>
             <NavBarItem buttonText="E-MAIL" url="/email"/>

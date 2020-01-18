@@ -10,13 +10,13 @@ function StudentNavBar(){
             <img src={mainLogo} alt="logo"></img>
             <div id={home.navBarSeparator}></div>
             <NavBarItem buttonText="ORAR" url="/home"/>
-            <NavBarItem buttonText="PREZENTA" url="/prezenta"/>
+            <NavBarItem buttonText="PREZENȚE" url="/prezenta"/>
             <NavBarItem buttonText="NOTE" url="/note"/>
             <NavBarItem buttonText="MEDII" url="/medii"/>
             <NavBarItem buttonText="CONTRACTE" url="/contracte"/>
             <NavBarItem buttonText="E-MAIL" url="/email"/>
             <NavBarItem buttonText="SCHIMB LABORATOARE" url="/trade"/>
-            <NavBarItem buttonText="SUGEREAZA OPTIONALE" url="/ai"/>
+            <NavBarItem buttonText="SUGESTII OPȚIONALE" url="/ai"/>
             <NavBarItem buttonText="INFORMAȚII GENERALE" url="/student"/>
         </div>
     )
