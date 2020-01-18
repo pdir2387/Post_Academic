@@ -31,7 +31,14 @@ export default function StudentInfoPage() {
         }
         else
         {
-            return <PermissionDeniedPage />;
+            if(accountType!=="")
+            {
+                return <PermissionDeniedPage />;
+            }
+            else
+            {
+                return null
+            }
         }
     }
 

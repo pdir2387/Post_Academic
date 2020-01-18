@@ -34,7 +34,14 @@ export default function ResultsPage()
         }
         else
         {
-            return <PermissionDeniedPage />;
+            if(accountType!=="")
+            {
+                return <PermissionDeniedPage />;
+            }
+            else
+            {
+                return null
+            }
         }
     }
 

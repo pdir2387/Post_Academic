@@ -29,7 +29,14 @@ export default function AI() {
         }
         else
         {
-            return <PermissionDeniedPage />;
+            if(accountType!=="")
+            {
+                return <PermissionDeniedPage />;
+            }
+            else
+            {
+                return null
+            }
         }
     }
 

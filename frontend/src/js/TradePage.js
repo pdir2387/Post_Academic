@@ -9,12 +9,12 @@ import commons from '../css/commons.module.css'
 export default function TradePage() 
 {
     let [accountType,setAccountType]=useState("");
+    getAccountType();
 
     return <Page />;
 
     function Page()
     {
-        getAccountType();
         if(accountType==="student")
         {
             return (
@@ -32,7 +32,14 @@ export default function TradePage()
         }
         else
         {
-            return <PermissionDeniedPage />;
+            if(accountType!=="")
+            {
+                return <PermissionDeniedPage />;
+            }
+            else
+            {
+                return null
+            }
         }
     }
 
