@@ -9,7 +9,7 @@ import commons from '../css/commons.module.css'
 
 export default function LocationPage() 
 {
-    let [accountType,setAccountType]=useState(()=>getAccountType());
+    let [accountType,setAccountType]=useState("");
     getAccountType();
 
     return <Page />;
