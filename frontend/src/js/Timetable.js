@@ -49,8 +49,8 @@ function Timetable() {
 
     function fetchOrar() {
         if (orar === 0)
-            fetch('http://localhost:3000/api/orar')
-            //fetch('http://localhost:3000/api/student/ore')
+            //fetch('http://localhost:3000/api/orar')
+            fetch('http://localhost:3000/api/student/ore')
             .then(res => res.json())
             .then(data => {
                 setOrar(data);
@@ -68,7 +68,7 @@ function Timetable() {
     function getClassFromTimeAndDay(orar, time, day) {
         if (isIterable(orar))
             for (let course of orar) {
-                if (course.zi === day && time >= course.start && time < (course.start + course.durata))
+                if (course.zi.toLowerCase() === day.toLowerCase() && time >= course.start && time < (course.start + course.durata))
                     return course;
             }
     

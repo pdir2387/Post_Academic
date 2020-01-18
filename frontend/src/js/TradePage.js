@@ -9,12 +9,12 @@ import commons from '../css/commons.module.css'
 export default function TradePage() 
 {
     let [accountType,setAccountType]=useState("");
-    getAccountType();
 
     return <Page />;
 
     function Page()
     {
+        getAccountType();
         if(accountType==="student")
         {
             return (
