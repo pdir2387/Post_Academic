@@ -183,7 +183,7 @@ export default function AISuggestionsPage() {
                     </div><br/><br/>
 
                     <p>Sau... poate iți este mai ușor sa ne spui ce concepte iți plac, cursurile tale favorite sau limbajele de programare pe care le preferi în câteva propoziții. </p>
-                    <div id="second-form-container" style={{borderBottom:"1px solid grey"}}>
+                    <div id="second-form-container">
                         <form id="second-form">
                             <textarea id="textarea-input" placeholder="Scrie aici..." className={ai.textarea} value={aiTextArea}  onChange={(e) => setAITextArea(e.target.value)}></textarea><br/>
                             <button className={ai.button} onClick={() => submitText()} type='button'>Trimite</button>
@@ -193,11 +193,11 @@ export default function AISuggestionsPage() {
                             <p>Am identificat următoarele cuvinte cheie:</p>
                         </div>
                     </div><br/><br/>
-                    <div id="any-form-hidden-content" style={{textAlign:"left"}}>
+                    {/* <div id="any-form-hidden-content" style={{textAlign:"left"}}>
                         <p>Cursurile recomandate sunt filtrate în tabel.</p>
                         <span>Dacă iți place ce vezi, lasă-ne să ți le adăugăm la profil!</span>
-                        <button className={ai.button}>Adauga</button>
-                    </div>
+                        <button className={ai.button}>Adaugă</button>
+                    </div> */}
                 </div>
 
                 <div id={ai.aiRight}>
