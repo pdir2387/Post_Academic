@@ -59,9 +59,9 @@ export default class GradesScreen extends Component
                   <Row data={this.state.tableFirstRow} style={styles.firstRow} textStyle={styles.text}/>
                   <TableWrapper style={styles.wrapperCols} >
                     <Col data={this.state.tableWeeks} style={styles.weeks} textStyle={styles.text}/>
-                    <Col data={this.state.courseGrades} textStyle={styles.text}/>
-                    <Col data={this.state.seminarGrades} textStyle={styles.text}/>
-                    <Col data={this.state.labGrades} textStyle={styles.text}/>
+                    <Col data={this.state.courseGrades} textStyle={styles.textBlack}/>
+                    <Col data={this.state.seminarGrades} textStyle={styles.textBlack}/>
+                    <Col data={this.state.labGrades} textStyle={styles.textBlack}/>
                   </TableWrapper>
                 </TableWrapper>
               </Table>
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
       alignSelf: "stretch",      
     },
     weeks: {  
-      backgroundColor: '#547598'  
+      backgroundColor: '#547598' ,
     },
     wrapper: { 
       flexDirection: 'column' 
@@ -199,5 +199,8 @@ const styles = StyleSheet.create({
       borderColor:"black",
       borderStyle:"solid",
       borderWidth:1
+    },
+    textBlack:{
+      textAlign: 'center',
     }
 });

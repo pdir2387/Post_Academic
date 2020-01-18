@@ -62,9 +62,9 @@ export default class AttendancesScreen extends Component
                   <Row data={this.state.tableFirstRow} style={styles.firstRow} textStyle={styles.text}/>
                   <TableWrapper style={styles.wrapperCols} >
                     <Col data={this.state.tableWeeks} style={styles.weeks} textStyle={styles.text}/>
-                    <Col data={this.state.courseAttendances} textStyle={styles.text}/>
-                    <Col data={this.state.seminarAttendances} textStyle={styles.text}/>
-                    <Col data={this.state.labAttendances} textStyle={styles.text}/>
+                    <Col data={this.state.courseAttendances} textStyle={styles.textBlack}/>
+                    <Col data={this.state.seminarAttendances} textStyle={styles.textBlack}/>
+                    <Col data={this.state.labAttendances} textStyle={styles.textBlack}/>
                   </TableWrapper>
                 </TableWrapper>
               </Table>
@@ -239,5 +239,8 @@ const styles = StyleSheet.create({
       borderColor:"black",
       borderStyle:"solid",
       borderWidth:1
+    },
+    textBlack:{
+      textAlign: 'center',
     }
 });
