@@ -134,6 +134,7 @@ public class NotaService {
     public String addNota(User user, Disciplina materie, Student student, String saptamana, String nota, String tip, String observatii){
         String error = "";
         if(user.getAccountType().equals(AccountType.profesor)) {
+            System.out.println(oraService.getOraByMaterieAndTip(user, materie.getCodDisciplina(), tip).getId());
             notaRepo.save(new Nota(Integer.parseInt(saptamana), oraService.getOraByMaterieAndTip(user, materie.getCodDisciplina(), tip), Integer.parseInt(nota), observatii, student));
         }
         return error;

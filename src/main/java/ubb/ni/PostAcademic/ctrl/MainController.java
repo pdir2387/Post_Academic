@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ubb.ni.PostAcademic.domain.*;
 import ubb.ni.PostAcademic.repo.CladireRepo;
+import ubb.ni.PostAcademic.repo.PerioadaContracteRepo;
 import ubb.ni.PostAcademic.repo.SalaRepo;
 import ubb.ni.PostAcademic.service.*;
 
@@ -53,6 +54,8 @@ public class MainController {
 	CladireRepo cladireRepo;
 	@Autowired
 	SalaRepo salaRepo;
+	@Autowired
+	PerioadaContracteRepo perioadaContracteRepo;
 
 
 	@GetMapping(value = "/api/authority")
@@ -64,6 +67,14 @@ public class MainController {
 			return "anon";
 		}
 		return auth.getAuthorities().toArray()[0].toString();
+	}
+
+	@GetMapping(value = "/api/all/perioada")
+	@ResponseBody
+	public String getPerioada() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		return perioadaContracteRepo.findById(new Long(1)).get().getNr().toString();
 	}
 
 	@GetMapping(value = "/api/all/emails/getAll")
@@ -307,20 +318,20 @@ public class MainController {
 		return userService.deleteStudent(user, username);
 	}
 
-	@PostMapping("/api/admin/addProfesor")
-	public String addProfesor(@RequestParam String username, @RequestParam String nume, @RequestParam String password, @RequestParam String email, @RequestParam String website, @RequestParam String adresa, @RequestParam String telefon, @RequestParam String domenii_de_interes) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getByUsername(auth.getName());
-		return userService.addProfesor(user, username, nume, password, email, website, adresa, telefon, domenii_de_interes);
-	}
-
-	@PostMapping("/api/admin/addProfesorCSV")
-	public String addProfesorCSV(@RequestParam MultipartFile file) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getByUsername(auth.getName());
-
-		return userService.addProfesorCSV(user, file);
-	}
+//	@PostMapping("/api/admin/addProfesor")
+//	public String addProfesor(@RequestParam String username, @RequestParam String nume, @RequestParam String password, @RequestParam String email, @RequestParam String website, @RequestParam String adresa, @RequestParam String telefon, @RequestParam String domenii_de_interes) {
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		User user = userService.getByUsername(auth.getName());
+//		return userService.addProfesor(user, username, nume, password, email, website, adresa, telefon, domenii_de_interes);
+//	}
+//
+//	@PostMapping("/api/admin/addProfesorCSV")
+//	public String addProfesorCSV(@RequestParam MultipartFile file) {
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		User user = userService.getByUsername(auth.getName());
+//
+//		return userService.addProfesorCSV(user, file);
+//	}
 
 	@PostMapping("/api/admin/deleteProfesor")
 	public String deleteProfesor(@RequestParam String username) {
@@ -653,6 +664,37 @@ public class MainController {
 			medie_json.put("sala", o.getSala().getNume());
 			medie_json.put("sala_id", o.getSala().getId());
 			
+			wrapper.put(medie_json);
+		}
+
+
+		return wrapper.toString();
+	}
+
+	@GetMapping(value = "/api/profesor/ore", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String getOreProfesor() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+		JSONArray wrapper = new JSONArray();
+
+
+		for (Ora o : oraService.getOreProfesor(user)) {
+			JSONObject medie_json = new JSONObject();
+
+			medie_json.put("zi", o.getZi());
+			medie_json.put("color", o.getColor());
+			medie_json.put("nume", o.getDisciplina().getNume());
+			medie_json.put("start", o.getOraStart());
+			medie_json.put("durata", o.getOraEnd() - o.getOraStart());
+			medie_json.put("tip", o.getTipOra());
+			medie_json.put("tipDisciplina", o.getDisciplina().getTipDisciplina());
+			medie_json.put("profesor", o.getProfesor().getNume());
+			medie_json.put("profesor_id", o.getProfesor().getId());
+			medie_json.put("sala", o.getSala().getNume());
+			medie_json.put("sala_id", o.getSala().getId());
+
 			wrapper.put(medie_json);
 		}
 
@@ -1010,8 +1052,10 @@ public class MainController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getByUsername(auth.getName());
 
-		Student student_ob = userService.getStudentByName(auth.getName());
+		Student student_ob = userService.getStudentByName(json.getString("nume"));
+		System.out.println(json.getString("materie"));
 		Disciplina disciplina = disciplinaService.findDisciplina(json.getString("materie"));
+		System.out.println(disciplina.getCodDisciplina());
 
 		return notaService.addNota(user, disciplina, student_ob, json.getString("saptamana"), json.getString("nota"), json.getString("tip"), json.getString("observatii"));
 	}

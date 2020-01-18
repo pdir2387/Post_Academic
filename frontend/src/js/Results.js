@@ -79,6 +79,7 @@ export default function Results()
 
     function manageFilteringOptions(semester,checkbox)
     {
+		semester=parseInt(semester);
     	if(checkbox.checked)
     	{
 			filteringOptions.push(semester);
@@ -278,7 +279,7 @@ export default function Results()
         .then(res => res.json())
         .then(res => {
             results=res;
-            fillTable(results);
+			fillTable(results);
 		});
 	}
 }

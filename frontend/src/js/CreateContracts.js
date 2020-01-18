@@ -66,7 +66,55 @@ export default function CreateContracts()
 
 	        <button id={contracts.createContractButton} className={commons.button} onClick={sendContract} type="button">Creare contract</button>
         </div>
-    );
+	);
+	
+	function saveFileToDisk(file,fileName)
+	{
+		if (window.navigator.msSaveOrOpenBlob)
+		{ // IE10+
+			window.navigator.msSaveOrOpenBlob(file, fileName);
+		}
+		else 
+		{ // Others
+			var a = document.createElement("a"),
+					url = URL.createObjectURL(file);
+			a.href = url;
+			a.download = fileName;
+			document.body.appendChild(a);
+			a.click();
+			setTimeout(function() {
+				document.body.removeChild(a);
+				window.URL.revokeObjectURL(url);  
+			}, 0); 
+		}
+	}
+
+	function dataURLtoFile(bytes, type, fileName) 
+	{
+		let bstr = atob(bytes);
+		let n = bstr.length;
+		let u8arr = new Uint8Array(n);
+            
+		while(n--)
+		{
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        
+        return new File([u8arr], fileName, {type:type});
+    }
+	
+	function downloadContract()
+	{
+		fetch('http://localhost:3000/api/student/contract/')
+		.then((res)=>res.json())
+		.then((res)=>{
+			console.log(res);
+			let type="application/pdf";
+			let name="Contract.pdf";
+			let file=dataURLtoFile(res.bytes,type,name);
+			saveFileToDisk(file,name);
+		});
+	}
 
     function fillSemester1Table()
     {
@@ -359,6 +407,6 @@ export default function CreateContracts()
 
 		let toSendJSON=JSON.stringify(disciplineCodes);
 
-		fetch('http://localhost:3000/api/student/contract/add',{method:'POST',body:toSendJSON});
+		fetch('http://localhost:3000/api/student/contract/add',{method:'POST',body:toSendJSON}).then(()=>downloadContract());
 	}
 }

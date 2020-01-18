@@ -25,12 +25,15 @@ public class Profesor {
     @OneToOne
     @JoinColumn
     private User user;
+    @Column
+    private Integer semestru;
 
     public Profesor(){
 
     }
 
-    public Profesor(String nume, String email, String website, String adresa, String telefon, String domeniiDeInteres, User user) {
+    public Profesor(String nume, String email, String website, String adresa, String telefon, String domeniiDeInteres, User user, Integer semestru)
+    {
         this.nume = nume;
         this.email = email;
         this.website = website;
@@ -38,69 +41,96 @@ public class Profesor {
         this.telefon = telefon;
         this.domeniiDeInteres = domeniiDeInteres;
         this.user = user;
+        this.semestru = semestru;
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public String getNume() {
+    public String getNume()
+    {
         return nume;
     }
 
-    public void setNume(String nume) {
+    public void setNume(String nume)
+    {
         this.nume = nume;
     }
 
-    public String getEmail() {
+    public String getEmail()
+    {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public String getWebsite() {
+    public String getWebsite()
+    {
         return website;
     }
 
-    public void setWebsite(String website) {
+    public void setWebsite(String website)
+    {
         this.website = website;
     }
 
-    public String getAdresa() {
+    public String getAdresa()
+    {
         return adresa;
     }
 
-    public void setAdresa(String adresa) {
+    public void setAdresa(String adresa)
+    {
         this.adresa = adresa;
     }
 
-    public String getTelefon() {
+    public String getTelefon()
+    {
         return telefon;
     }
 
-    public void setTelefon(String telefon) {
+    public void setTelefon(String telefon)
+    {
         this.telefon = telefon;
     }
 
-    public String getDomeniiDeInteres() {
+    public String getDomeniiDeInteres()
+    {
         return domeniiDeInteres;
     }
 
-    public void setDomeniiDeInteres(String domeniiDeInteres) {
+    public void setDomeniiDeInteres(String domeniiDeInteres)
+    {
         this.domeniiDeInteres = domeniiDeInteres;
     }
 
-    public User getUser() {
+    public User getUser()
+    {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(User user)
+    {
         this.user = user;
+    }
+
+    public Integer getSemestru()
+    {
+        return semestru;
+    }
+
+    public void setSemestru(Integer semestru)
+    {
+        this.semestru = semestru;
     }
 }

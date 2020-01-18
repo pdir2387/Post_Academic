@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import LogoutButton from "./LogoutButton.js"
 import StudentNavBar from "./StudentNavBar.js"
 import ViewContracts from "./ViewContracts"
@@ -9,9 +9,14 @@ import commons from '../css/commons.module.css'
 
 export default function ContractsPage() 
 {
-    let [period,setPeriod]=useState(()=>getPeriod());
     let [accountType,setAccountType]=useState("");
+    let [page,setPage]=useState(null);
     getAccountType();
+
+    useEffect(() => 
+	{
+		ContractsPageContent();
+    }, []);
 
     return <Page />;
 
@@ -27,7 +32,7 @@ export default function ContractsPage()
                     </div>
         
                     <div id={commons.right}> 
-                        <ContractsPageContent />
+                        {page}
                     </div>
                 </div>
             );
@@ -53,23 +58,22 @@ export default function ContractsPage()
         .catch( e => alert(e));
     }
 
-    function getPeriod()
-    {
-        return JSON.parse('{"period":"1"}').period;
-    }
-
     function ContractsPageContent(props)
     {
-        if(period=="0")
-        {
-            return <ViewContracts />;
-        }
-        else
-        {
-            if(period=="1")
+        fetch('http://localhost:3000/api/all/perioada')
+        .then(res=>res.text())
+        .then(res=>{
+            if(res=="0")
             {
-                return <CreateContracts />;
+                setPage(<ViewContracts />);
             }
-        }
+            else
+            {
+                if(res=="1")
+                {
+                    setPage(<CreateContracts />);
+                }
+            }
+        });
     }
 }

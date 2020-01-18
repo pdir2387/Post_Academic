@@ -49,12 +49,31 @@ function Timetable() {
 
     function fetchOrar() {
         if (orar === 0)
+            fetch('http://localhost:3000/api/authority')
+            .then(response => response.text())
+            .then(auth => {
+                if(auth==="student")
+                {
+                    fetch('http://localhost:3000/api/student/ore')
+                    .then(res => res.json())
+                    .then(data => {
+                        setOrar(data);
+                    });
+                }
+                else
+                {
+                    if(auth==="profesor")
+                    {
+                        fetch('http://localhost:3000/api/profesor/ore')
+                        .then(res => res.json())
+                        .then(data => {
+                            setOrar(data);
+                        });
+                    }
+                }
+            })
             //fetch('http://localhost:3000/api/orar')
-            fetch('http://localhost:3000/api/student/ore')
-            .then(res => res.json())
-            .then(data => {
-                setOrar(data);
-            });
+            
     }
 
     function isIterable(obj) {

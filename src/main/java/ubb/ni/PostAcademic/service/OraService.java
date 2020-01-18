@@ -35,6 +35,19 @@ public class OraService {
         return ore;
     }
 
+    public ArrayList<Ora> getOreProfesor(User user){
+        ArrayList<Ora> ore = new ArrayList<>();
+        if(user.getAccountType().equals(AccountType.profesor)){
+            Profesor profesor = userService.getProfesorByUsername(user.getUsername());
+            for(Ora o : oraRepo.findAll()){
+                if(o.getDisciplina().getSemestru().equals(profesor.getSemestru())){
+                    ore.add(o);
+                }
+            }
+        }
+        return ore;
+    }
+
     public ArrayList<TipOra> getTipuriOraProf(User user, String disciplina){
         ArrayList<TipOra> tipuri = new ArrayList<>();
 
@@ -86,7 +99,7 @@ public class OraService {
     }
 
     public Ora getOraByMaterieAndTip(User user, String disciplina, String tip){
-        if(user.getAccountType().equals(AccountType.student)){
+        if(user.getAccountType().equals(AccountType.profesor)){
             for(Ora d: oraRepo.findAll()){
                 if(d.getDisciplina().getCodDisciplina().equals(disciplina) && d.getTipOra().toString().equals(tip)){
                     return d;

@@ -117,7 +117,7 @@ public class UserService {
         return null;
     }
 
-    //TODO: Validation
+
     public String addStudent(User user, String username, String nume, String cnp, String telefon, String cod_student, String grupa, Integer semestru, String email, Integer anulInscrierii, String password){
         String error = "";
         if(user.getAccountType().equals(AccountType.admin)){
@@ -141,22 +141,22 @@ public class UserService {
     }
 
 
-    //TODO: Validation
-    public String addProfesor(User user, String username, String nume, String password, String email, String website, String adresa, String telefon, String domenii_de_interes){
-        String error = "";
-        if(user.getAccountType().equals(AccountType.admin)){
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-            if(error.isEmpty()){
-                User user_nou = new User(username, passwordEncoder.encode(password), AccountType.student);
-                userRepo.save(user_nou);
-
-
-                profesorRepo.save(new Profesor(nume, email, website, adresa, telefon, domenii_de_interes, user));
-            }
-        }
-        return error;
-    }
+//
+//    public String addProfesor(User user, String username, String nume, String password, String email, String website, String adresa, String telefon, String domenii_de_interes){
+//        String error = "";
+//        if(user.getAccountType().equals(AccountType.admin)){
+//            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//
+//            if(error.isEmpty()){
+//                User user_nou = new User(username, passwordEncoder.encode(password), AccountType.student);
+//                userRepo.save(user_nou);
+//
+//
+//                profesorRepo.save(new Profesor(nume, email, website, adresa, telefon, domenii_de_interes, user));
+//            }
+//        }
+//        return error;
+//    }
 
     public String addStudentCSV(User user, MultipartFile file){
         String error = "";
@@ -177,24 +177,24 @@ public class UserService {
         return error;
     }
 
-    public String addProfesorCSV(User user, MultipartFile file){
-        String error = "";
-        if(user.getAccountType().equals(AccountType.admin)){
-            String fileString = "";
-            try {
-                fileString = new String(file.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            for(String elem : fileString.split("\n")){
-                String[] userDetails = elem.split(",");
-
-                error += addProfesor(user, userDetails[0], userDetails[1], userDetails[2], userDetails[3], userDetails[4], userDetails[5], userDetails[6], userDetails[7]) + "\n";
-            }
-
-        }
-        return error;
-    }
+//    public String addProfesorCSV(User user, MultipartFile file){
+//        String error = "";
+//        if(user.getAccountType().equals(AccountType.admin)){
+//            String fileString = "";
+//            try {
+//                fileString = new String(file.getBytes());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            for(String elem : fileString.split("\n")){
+//                String[] userDetails = elem.split(",");
+//
+//                error += addProfesor(user, userDetails[0], userDetails[1], userDetails[2], userDetails[3], userDetails[4], userDetails[5], userDetails[6], userDetails[7]) + "\n";
+//            }
+//
+//        }
+//        return error;
+//    }
 
     //TODO: Validation
     public String deleteStudent(User user, String username){
